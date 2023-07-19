@@ -3,9 +3,10 @@ import Navigation from './Navigation'
 
 export default function Home() {
   return (
-    <Navigation>
+    <><Navigation/>
         
-      <div>This is HOME page.</div>
-    </Navigation>
+    <div>This is HOME page.</div>
+ </>
+    
   )
 }

@@ -2,18 +2,19 @@
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import Logo from './Logo'
 
 
 function Navigation() {
   return (
     <Navbar collapseOnSelect expand="lg" bg="light" variant="light"  >
     <Navbar.Brand href="#home">
-      {/* <Logo
+      <Logo
         alt=""
         width="30"
         height="30"
         className="d-inline-block align-top"
-      /> */}
+      />
      Logo konferencije
     </Navbar.Brand>
     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
