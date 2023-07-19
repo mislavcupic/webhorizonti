@@ -35,9 +35,7 @@ function Navigation() {
           <NavDropdown.Item href="/registrationfeesaccommodation/dataprotection">
             Zaštita podataka
           </NavDropdown.Item>
-  
-          <NavDropdown.Divider />
-          <NavDropdown.Item href="application">
+          <NavDropdown.Item href="/registrationfeesaccommodation/eventregistration">
             Prijava na događaj
           </NavDropdown.Item>
         </NavDropdown>
