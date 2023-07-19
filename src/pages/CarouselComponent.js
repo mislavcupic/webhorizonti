@@ -4,11 +4,11 @@ import Carousel from "react-bootstrap/Carousel";
 function CarouselComponent() {
     return (
       <div>
-      <Carousel>
-        <Carousel.Item >
+      <Carousel >
+        <Carousel.Item style={{'height':"80vh"}}>
           <img
             className="d-block w-100 text-white active"
-            src="https://i0.wp.com/www.randomlengthsnews.com/wp-content/uploads/2023/05/AI_mural_mentalhealth-e1684430089947.jpeg?fit=600%2C332&ssl=1"
+            src="https://www.publicdomainpictures.net/pictures/480000/velka/banner-abstrakt-kunst-hintergrund-1670195980Uci.jpg"
             alt="mental-health"
           />
           <Carousel.Caption>
@@ -16,11 +16,11 @@ function CarouselComponent() {
             <p>Bla</p>
           </Carousel.Caption>
         </Carousel.Item>
-        <Carousel.Item>
+        <Carousel.Item style={{'height':"80vh"}}>
           <img
             className="d-block w-100"
             // src={require('C:\\Users\\misla\\web-jelk\\src\\assets\\jelkovec-zrak2.jpg')}
-            src="https://mentalhealthtoday.co.uk/media/36941/mental-health-art-prime.jpg"
+            src="https://www.publicdomainpictures.net/pictures/470000/velka/banner-abstrakt-textur-hintergrund-1665436199id1.jpg"
             alt="mental-health 2"
           />
   
@@ -29,7 +29,7 @@ function CarouselComponent() {
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
           </Carousel.Caption>
         </Carousel.Item>
-        <Carousel.Item>
+        <Carousel.Item style={{'height':"80vh"}}>
           <img
             className="d-block w-100"
             // src={require('C:\\Users\\misla\\web-jelk\\src\\assets\\jelkoveczrak.jpg')}
