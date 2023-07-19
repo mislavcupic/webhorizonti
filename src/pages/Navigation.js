@@ -15,14 +15,14 @@ function Navigation() {
         height="30"
         className="d-inline-block align-top"
       />
-     Logo konferencije
+     Horizonti
     </Navbar.Brand>
     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
     <Navbar.Collapse id="responsive-navbar-nav">
       <Nav className="mr-auto">
         <Nav.Link href="/">Home</Nav.Link>
         <NavDropdown title="About" id="collasible-nav-dropdown">
-        <NavDropdown.Item href="./about">O nama</NavDropdown.Item>
+        <NavDropdown.Item href="/about">O nama</NavDropdown.Item>
           <NavDropdown.Item href="/about/introductionspeech">Pozdravni govor</NavDropdown.Item>
           <NavDropdown.Item href="/about/organizingcomettee">
             Programsko povjerenstvo
@@ -31,7 +31,7 @@ function Navigation() {
         </NavDropdown>
 
         <NavDropdown title="Kotizacije i smještaj" id="collasible-nav-dropdown">
-          <NavDropdown.Item href="./registrationfeesaccommodation">Kotizacije i smještaj</NavDropdown.Item>
+          <NavDropdown.Item href="/registrationfeesaccommodation">Kotizacije i smještaj</NavDropdown.Item>
           <NavDropdown.Item href="/registrationfeesaccommodation/dataprotection">
             Zaštita podataka
           </NavDropdown.Item>
