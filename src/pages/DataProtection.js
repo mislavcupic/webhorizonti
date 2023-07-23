@@ -1,20 +1,23 @@
 import React from 'react'
-import { CardGroup } from 'react-bootstrap'
+import { CardGroup, Container, Col, Row } from 'react-bootstrap'
 import CardsMental from './CardsMental'
 
 export default function DataProtection() {
   return (
-    <>  <div className="App">
-    <CardGroup> 
+    <> 
+    <Container><Row  > <Col><CardGroup  > 
       <CardsMental/> 
-      <CardsMental/>
-      <CardsMental/>
-    </CardGroup>
-    <div>
+    </CardGroup></Col><Col><CardGroup  > 
+      <CardsMental/> 
+    </CardGroup></Col></Row>
+   
+    </Container>
+     
+    
+   
     Data Protection site...
-  
-  </div>
-  </div>
+
+
   </>
   )
 }

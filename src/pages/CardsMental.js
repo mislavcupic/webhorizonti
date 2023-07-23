@@ -5,7 +5,7 @@ export default function CardsMental() {
   return (
     <div>
    
-       <Card style={{ width: '18 rem' }} > 
+       <Card > 
         <Card.Img variant="top" className='card-img' src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Nature-View.jpg"/>
         {/* // src={require('C:\\Users\\misla\\web-jelk\\src\\assets\\jelkovec-zrak2.jpg')}  */}
         <Card.Body>
