@@ -12,9 +12,12 @@ export default function About() {
    <CarouselComponent/>
    <div>Ovo je o nama stranica!</div>
    <Routes>
+   
    <Route path="introductionspeech" element={<IntroductionSpeech/>}></Route>
    <Route path="organizingcomettee" element={<ProgramOrganizingComittee/>}></Route>
    <Route path="theplaceofevent" element={<ThePlaceOfEvent/>}></Route>
+ 
+  
    </Routes>
 
     </>

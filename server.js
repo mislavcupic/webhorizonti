@@ -1,72 +1,91 @@
-//DRUGI TUTORIAL stali smo na 1:00 min tutorial2 part2 
-import Psiholog from './src/dbFiles/Psiholog';
+//DRUGI TUTORIAL stali smo na 1:00 min tutorial2 part2
+//import Psiholog from './src/dbFiles/Psiholog';
+
 const express = require('express')
 const app = express();
-const sql = require('mssql');
-const Psiholog = require('./src/dbFiles/Psiholog');
+const dbOperation = require('./src/dbFiles/dbOperation');
+const cors = require('cors');
+const nodemailer = require('nodemailer');
+const port = 7000;
 
 
-const config = {
-    user: 'HorizontiSnage',
-    server:'DESKTOP-KHJLLQS',
-    database:'HorizontiSnage',
-    password:'Bioskop7',
-    options:{
-        trustServerCertificate:true,
-        trustedConnection:false,
-        enableArithAbort:true,
-        instancename:'SQLEXPRESS'
+
+
+app.use(express.json());
+app.use(express.urlencoded());
+app.use(cors());
+
+function sendEmail (userPsiholog) {
+
+    console.log(userPsiholog);
+
+    return new Promise((resolve,reject) =>{
+        var transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth:{
+                user:'mislav.cupic@gmail.com',
+                pass:'kgaoznzuauyusjvs',
+
+            }
+            ,
+        });
+        const mail_configs = {
+            from: 'mislav.cupic@gmail.com',
+            to:   userPsiholog.email,
+            subject: "Potvrda prijave na stručni skup",
+            text: `Pozdrav ${userPsiholog.ime} ${userPsiholog.prezime}, Vaša prijava na stručni skup "Horizonti snage" uspješno je izvršena dana ${userPsiholog.date}. Vaša kontakt mail adresa je ${userPsiholog.email}`
+        };
+        transporter.sendMail(mail_configs,function(err,info){
+            if(err){
+                console.log(err);
+                return reject({message: 'an error has occured'});
+            }
+            return resolve({message:"Vaši podaci uspješno su spremljeni"});
+            });
+
+        })
     }
-    ,
-     port: 49676
+//ISKLJUČIVO NAPRAVLJENI RADI SLANJA MAILOVA,SAD ĆU IH PREBACITI SVE U ISTI ONAJ GET I POST app.req
+    // app.get("/registrationfeesaccommodation/eventregistration",(req,res) => {
+    //     sendEmail().then((response)=> req.send(response.message)).catch((err)=> res.status(500).send(err.message));
+    //  });
+
+    //  app.post("/registrationfeesaccommodation/eventregistration/send_mail",(req,res) => {
+    //     sendEmail(req.body).then((response)=> req.send(response.message)).catch((err)=> res.status(500).send(err.message));
+    //  });
+
+
+
+
+ app.get('/registrationfeesaccommodation/eventregistration', async (req,res) =>{
+       await dbOperation.createPsiholog();
+     const result = await dbOperation.getPsiholozi();
+    //    sendEmail().then((response)=> req.send(response.message)).catch((err)=> res.status(500).send(err.message));
+    return;
+
+ });
+
+
+app.post('/registrationfeesaccommodation/eventregistration', async (req, res) =>{
+    await dbOperation.createPsiholog(req.body);
+    const result = await dbOperation.getPsiholozi(req.body.name);
+
+    console.log(req.body);
+
+
+    if(result!=null){
+        res.send(result.recordset);
+        sendEmail(req.body).then((response)=> req.send(response.message)).catch((err)=> res.status(500).send(err.message));
     }
-    let Mislav = new Psiholog(1045,'Mislav','Čupić','mislav@gmail.com');
-  
-sql.connect(config,function(err){
-    var req = new sql.Request();
-    //OVO ŽELIM NAPRAVITI I POSPREMITI U BAZU
-req.query(`INSERT INTO EventRegistration2 VALUES (${Mislav.Psiholog_ID}, '${Mislav.ime}','${Mislav.prezime}','${Mislav.email}') 
-`,function(err,records){
-    if(err)console.log(err);
-    else console.log(records);
-})}
- )
-    // req.query("INSERT INTO EventRegistration2 (EventRegistration2.Psiholog_ID, EventRegistration2.ime, EventRegistration2.prezime, EventRegistration2.email) VALUES (1020,'Kreš','Pupuć','kpupuc@gmail.com')",function(err,records){
-    //     if(err)console.log(err);
-    //     else console.log(records);
-    // })})
-
-  //  let Hrvoje = new Psiholog(1005,'Hrvoje','Bekić','hrco@bekic.com');
-
-//     req.query(`INSERT INTO EventRegistration2 VALUES 
-//     (${Psiholog.Psiholog_ID}, 
-//        '${Psiholog.ime}',
-//        '${Psiholog.prezime}',
-//        '${Psiholog.email}')`,function(err,records){
-//         if(err)console.log(err);
-//         else console.log(records);
-//     })}
-// )
-
-
-
-//chat gpt
-// req.query(`INSERT INTO EventRegistration2 (Psiholog_ID, \`ime\`, prezime, email) VALUES 
-// (${Mislav.Psiholog_ID}, '${Mislav.ime}', '${Mislav.prezime}', '${Mislav.email}')`, function(err, records) {
-//     if (err) console.log(err);
-//     else console.log(records);
-// })
-
-
-// app.get('/',(req,res)=>{
-//     const sqlInsert = "INSERT INTO EventRegistration2 (EventRegistration2.Psiholog_ID, EventRegistration2.ime, EventRegistration2.prezime, EventRegistration2.email) VALUES (1005,'Kreš','Pupuć,'kpupuc@gmail.com');";
-//     db.query(sqlInsert, (err,result)=> {res.send("Hello");})});
-   
-
-
-app.listen(3011, () => {
-    console.log("running on port 3011");
 });
+
+// npm run dev --host localhost:8080
+
+//ovo nekad moraš odkomat
+// app.listen(port, () => {
+//     console.log(`listening on port: ${port}`);
+// });
+
 
 
 
@@ -78,10 +97,10 @@ app.listen(3011, () => {
 
 
 //prvi tutorial
-//       dbOperation = require('./src/dbFiles/dbOperation');
+//dbOperation = require('./src/dbFiles/dbOperation');
 // const Psiholog = require('./src/dbFiles/Psiholog');
 
-    
+
 //       cors = require('cors');
 //  //cors = require('cors');
 // const API_PORT = process.env.port || 5000;
@@ -118,4 +137,4 @@ app.listen(3011, () => {
 // // })
 
 
-// // app.listen(API_PORT,()=>console.log(`listening on port ${API_PORT}`));
+// app.listen(API_PORT,()=>console.log(`listening on port ${API_PORT}`));
