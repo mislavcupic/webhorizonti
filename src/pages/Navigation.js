@@ -5,9 +5,11 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Logo from './Logo'
 
 
+
 function Navigation() {
+
   return (
-    <Navbar collapseOnSelect expand="lg" bg="light" variant="light"  >
+    <Navbar collapseOnSelect expand="lg" bg="primary" variant="light"  >
     <Navbar.Brand href="#home">
       <Logo
         alt=""
@@ -16,28 +18,38 @@ function Navigation() {
         className="d-inline-block align-top"
       />
      Horizonti
-    </Navbar.Brand>
+    </Navbar.Brand >
     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
     <Navbar.Collapse id="responsive-navbar-nav">
       <Nav className="mr-auto">
         <Nav.Link href="/">Home</Nav.Link>
-        <NavDropdown title="About" id="collasible-nav-dropdown">
-        <NavDropdown.Item href="/about">O nama</NavDropdown.Item>
-          <NavDropdown.Item href="/about/introductionspeech">Pozdravni govor</NavDropdown.Item>
+        <NavDropdown title="About" id="collasible-nav-dropdown" >
+        <NavDropdown.Item color='red' href="/about">O nama</NavDropdown.Item><NavDropdown.Divider/>
+        
+          <NavDropdown.Item href="/about/introductionspeech">Pozdravni govor</NavDropdown.Item><NavDropdown.Divider/>
+          
           <NavDropdown.Item href="/about/organizingcomettee">
+          
             Programsko povjerenstvo
-          </NavDropdown.Item>
+          </NavDropdown.Item><NavDropdown.Divider/>
           <NavDropdown.Item href="/about/theplaceofevent">Mjesto odrzavanja</NavDropdown.Item>
         </NavDropdown>
 
         <NavDropdown title="Kotizacije i smještaj" id="collasible-nav-dropdown">
           <NavDropdown.Item href="/registrationfeesaccommodation">Kotizacije i smještaj</NavDropdown.Item>
+          <NavDropdown.Divider/>
           <NavDropdown.Item href="/registrationfeesaccommodation/dataprotection">
             Zaštita podataka
           </NavDropdown.Item>
+          <NavDropdown.Divider/>
           <NavDropdown.Item href="/registrationfeesaccommodation/eventregistration">
             Prijava na događaj
           </NavDropdown.Item>
+          <NavDropdown.Divider/>
+          <NavDropdown.Item href="/registrationfeesaccommodation/formsofparticipation">
+            Oblici sudjelovanja
+          </NavDropdown.Item>
+          
         </NavDropdown>
       </Nav>
       <Nav.Link href="/registrationfeesaccommodation/eventregistration">Prijava</Nav.Link>

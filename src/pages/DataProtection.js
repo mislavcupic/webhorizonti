@@ -1,7 +1,7 @@
 import React from 'react'
 import { CardGroup, Container, Col, Row } from 'react-bootstrap'
 import CardsMental from './CardsMental'
-
+import Footer from './Footer'
 export default function DataProtection() {
   return (
     <> 
@@ -20,7 +20,7 @@ export default function DataProtection() {
       </Row>
     </Container>
      
-    
+    <Footer/>
    
     Data Protection site...
 

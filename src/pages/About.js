@@ -5,6 +5,7 @@ import IntroductionSpeech from './IntroductionSpeech';
 import ThePlaceOfEvent from './ThePlaceOfEvent';
 import Navigation from '../pages/Navigation';
 import CarouselComponent from './CarouselComponent'
+import Footer from './Footer';
 export default function About() {
   return (
     <>
@@ -19,7 +20,7 @@ export default function About() {
  
   
    </Routes>
-
+   <Footer/>
     </>
   )
 }

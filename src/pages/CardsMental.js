@@ -20,7 +20,7 @@ export default function CardsMental() {
         </Card.Footer>
         </Card>
       
-       
+      
     </div>
   )
 }

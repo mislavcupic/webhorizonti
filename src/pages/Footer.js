@@ -1,6 +1,7 @@
 import React from 'react'
-
 import { MDBFooter, MDBContainer, MDBRow, MDBCol, MDBIcon } from 'mdb-react-ui-kit';
+
+
 
 export default function Footer() {
   return (
@@ -12,7 +13,7 @@ export default function Footer() {
         </div>
 
         <div>
-          <a href='https://facebook.com' className='me-4 text-reset'>
+          <a href='https://www.psiholoska-komora.hr/' className='me-4 text-reset'>
             <MDBIcon color='secondary' fab icon='facebook-f' />
           </a>
           <a href='https://twitter.com' className='me-4 text-reset'>
@@ -37,11 +38,10 @@ export default function Footer() {
             <MDBCol md='3' lg='4' xl='3' className='mx-auto mb-4'>
               <h6 className='text-uppercase fw-bold mb-4'>
                 <MDBIcon color='secondary' icon='gem' className='me-3' />
-                Company name
+                Horizonti snage
               </h6>
               <p>
-                Here you can use rows and columns to organize your footer content. Lorem ipsum dolor sit
-                amet, consectetur adipisicing elit.
+              'Horizonti snage predstavlja svoju drugu konferenciju s temom, kako preživjeti život bez smrti do kraja života'
               </p>
             </MDBCol>
 
