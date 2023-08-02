@@ -46,11 +46,11 @@ catch(error){
 }
 }
 
-//create predavanje operacija
-// const createPredavanje = async(Predavanje) => {
+//create post predavanje operacija
+// const postPredavanja = async(Predavanje) => {
 //     try{
 //         let pool = await sql.connect(config);
-//         let predavanje = pool.request().query(`INSERT INTO Predavanja VALUES 
+//         let predavanje = pool.request().query(`SELECT * FROM Predavanja
 //          ('${Predavanje.Predavanje_ID}', 
 //             '${Predavanje.naziv}',
 //             '${Predavanje.tip}',
@@ -71,5 +71,6 @@ module.exports = {
     getPsiholozi,
     createPsiholog,
     getPredavanja,
+   // postPredavanja
     //createPredavanje
 }

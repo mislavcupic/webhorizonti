@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import {Table,Container,Row, Button} from 'react-bootstrap'
-import Predavanje from '../dbFiles/Predavanje'
-import { nanoid } from 'nanoid'
+// import Predavanje from '../dbFiles/Predavanje'
+// import { nanoid } from 'nanoid'
 export default function LectureSelection() { //tu mogu gurnuti prop i samo napisati psiholog
    // let Predavanje_ID = nanoid(5);
     // const [predavanje,setPredavanje] = useState ({
@@ -40,30 +40,52 @@ export default function LectureSelection() { //tu mogu gurnuti prop i samo napis
       //   }
       // }
      //ovo je moja metoda fetch
-      // const getPredavanja = async () => {
-      //   const data = await fetch('/registrationfeesaccommodation/lectureselection',{
-      //     method:'GET',
+      // const postPredavanja = async () => {
+      //   const response = await fetch('/registrationfeesaccommodation/lectureselection',{
+      //     method:'POST',
       //     headers: {
       //         'Content-Type':'application/json',
       //         'Accept': 'application/json'
-      //             }
+      //             },
+      //     body: JSON.stringify({...lista})
       //   }).then((response)=>
-      //     setLista(response)
+      //     response.json());
+      //     setLista(response);
         
-        
-      // );
-      // console.log(data);
-      const getPredavanja = async () => {
-        const response = await fetch(
-          '/registrationfeesaccommodation/lectureselection'
-        ).then((response) => response.json());
+      
+      // }
+      //moja metoda - getPredavanja
+      // const getPredavanja = async () => {
+      //   const response = await fetch(
+      //     '/registrationfeesaccommodation/lectureselection'
+      //   ).then((response) => response.json());
     
-        setLista(response);
-      };
+      //   setLista(response);
+      // };
     
       // useEffect(() => {
       //   getPredavanja();
       // }, []);
+
+      //chat gpt
+      const getPredavanja = async () => {
+        try {
+          const response = await fetch('/registrationfeesaccommodation/lectureselection');
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+      
+          const data = await response.json();
+          setLista(data);
+        } catch (error) {
+          // Handle the error appropriately, for example, log it or show an error message
+          console.error('Error fetching data:', error);
+        }
+      };
+      
+      useEffect(() => {
+        getPredavanja();
+      }, []);
   return (
     
      <>
@@ -98,7 +120,7 @@ export default function LectureSelection() { //tu mogu gurnuti prop i samo napis
                 ))}
           </tbody>
           
-          </Table><Button onClick={getPredavanja}>Prikaz predavanja</Button></Row></Container>
+          </Table><Button onClick={getPredavanja}>Prikaz predavanja</Button><br/></Row></Container>
        
           
         </>

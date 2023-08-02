@@ -6,7 +6,7 @@ const app = express();
 const dbOperation = require('./src/dbFiles/dbOperation');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
-const port = 8080;
+const port = process.env.REACT_APP_PORT;
 
 
 
@@ -65,23 +65,114 @@ function sendEmail (userPsiholog) {
 
  });
 
+//moja createPsiholog metoda
+// app.post('/registrationfeesaccommodation/eventregistration', async (req, res) =>{
+//     await dbOperation.createPsiholog(req.body);
+//     const result = await dbOperation.getPsiholozi(req.body.name);
+//     console.log(req.body);
+//     if(result!=null){
+//         res.send(result.recordset);
+//         sendEmail(req.body).then((response)=> req.send(response.message)).catch((err)=> res.status(500).send(err.message));
+//     }
+// }
+// );
 
-app.post('/registrationfeesaccommodation/eventregistration', async (req, res) =>{
-    await dbOperation.createPsiholog(req.body);
-    const result = await dbOperation.getPsiholozi(req.body.name);
+//predložena u tutorijalu da bi se izbjegao ERR_HTTP_HEADERS_SENT
+// app.post('/registrationfeesaccommodation/eventregistration', async (req, res) => {
+//     await dbOperation.createPsiholog(req.body);
+    
+//     if (!req.body) {
+//       return res.status(400).json({
+//         status: 'error',
+//         error: 'req body cannot be empty',
+//       });
+//     }
+  
+//     res.status(200).json({
+//       status: 'succes',
+//       data: req.body,
+//     })
+//     const result = dbOperation.getPsiholozi(req.body.name);
+//     console.log(req.body);
+//     if(result!=null){
+//         res.send(result.recordset);
+//         sendEmail(req.body).then((response)=> req.send(response.message)).catch((err)=> res.status(500).send(err.message)); //result umj req.body ovdje
+//     }
+//   });
+//predložena gpt-chat
+app.post('/registrationfeesaccommodation/eventregistration', async (req, res) => {
+  try {
+     await dbOperation.createPsiholog(req.body);
+     
+     const result = await dbOperation.getPsiholozi(req.body.name);
+     console.log(req.body);
+     
+     if (result != null) {
+        await sendEmail(req.body);
+     }
+     
+     return res.status(200).json({
+        status: 'success',
+        data: req.body
+     });
+  } catch (error) {
+     console.log(error);
+     return res.status(400).json({
+        status: 'error',
+        error: error.message
+     });
+  }
+});
+ 
 
-    console.log(req.body);
+//PREDAVANJA GET I POST - moj način
+// app.get('/registrationfeesaccommodation/lectureselection', async (req,res) =>{
+//     await dbOperation.getPredavanja();
+//   const result = await dbOperation.getPredavanja();
+//   console.log(req);
+//   console.log(result.recordset);
+//   res.send(result.recordset);
+//  //    sendEmail().then((response)=> req.send(response.message)).catch((err)=> res.status(500).send(err.message));
+//  return;
 
+// });
 
-    if(result!=null){
-        res.send(result.recordset);
-        sendEmail(req.body).then((response)=> req.send(response.message)).catch((err)=> res.status(500).send(err.message));
-    }
+//CHAT GPT ANSWER FOR GET LECTURESELECTION MENU
+// Assuming you have required dependencies and initialized the app and dbOperation.
+
+// Improved version of the endpoint handler
+app.get('/registrationfeesaccommodation/lectureselection', async (req, res) => {
+  try {
+    // Fetch the data from the database using dbOperation.getPredavanja()
+    const result = await dbOperation.getPredavanja();
+    console.log(result.recordset);
+
+    // Send the fetched data as the response
+    res.send(result.recordset);
+  } catch (error) {
+    // If there's an error, handle it gracefully
+    console.error('Error while fetching data:', error);
+    res.status(500).send('An error occurred while fetching data.');
+  }
 });
 
-app.get('/registrationfeesaccommodation/lectureselection', async (req,res) =>{
+// Additional improvement: If you want to send an email (as it seems commented out in the original code),
+// you can use a separate endpoint for that purpose, and you can refactor the code as follows:
+
+// app.post('/sendEmail', async (req, res) => {
+//   try {
+//     // sendEmail() is assumed to be a function that sends the email
+//     const response = await sendEmail();
+//     res.send(response.message);
+//   } catch (error) {
+//     console.error('Error while sending email:', error);
+//     res.status(500).send('An error occurred while sending the email.');
+//   }
+// });
+
+app.post('/registrationfeesaccommodation/lectureselection', async (req,res) =>{
     await dbOperation.getPredavanja();
-  const result = await dbOperation.getPredavanja();
+  const result = dbOperation.getPredavanja();
   console.log(req);
   console.log(result.recordset);
   res.send(result.recordset);
@@ -92,7 +183,7 @@ app.get('/registrationfeesaccommodation/lectureselection', async (req,res) =>{
 
 // npm run dev --host localhost:8080
 
-//ovo nekad moraš odkomat
+//  O  V  O     N  E  K  A  D     T   R   E  B  A  Š      O   D   K   O  M   E N   T  I  R  A   T  I
 
 app.listen(port, () => {
     console.log(`listening on port: ${port}`);

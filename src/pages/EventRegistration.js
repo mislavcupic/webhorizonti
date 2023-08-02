@@ -6,7 +6,7 @@ import Psiholog from '../dbFiles/Psiholog';
 import { nanoid } from 'nanoid'
 import { Modal } from 'react-bootstrap';
 import CarouselComponent from './CarouselComponent';
-import LectureSelection from './LectureSelection';
+
 
 
 
@@ -171,6 +171,7 @@ const createPsiholog = async () => {
     }});
     console.log(newData);
   }
+  
 }
 
 //(response) => {
