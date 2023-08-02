@@ -23,6 +23,6 @@ class Psiholog   { //extends React.Component
 
 }
 
-module.exports = Psiholog;
+//module.exports = Psiholog;
 
-//export default Psiholog;
+export default Psiholog;
