@@ -185,9 +185,9 @@ app.post('/registrationfeesaccommodation/lectureselection', async (req,res) =>{
 
 //  O  V  O     N  E  K  A  D     T   R   E  B  A  Š      O   D   K   O  M   E N   T  I  R  A   T  I
 
-app.listen(port, () => {
-    console.log(`listening on port: ${port}`);
-});
+// app.listen(port, () => {
+//     console.log(`listening on port: ${port}`);
+// });
 
 
 
