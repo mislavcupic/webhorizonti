@@ -5,6 +5,7 @@ import {Routes,Route} from 'react-router-dom'
 import EventRegistration from './EventRegistration'
 import Footer from './Footer'
 import FormsOfParticipation from './FormsOfParticipation'
+import LectureSelection from './LectureSelection'
 export default function Fees() {
   return (
     <>
@@ -14,6 +15,7 @@ export default function Fees() {
      <Route path="dataprotection" element={<DataProtection/>}></Route>
      <Route path="eventregistration" element={<EventRegistration/>}></Route>
      <Route path="formsofparticipation" element={<FormsOfParticipation/>}></Route>
+     <Route path="lectureselection" element={<LectureSelection/>}></Route>
     
      </Routes>
      <Footer/>

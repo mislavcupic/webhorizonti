@@ -8,7 +8,6 @@ import Navigation from './pages/Navigation';
 import Fees from './pages/Fees';
 
 
-
 function App() {
   return (
     <>

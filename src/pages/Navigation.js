@@ -9,6 +9,8 @@ import Logo from './Logo'
 function Navigation() {
 
   return (
+    <>
+
     <Navbar collapseOnSelect expand="lg" bg="primary" variant="light"  >
     <Navbar.Brand href="#home">
       <Logo
@@ -16,6 +18,7 @@ function Navigation() {
         width="30"
         height="30"
         className="d-inline-block align-top"
+        type="file"
       />
      Horizonti
     </Navbar.Brand >
@@ -49,7 +52,10 @@ function Navigation() {
           <NavDropdown.Item href="/registrationfeesaccommodation/formsofparticipation">
             Oblici sudjelovanja
           </NavDropdown.Item>
-          
+          <NavDropdown.Divider/>
+          <NavDropdown.Item href="/registrationfeesaccommodation/lectureselection">
+            Odabir seminara
+          </NavDropdown.Item>
         </NavDropdown>
       </Nav>
       <Nav.Link href="/registrationfeesaccommodation/eventregistration">Prijava</Nav.Link>
@@ -61,6 +67,7 @@ function Navigation() {
       </Nav>
     </Navbar.Collapse>
   </Navbar>
+  </>
   );
 }
 

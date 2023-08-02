@@ -5,13 +5,14 @@ import Psiholog from '../dbFiles/Psiholog';
 // import { v4 as uuid } from 'uuid';
 import { nanoid } from 'nanoid'
 import { Modal } from 'react-bootstrap';
-import './EventCss.css';
+import CarouselComponent from './CarouselComponent';
+import LectureSelection from './LectureSelection';
+
 
 
 export default function EventRegistration() {
 let Psiholog_ID = nanoid(10);
-
-
+let validates = true;
 
   //Math.floor(Math.random(0,10000)*10000);
   //imam problem jer mi baza i dalje prima brojeve, a promijenio sam u bazi da je id varchar
@@ -41,11 +42,11 @@ let Psiholog_ID = nanoid(10);
   const handleShow = () => setShow(true);
 
 //errorhandling
-const [error,setError] = useState({
-  errorIme: "",
-  errorPrezime:"",
-  errorEmail:""
-});
+// const [error,setError] = useState({
+//   errorIme: "",
+//   errorPrezime:"",
+//   errorEmail:""
+// });
 
 
 
@@ -92,19 +93,56 @@ console.log(psiho);
 //module.exports = psiho;
 
  const submitValues = (e) => {
-  e.preventDefault();
-
-  //clearanje submit forme
+  //windows.confirm
+ 
   const firstNameInput = document.getElementById('ime');
-  firstNameInput.value='';
   const lastNameInput = document.getElementById('prezime');
-  lastNameInput.value='';
   const emailInput = document.getElementById('email');
-  emailInput.value='';
+  
+ 
+  while(validates){
+     if(firstNameInput.value===''||lastNameInput.value===''||emailInput.value===''){
+        alert('Ispuni sva polja da bi se nastavio proces prijave na stručni skup "Horizonti snage"');
+        return;
+        } 
 
-  if(firstNameInput.length <2){
-    setError({errorIme: 'Unesite ime!'});
-  }
+    else if(firstNameInput.value!==''&&lastNameInput.value!==''&&emailInput.value!==''){
+ let confirmWindow= window.confirm(`Želite li pospremiti ovako unesene podatke? 
+  Ime: ${psiho.ime},
+  Prezime: ${psiho.prezime},
+  Email: ${psiho.email}`);
+ 
+  if(confirmWindow){
+    try{
+  e.preventDefault();
+  setTimeout(5000)
+  
+    }
+    catch(err){
+      console.log(err);
+    }
+    
+  
+   //clearanje submit forme
+  firstNameInput.value='';
+  lastNameInput.value='';
+  emailInput.value='';
+  validates=true;
+  return;
+ }
+else {
+  firstNameInput.value = `${psiho.ime}`
+  lastNameInput.value = `${psiho.prezime}`
+  emailInput.value = `${psiho.email}`
+ return;
+}
+
+}
+ 
+ //validacije
+  // if(firstNameInput.length <2){
+  //   setError({errorIme: 'Unesite ime!'});
+  // }
   //ovo mi ne treba
   // setPsiholog({
   //   ime: "",
@@ -113,9 +151,8 @@ console.log(psiho);
 
   // })
 
-
-
-  }
+ }
+}
 
 //OVO ĆE TI TREBATI, SAMO PRIVREMENO KOMENTIRAM RADI PROVJERE
 const createPsiholog = async () => {
@@ -128,15 +165,17 @@ const createPsiholog = async () => {
       },
       body: JSON.stringify({...psiho})
 
-    }).then((response) => {
+    }).then((response) => { if(response.status === 200){
+      alert('Uspješno pospremljeni podaci, uskoro ćete dobiti mail potvrde');
       console.log(response);
-    });
+    }});
     console.log(newData);
-  }else{
-    return alert('Ispuni sva polja da bi nastavio proces prijave');
   }
 }
 
+//(response) => {
+ 
+//ERRORI
 // const [errors,setErrors] =useState ({});
 // function handleInput(e) {
 //   const newObj = {...values,[e.target.ime]:event.target.value}
@@ -150,9 +189,10 @@ const createPsiholog = async () => {
   return (
 
     <>
+    <CarouselComponent/>
     <Container fluid>
       <Row>
-        <Button variant="outline-secondary" size="md" onClick={handleShow}>
+        <Button variant="primary" size="md" onClick={handleShow}>
         Prijava na 'Horizonti snage'
       </Button>
       </Row>
@@ -169,7 +209,7 @@ const createPsiholog = async () => {
            <Form.Control type="name"
                          placeholder="Unesi ime" id='ime' name="ime"  onChange={handleInputIme} />  {/** */}
          </Form.Group>
-         <div style={{color:'red'}}>{error.errorIme}</div>
+         {/* <div style={{color:'red'}}>{error.errorIme}</div> validacije errori*/}
          <Form.Group>
            <Form.Label htmlFor='prezime'>Prezime:</Form.Label>
            <Form.Control type="prezime"
@@ -183,12 +223,12 @@ const createPsiholog = async () => {
 
 
          <br/>
-         <Button variant="outline-primary" type="submit" onClick={createPsiholog}>
+         <Button variant="primary" type="submit" onClick={createPsiholog}>
             Click here to submit form
          </Button>
          <br/>
          <br/>
-         <Button variant="outline-primary" type="submit">
+         <Button variant="primary" type="submit">
             Click here to return data
          </Button>
 
@@ -207,6 +247,7 @@ const createPsiholog = async () => {
       </Modal>
      
       </Container>
+     
      {/* <Container className='container-sm'>
                      <h4>Obrazac za prijavu na konferenciju:</h4>
 

@@ -21,3 +21,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+
+.env #REACT_APP_GOOGLE_PASS #REACT_APP_SQL_PASS

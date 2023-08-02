@@ -83,7 +83,7 @@ export default function FormsOfParticipation() {
           </Card.Text>
         </Card.Body>
         <Card.Footer>
-          <small className="text-muted">{'objavljeno prije '+newDaysRemaining+' dana'}</small>
+          <small className="text-muted">{'objavljeno prije '+newDaysRemaining2+' dana'}</small>
         </Card.Footer>
         </Card>
           </CardGroup>

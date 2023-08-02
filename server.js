@@ -6,7 +6,7 @@ const app = express();
 const dbOperation = require('./src/dbFiles/dbOperation');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
-const port = 7000;
+const port = 8080;
 
 
 
@@ -24,7 +24,7 @@ function sendEmail (userPsiholog) {
             service: "gmail",
             auth:{
                 user:'mislav.cupic@gmail.com',
-                pass:'kgaoznzuauyusjvs',
+                pass: process.env.REACT_APP_GOOGLE_PASS,
 
             }
             ,
@@ -79,12 +79,24 @@ app.post('/registrationfeesaccommodation/eventregistration', async (req, res) =>
     }
 });
 
+app.get('/registrationfeesaccommodation/lectureselection', async (req,res) =>{
+    await dbOperation.getPredavanja();
+  const result = await dbOperation.getPredavanja();
+  console.log(req);
+  console.log(result.recordset);
+  res.send(result.recordset);
+ //    sendEmail().then((response)=> req.send(response.message)).catch((err)=> res.status(500).send(err.message));
+ return;
+
+});
+
 // npm run dev --host localhost:8080
 
 //ovo nekad moraš odkomat
-// app.listen(port, () => {
-//     console.log(`listening on port: ${port}`);
-// });
+
+app.listen(port, () => {
+    console.log(`listening on port: ${port}`);
+});
 
 
 
