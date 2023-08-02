@@ -94,9 +94,9 @@ app.get('/registrationfeesaccommodation/lectureselection', async (req,res) =>{
 
 //ovo nekad moraš odkomat
 
-app.listen(port, () => {
-    console.log(`listening on port: ${port}`);
-});
+// app.listen(port, () => {
+//     console.log(`listening on port: ${port}`);
+// });
 
 
 

@@ -7,7 +7,6 @@
   background-color: black;
   font-family: "Times New Roman", Times, serif;
   color: black;
-  background-color: palegoldenrod;
 }
 
 .App-logo {
@@ -22,7 +21,7 @@
 
 .card-img {
   margin-top: 15px;
-  opacity: 0.2;
+  opacity: 0.6;
   padding: 5px;
 }
 
