@@ -6,6 +6,7 @@ import EventRegistration from './EventRegistration'
 import Footer from './Footer'
 import FormsOfParticipation from './FormsOfParticipation'
 import LectureSelection from './LectureSelection'
+import LectureSelectionPredb from './LectureSelectionPredb'
 export default function Fees() {
   return (
     <>
@@ -16,6 +17,7 @@ export default function Fees() {
      <Route path="eventregistration" element={<EventRegistration/>}></Route>
      <Route path="formsofparticipation" element={<FormsOfParticipation/>}></Route>
      <Route path="lectureselection" element={<LectureSelection/>}></Route>
+     <Route path="lectureselectionpredb" element={<LectureSelectionPredb/>}></Route>
     
      </Routes>
      <Footer/>

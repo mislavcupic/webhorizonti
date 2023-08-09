@@ -14,32 +14,84 @@ catch(error){
 }
 }
 
-//create psiholog operacija
-const createPsiholog = async(Psiholog) => {
-    try{
-        let pool = await sql.connect(config);
-        let psiholozi = pool.request().query(`INSERT INTO EventRegistration2 VALUES 
-         ('${Psiholog.Psiholog_ID}', 
-            '${Psiholog.ime}',
-            '${Psiholog.prezime}',
-            '${Psiholog.email}',
-            '${Psiholog.date}'
-            )`);
-        console.log(psiholozi);
-        return psiholozi;
+// const getPrijavljeniPsiholozi = async() => {
+//     try{
+//         let pool = await sql.connect(config);
+//         let prijavljeni = pool.request().query('SELECT * FROM Predbiljezbe,EventRegistration2,Predavanja ');
+//         console.log(prijavljeni);
+//         return prijavljeni;
+//     }
+// catch(error){
+//     console.log(error);
+// }
+// }
+// Create Psiholog operation
+const createPsiholog = async (Psiholog) => {
+    try {
+      let pool = await sql.connect(config);
+      await pool.request().query(`
+        INSERT INTO EventRegistration2
+        VALUES ('${Psiholog.Psiholog_ID}', 
+                '${Psiholog.ime}',
+                '${Psiholog.prezime}',
+                '${Psiholog.email}',
+                '${Psiholog.date}')
+      `);
+    } catch (error) {
+      console.log(error);
+      throw error;
     }
-catch(error){
-    console.log(error);
-}
-}
+  };
+  
+  // Get Predavanja operation
+  const getPredavanja = async () => {
+    try {
+      let pool = await sql.connect(config);
+      const result = await pool.request().query('SELECT * FROM Predavanja');
+      return result.recordset;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+//create psiholog operacija
+// const createPsiholog = async(Psiholog) => {
+//     try{
+//         let pool = await sql.connect(config);
+//         let psiholozi = pool.request().query(`INSERT INTO EventRegistration2 VALUES 
+//          ('${Psiholog.Psiholog_ID}', 
+//             '${Psiholog.ime}',
+//             '${Psiholog.prezime}',
+//             '${Psiholog.email}',
+//             '${Psiholog.date}'
+//             )`);
+//         console.log(psiholozi);
+//         return psiholozi;
+//     }
+// catch(error){
+//     console.log(error);
+// }
+// }
 
-//getPredavanja operacija
-const getPredavanja = async() => {
+// //getPredavanja operacija
+// const getPredavanja = async() => {
+//     try{
+//         let pool = await sql.connect(config);
+//         let predavanja = pool.request().query('SELECT * FROM Predavanja');
+//         console.log(predavanja);
+//         return predavanja;
+//     }
+// catch(error){
+//     console.log(error);
+// }
+// }
+//ovo je za sve predbiljezbe
+const getPredbiljezbe = async() => {
     try{
         let pool = await sql.connect(config);
-        let predavanja = pool.request().query('SELECT * FROM Predavanja');
-        console.log(predavanja);
-        return predavanja;
+        let predbiljezbe = pool.request().query('SELECT EventRegistration2.ime, EventRegistration2.prezime, EventRegistration2.email, EventRegistration2.datetime, Predavanja.naziv, Predavanja.tip, Predavanja.opis,Predavanja.slobodnaMjesta FROM EventRegistration2, Predavanja, Predbiljezbe WHERE Predbiljezbe.Psiholog_ID = EventRegistration2.Psiholog_ID AND Predbiljezbe.Predavanje_ID = Predavanja.Predavanje_ID');  //tu treba osmisliti pravi upit
+        console.log(predbiljezbe);
+        return predbiljezbe;
     }
 catch(error){
     console.log(error);
@@ -71,6 +123,7 @@ module.exports = {
     getPsiholozi,
     createPsiholog,
     getPredavanja,
-   // postPredavanja
+    getPredbiljezbe
+   // createPredbiljezba
     //createPredavanje
 }

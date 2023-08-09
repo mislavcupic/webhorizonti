@@ -1,6 +1,6 @@
 class Predavanje {
 
-    constructor(Predavanje_ID,naziv,tip,opis,brojPolaznika,slobodnaMjesta,ukupnoMjesta,Psiholog_ID){
+    constructor(Predavanje_ID,naziv,tip,opis,brojPolaznika,slobodnaMjesta,ukupnoMjesta){
         brojPolaznika++;
         slobodnaMjesta=ukupnoMjesta--;
         if(slobodnaMjesta<=0){
@@ -13,7 +13,7 @@ class Predavanje {
         this.brojPolaznika=brojPolaznika;
         this.slobodnaMjesta=slobodnaMjesta;
         this.ukupnoMjesta=ukupnoMjesta;
-        this.Psiholog_ID = Psiholog_ID;
+       
         
     }
 }
