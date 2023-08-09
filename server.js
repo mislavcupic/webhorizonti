@@ -10,7 +10,7 @@ const nodemailer = require('nodemailer');
 
 
 // Import database operations
-const { createPsiholog, getPredavanja } = require('./src/dbFiles/dbOperation');
+const { createPsiholog, getPredavanja, getPredbiljezbe } = require('./src/dbFiles/dbOperation');
 
 
 app.use(express.json());
@@ -57,19 +57,17 @@ io.on('connection', (socket) => {
 
   socket.on('insertData', async (data) => {
     try {
-      
       setTimeout(async () => {
         await createPsiholog(data);
         sendEmail(data);
         io.emit('dataInserted', data);
-      
       }, 5000);
     } catch (error) {
       console.error('Error while inserting data:', error);
       socket.emit('insertionError', 'An error occurred while inserting data.');
     }
-   
   });
+
   socket.on('getPredavanja', async () => {
     try {
       const predavanja = await getPredavanja();
@@ -80,9 +78,20 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('getPredbiljezbe', async () => {
+    try {
+      const predbiljezbe = await getPredbiljezbe();
+      io.emit('getPredbiljezbe', predbiljezbe);
+    } catch (error) {
+      console.error('Error while fetching data:', error);
+      socket.emit('fetchingError', 'An error occurred while fetching data.');
+    }
+  });
+
   socket.on('disconnect', () => {
     console.log('A user disconnected');
   });
+
 
 
 
