@@ -32,6 +32,19 @@ function CarouselComponent() {
         <Carousel.Item style={{'height':"80vh"}}>
           <img
             className="d-block w-100"
+            // src={require('C:\\Users\\misla\\web-jelk\\src\\assets\\jelkovec-zrak2.jpg')}
+            src="https://c1.wallpaperflare.com/preview/504/588/842/waterfall-nature-water-croatia.jpg"
+            alt="mental-health 2"
+          />
+  
+          <Carousel.Caption>
+            <h3>Second slide label</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          </Carousel.Caption>
+        </Carousel.Item>
+        <Carousel.Item style={{'height':"80vh"}}>
+          <img
+            className="d-block w-100"
             // src={require('C:\\Users\\misla\\web-jelk\\src\\assets\\jelkoveczrak.jpg')}
             src="https://www.picpedia.org/chalkboard/images/mental-health-treatment.jpg"
             alt="Third slide"

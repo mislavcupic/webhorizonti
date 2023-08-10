@@ -9,6 +9,7 @@ const port = process.env.REACT_APP_PORT || 8080;
 const nodemailer = require('nodemailer');
 
 
+
 // Import database operations
 const { createPsiholog, getPredavanja, getPredbiljezbe } = require('./src/dbFiles/dbOperation');
 
@@ -88,9 +89,9 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('disconnect', () => {
-    console.log('A user disconnected');
-  });
+  // socket.on('disconnect', () => {
+  //   console.log('A user disconnected');
+  // });
 
 
 

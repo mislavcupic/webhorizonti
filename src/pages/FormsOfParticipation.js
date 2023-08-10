@@ -1,6 +1,7 @@
 import React from 'react'
 import {Container,Row,Col} from 'react-bootstrap'
 import {Card, CardGroup } from 'react-bootstrap'
+
 export default function FormsOfParticipation() {
 
    
