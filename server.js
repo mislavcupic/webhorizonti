@@ -7,8 +7,15 @@ const io = socketIo(server);
 const cors = require('cors');
 const port = process.env.REACT_APP_PORT || 8080;
 const nodemailer = require('nodemailer');
+const path = require('path');
 
+// Serve static files (build folder) for the React app
+app.use(express.static(path.join(__dirname, 'build')));
 
+// Catch-all route to serve index.html for client-side routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 // Import database operations
 const { createPsiholog, getPredavanja, getPredbiljezbe } = require('./src/dbFiles/dbOperation');
@@ -63,6 +70,9 @@ io.on('connection', (socket) => {
         sendEmail(data);
         io.emit('dataInserted', data);
       }, 5000);
+      // Emit the refresh event
+ // socket.emit('refreshPage');
+
     } catch (error) {
       console.error('Error while inserting data:', error);
       socket.emit('insertionError', 'An error occurred while inserting data.');
@@ -79,19 +89,21 @@ io.on('connection', (socket) => {
     }
   });
 
+
+
   socket.on('getPredbiljezbe', async () => {
     try {
       const predbiljezbe = await getPredbiljezbe();
+      console.log(predbiljezbe);
       io.emit('getPredbiljezbe', predbiljezbe);
     } catch (error) {
       console.error('Error while fetching data:', error);
-      socket.emit('fetchingError', 'An error occurred while fetching data.');
+      io.emit('fetchingError', 'An error occurred while fetching data.');
     }
   });
-
-  // socket.on('disconnect', () => {
-  //   console.log('A user disconnected');
-  // });
+  socket.on('disconnect', () => {
+    console.log('A user disconnected');
+  });
 
 
 

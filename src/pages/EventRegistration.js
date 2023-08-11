@@ -4,14 +4,14 @@ import Psiholog from '../dbFiles/Psiholog';
 import { nanoid } from 'nanoid';
 import CarouselComponent from './CarouselComponent';
 import { io } from 'socket.io-client';
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 import horizonti_velik_cropped from '../assets/media/horizonti_velik_cropped.png';
 
 export default function EventRegistration() {
   let Psiholog_ID = nanoid(10);
   let validates = true;
   const applicationDate = new Date().toLocaleString();
-  const navigate = useNavigate();
+ // const navigate = useNavigate();
   const socket = io('http://localhost:8080');
 
   const [psiholog, setPsiholog] = useState({
@@ -92,7 +92,11 @@ export default function EventRegistration() {
   useEffect(() => {
     socket.on('dataInserted', (insertedData) => {
       console.log('Data inserted:', insertedData);
-      navigate('/');
+  //    navigate('/');
+    });
+    socket.on('refreshPage', () => {
+      // Refresh the page
+    //  location.reload();
     });
   }, []);
 

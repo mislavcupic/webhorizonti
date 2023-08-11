@@ -41,7 +41,20 @@ export default function LectureSelection() {
         <Row>
           <Table striped bordered hover>
             <thead className="bg-primary" mt-10>
-              {/* ... Header cells */}
+            <tr>
+            
+              
+            <th>Naziv: </th>
+            <th>Tip: </th>
+            <th>Opis: </th>
+            <th>Broj polaznika: </th>
+            <th>Slobodna mjesta: </th>
+            <th>Ukupno mjesta: </th>
+        
+            
+          
+            {/* <th>Psiholog_ID: </th> */}
+          </tr>
             </thead>
             <tbody>
               {loading ? (

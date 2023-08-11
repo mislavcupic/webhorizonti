@@ -8,6 +8,12 @@ export default function LectureSelectionPredb() { //tu mogu gurnuti prop i samo 
     const [lista,setLista] = useState([]);
     const [loading, setLoading] = useState(true);
     const socket = io('http://localhost:8080');
+
+    // Emit the event when you want to request the data
+const handleGetPredbiljezbe = () => {
+  socket.emit('getPredbiljezbe');
+};
+
     const getPredbiljezbe = () => {
       socket.emit('getPredbiljezbe');
     };
@@ -15,12 +21,19 @@ export default function LectureSelectionPredb() { //tu mogu gurnuti prop i samo 
     useEffect(() => {
       getPredbiljezbe();
   
-      socket.on('getPredbiljezbe', (fetchingPredbiljezbe) => {
-        setLista(fetchingPredbiljezbe);
-        console.log(fetchingPredbiljezbe);
-        setLoading(false);
+      // socket.on('getPredbiljezbe', (predbiljezbe) => {
+      //   setLista(predbiljezbe);
+      //   console.log(predbiljezbe);
+      //   setLoading(false);
        
-      });
+      // });
+      
+      socket.on('getPredbiljezbe', (data) => {
+        const predbiljezbeArray = data.recordset; // Extract the array from the received data
+        setLista(predbiljezbeArray); // Update the state with the array
+        setLoading(false);
+      }); 
+      
   
      
   
@@ -103,26 +116,30 @@ export default function LectureSelectionPredb() { //tu mogu gurnuti prop i samo 
           </thead>
           
           <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan="7">Loading...</td>
-              </tr>
-            ) : (
-              lista.map((pred) => (
-                <tr className="bg-warning" key={pred.Predbiljezba_ID}>
-                   <td>{pred.ime}</td>
-                     <td>{pred.prezime}</td>
-                    <td>{pred.email}</td>
-                    <td>{pred.datetime}</td>
-                   <td>{pred.naziv}</td>
-                    <td>{pred.tip}</td>
-                    <td>{pred.opis}</td>
-                
-                </tr>
-              )))}
+          {loading ? (
+  <tr>
+    <td colSpan="7">Loading...</td>
+  </tr>
+) : lista.length === 0 ? (
+  <tr>
+    <td colSpan="7">No data available.</td>
+  </tr>
+) : (
+  lista.map((pred) => (
+    <tr className="bg-warning" key={pred.Predbiljezbe_ID}>
+      <td>{pred.ime}</td>
+      <td>{pred.prezime}</td>
+      <td>{pred.email}</td>
+      <td>{pred.datetime}</td>
+      <td>{pred.naziv}</td>
+      <td>{pred.tip}</td>
+      <td>{pred.opis}</td>
+    </tr>
+  ))
+)}
           </tbody>
         </Table>
-        <Button onClick={getPredbiljezbe}>Prikaz predbiljezbi</Button>
+        <Button onClick={handleGetPredbiljezbe}>Prikaz predbiljezbi</Button>
         <br />
       </Row>
     </Container>
