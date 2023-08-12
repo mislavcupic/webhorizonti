@@ -7,6 +7,7 @@ import Footer from './Footer'
 import FormsOfParticipation from './FormsOfParticipation'
 import LectureSelection from './LectureSelection'
 import LectureSelectionPredb from './LectureSelectionPredb'
+import CreatePredavanje from './CreatePredavanje'
 export default function Fees() {
   return (
     <>
@@ -18,7 +19,7 @@ export default function Fees() {
      <Route path="formsofparticipation" element={<FormsOfParticipation/>}></Route>
      <Route path="lectureselection" element={<LectureSelection/>}></Route>
      <Route path="lectureselectionpredb" element={<LectureSelectionPredb/>}></Route>
-    
+     <Route path="createpredavanje" element={<CreatePredavanje/>}></Route>
      </Routes>
      <Footer/>
      </>

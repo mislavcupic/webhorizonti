@@ -42,12 +42,45 @@ const createPsiholog = async (Psiholog) => {
       throw error;
     }
   };
+
+  // Create Psiholog operation
+const createPredavanje = async (Predavanje) => {
+  try {
+    let pool = await sql.connect(config);
+    await pool.request().query(`
+      INSERT INTO Predavanja
+      VALUES ('${Predavanje.Predavanje_ID}', 
+              '${Predavanje.naziv}',
+              '${Predavanje.tip}',
+              '${Predavanje.opis}',
+              ${Predavanje.brojPolaznika},
+              ${Predavanje.slobodnaMjesta},
+              ${Predavanje.ukupnoMjesta})
+    `);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
   
   // Get Predavanja operation
   const getPredavanja = async () => {
     try {
       let pool = await sql.connect(config);
       const result = await pool.request().query('SELECT * FROM Predavanja');
+      return result.recordset;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  // Delete Predavanja operation
+  const deletePredavanje = async (Predavanje_ID) => {
+    try {
+      let pool = await sql.connect(config);
+      const result = await pool.request().query(`DELETE FROM Predavanja WHERE Predavanje_ID = '${Predavanje_ID}'`);
+      console.log(result);
       return result.recordset;
     } catch (error) {
       console.log(error);
@@ -123,7 +156,8 @@ module.exports = {
     getPsiholozi,
     createPsiholog,
     getPredavanja,
-    getPredbiljezbe
+    getPredbiljezbe,
    // createPredbiljezba
-    //createPredavanje
+    createPredavanje,
+    deletePredavanje
 }

@@ -18,7 +18,7 @@ app.get('*', (req, res) => {
 });
 
 // Import database operations
-const { createPsiholog, getPredavanja, getPredbiljezbe } = require('./src/dbFiles/dbOperation');
+const { createPsiholog,getPredavanja ,getPredbiljezbe ,createPredavanje ,deletePredavanje } = require('./src/dbFiles/dbOperation');
 
 
 app.use(express.json());
@@ -79,6 +79,21 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('insertPredavanje', async (data) => {
+    try {
+      setTimeout(async () => {
+        await createPredavanje(data);
+        io.emit('predavanjeInserted', data);
+      }, 5000);
+      // Emit the refresh event
+ // socket.emit('refreshPage');
+
+    } catch (error) {
+      console.error('Error while inserting data:', error);
+      socket.emit('insertionError', 'An error occurred while inserting predavanje.');
+    }
+  });
+
   socket.on('getPredavanja', async () => {
     try {
       const predavanja = await getPredavanja();
@@ -88,6 +103,18 @@ io.on('connection', (socket) => {
       socket.emit('fetchingError', 'An error occurred while fetching data.');
     }
   });
+
+  socket.on('deletePredavanje', async (predavanjeID) => {
+    try {
+      const predavanje = await deletePredavanje(predavanjeID);
+      console.log('Received predavanjeID:', predavanjeID);
+      io.emit('deletePredavanje', predavanje);
+    } catch (error) {
+      console.log(error);
+      socket.emit('fetchingError', 'An error occurred while fetching data.');
+    }
+  });
+  
 
 
 

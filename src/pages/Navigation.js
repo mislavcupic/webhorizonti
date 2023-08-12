@@ -60,6 +60,10 @@ function Navigation() {
           <NavDropdown.Item href="/registrationfeesaccommodation/lectureselectionpredb">
             Predbilježbe
           </NavDropdown.Item>
+          <NavDropdown.Divider/>
+          <NavDropdown.Item href="/registrationfeesaccommodation/createpredavanje">
+            Stvori predavanje
+          </NavDropdown.Item>
         </NavDropdown>
       </Nav>
       <Nav.Link href="/registrationfeesaccommodation/eventregistration">Prijava</Nav.Link>

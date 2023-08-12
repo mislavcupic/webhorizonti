@@ -17,4 +17,6 @@ class Predavanje {
         
     }
 }
-module.exports = Predavanje
+//module.exports = Predavanje
+
+export default Predavanje
