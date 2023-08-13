@@ -130,7 +130,20 @@ catch(error){
     console.log(error);
 }
 }
-
+// Create Predbiljezba operation
+const createPredbiljezba = async (predbiljezbaData) => {
+  try {
+    let pool = await sql.connect(config);
+    await pool.request().query(`
+      INSERT INTO Predbiljezbe (Psiholog_ID, Predavanje_ID)
+      VALUES ('${predbiljezbaData.Psiholog_ID}', '${predbiljezbaData.Predavanje_ID}')
+    `);
+    return true; // Return success status
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
 //create post predavanje operacija
 // const postPredavanja = async(Predavanje) => {
 //     try{
@@ -157,7 +170,7 @@ module.exports = {
     createPsiholog,
     getPredavanja,
     getPredbiljezbe,
-   // createPredbiljezba
+    createPredbiljezba,
     createPredavanje,
     deletePredavanje
 }
