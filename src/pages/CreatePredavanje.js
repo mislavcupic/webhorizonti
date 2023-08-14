@@ -126,6 +126,7 @@ export default function CreatePredavanje() {
       // Refresh the page
     //  location.reload();
     });
+   // socket.emit('Predavanje_ID',Predavanje_ID);
   }, []);
 
   return (

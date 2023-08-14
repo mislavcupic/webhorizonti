@@ -135,8 +135,8 @@ const createPredbiljezba = async (predbiljezbaData) => {
   try {
     let pool = await sql.connect(config);
     await pool.request().query(`
-      INSERT INTO Predbiljezbe (Psiholog_ID, Predavanje_ID)
-      VALUES ('${predbiljezbaData.Psiholog_ID}', '${predbiljezbaData.Predavanje_ID}')
+      INSERT INTO Predbiljezbe (Predbiljezbe_ID, Psiholog_ID, Predavanje_ID)
+      VALUES ('${predbiljezbaData.Predbiljezbe_ID}','${predbiljezbaData.Psiholog_ID}', '${predbiljezbaData.Predavanje_ID}')
     `);
     return true; // Return success status
   } catch (error) {
