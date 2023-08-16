@@ -78,21 +78,21 @@ io.on('connection', (socket) => {
       socket.emit('insertionError', 'An error occurred while inserting data.');
     }
   });
-// Event for creating predbiljezba
-socket.on('createPredbiljezba', async (predbiljezbaData) => {
-  try {
-    const result = await createPredbiljezba(predbiljezbaData);
-    if (result) {
-      io.emit('predbiljezbaStatus', 'success'); // Emit success status
-      console.log(predbiljezbaData)
-    } else {
-      io.emit('predbiljezbaStatus', 'error'); // Emit error status
-    }
-  } catch (error) {
-    console.log('Error while creating predbiljezba:', error);
-    io.emit('predbiljezbaStatus', 'error'); // Emit error status
-  }
-});
+// // Event for creating predbiljezba
+// socket.on('createPredbiljezba', async (predbiljezbaData) => {
+//   try {
+//     const result = await createPredbiljezba(predbiljezbaData);
+//     if (result) {
+//       io.emit('predbiljezbaStatus', 'success'); // Emit success status
+//       console.log(predbiljezbaData)
+//     } else {
+//       io.emit('predbiljezbaStatus', 'error'); // Emit error status
+//     }
+//   } catch (error) {
+//     console.log('Error while creating predbiljezba:', error);
+//     io.emit('predbiljezbaStatus', 'error'); // Emit error status
+//   }
+// });
 
   socket.on('insertPredavanje', async (data) => {
     try {
@@ -165,21 +165,35 @@ socket.on('deletePredavanje', async (predavanjeID) => {
   });
 
   // Event for creating predbiljezba
-  socket.on('createPredbiljezba', async (predbiljezbaID,psihologID,predavanjeID) => {
-    try{
-      const predbiljezbaData = await createPredbiljezba(predbiljezbaID,psihologID,predavanjeID);
-      io.emit('createPredbiljezba', predbiljezbaData);
-      console.log('Deleted predavanje with ID:', predbiljezbaID);
+  socket.on('createPredbiljezba', async (predbiljezbaData) => {
+    try {
+      const { predbiljezbaID, psihologID, predavanjeID } = predbiljezbaData;
+      const result = await createPredbiljezba (predbiljezbaID, psihologID, predavanjeID);
+      if (result) {
+        io.emit('predbiljezbaStatus', 'success'); // Emit success status
+      } else {
+        io.emit('predbiljezbaStatus', 'error'); // Emit error status
+      }
+    } catch (error) {
+      console.log('Error while creating predbiljezba:', error);
+      io.emit('predbiljezbaStatus', 'error'); // Emit error status
     }
-    catch(error){
-      console.error('Error while fetching data:', error);
-      io.emit('fetchingError', 'An error occurred while fetching data.');
-
-    }
-    // Perform validation and store predbiljezbaData in your database
-    // For simplicity, we'll just emit a success status here
-    socket.emit('predbiljezbaStatus', 'success');
   });
+  // socket.on('createPredbiljezba', async (predbiljezbaID,psihologID,predavanjeID) => {
+  //   try{
+  //     const predbiljezbaData = await createPredbiljezba(predbiljezbaID,psihologID,predavanjeID);
+  //     io.emit('createPredbiljezba', predbiljezbaData);
+  //     console.log('Deleted predavanje with ID:', predbiljezbaID);
+  //   }
+  //   catch(error){
+  //     console.error('Error while fetching data:', error);
+  //     io.emit('fetchingError', 'An error occurred while fetching data.');
+
+  //   }
+  //   // Perform validation and store predbiljezbaData in your database
+  //   // For simplicity, we'll just emit a success status here
+  //   socket.emit('predbiljezbaStatus', 'success');
+  // });
 
   socket.on('disconnect', () => {
     console.log('A user disconnected');

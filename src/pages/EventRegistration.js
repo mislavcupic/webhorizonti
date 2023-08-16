@@ -7,6 +7,8 @@ import { io } from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
 import horizonti_velik_cropped from '../assets/media/horizonti_velik_cropped.png'
 
+
+
 export default function EventRegistration() {
   let Psiholog_ID = nanoid(10);
   let validates = true;
@@ -22,7 +24,8 @@ export default function EventRegistration() {
   date: ''
 
   });
-
+  
+  //const dataToSend = psiholog.Psiholog_ID;
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -72,9 +75,13 @@ export default function EventRegistration() {
           };
           setPsiholog(updatedPsiholog); // Update state with the updated Psiholog object
           socket.emit('insertData', updatedPsiholog);
+          const dataToSend = updatedPsiholog.Psiholog_ID;
           //send this Psiholog_ID to CreatePredbiljezba.js
-          socket.emit('Psiholog_ID',updatedPsiholog.Psiholog_ID);
+         // socket.emit('Psiholog_ID',updatedPsiholog.Psiholog_ID);
           console.log(updatedPsiholog.Psiholog_ID);
+          //localStorage.setItem('psihologID', dataToSend);
+          localStorage.setItem('psihologID', JSON.stringify(dataToSend));
+          console.log(dataToSend);
           inputIme.value = "";
           inputPrezime.value = "";
           inputEmail.value = "";
@@ -82,6 +89,7 @@ export default function EventRegistration() {
           console.log(err);
         } finally {
           alert('Uspješno pospremljeni prijavni podaci!');
+          
         }
       }
     };
@@ -97,7 +105,8 @@ export default function EventRegistration() {
   useEffect(() => {
     socket.on('dataInserted', (insertedData) => {
       console.log('Data inserted:', insertedData);
-      navigate('/');
+      
+      navigate('../lectureselection');
     }); },[]);
 
   return (
@@ -162,33 +171,4 @@ export default function EventRegistration() {
   );
 }
 
-// import React, { useState } from 'react';
-// import { Form, Button } from 'react-bootstrap';
-// import { io } from 'socket.io-client';
-
-// export default function EventRegistration() {
-//   const [Psiholog_ID, setPsiholog_ID] = useState('');
-//   const socket = io('http://localhost:8080');
-
-//   const handleEventRegistration = () => {
-//     socket.emit('eventRegistered', Psiholog_ID);
-//   };
-
-//   return (
-//     <>
-//       <p>Event Registration:</p>
-//       <Form>
-//         <Form.Group controlId="Psiholog_ID">
-//           <Form.Label>Psiholog ID</Form.Label>
-//           <Form.Control
-//             type="text"
-//             value={Psiholog_ID}
-//             onChange={(e) => setPsiholog_ID(e.target.value)}
-//           />
-//         </Form.Group>
-//         <Button variant="primary" onClick={handleEventRegistration}>Register Event</Button>
-//       </Form>
-//     </>
-//   );
-// }
 

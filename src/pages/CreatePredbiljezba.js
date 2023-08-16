@@ -3,23 +3,42 @@ import { Form, Button } from 'react-bootstrap';
 import { io } from 'socket.io-client'; 
 import { nanoid } from 'nanoid';
 
+
 export default function CreatePredbiljezba() {
   let predbiljezbaID = nanoid(10);
-  
+ 
 
   const [selectedPredavanjeID, setSelectedPredavanjeID] = useState('');
   const [predavanjaOptions, setPredavanjaOptions] = useState([]);
-  const [predavanjeID,setPredavanjeID] = useState([]);
-  const [psihologID, setPsihologID] = useState('');
+  //const [psihologID, setPsihologID] = useState('');
   const socket = io('http://localhost:8080');
+ // const receivedData = JSON.parse(localStorage.getItem('myData'));
+//   const psihologID = receivedData?.[0];
+// const predavanjeID = receivedData?.[1]?.[0];
 
+const receivedData = JSON.parse(localStorage.getItem('myData'));
+const psihologIDArr = receivedData[0];
+const predavanjeIDArr = receivedData[1]; // This is the array of selected Predavanje_ID values
+const psihologID = psihologIDArr.toString();
+const predavanjeID = predavanjeIDArr.toString();
+  console.log(psihologID);
+  console.log(predavanjeID);
   
+  const handleCreatePredbiljezba = (predbiljezbaID, psihologID, predavanjeID ) => {
+    console.log("Creating predbiljezba with:", predbiljezbaID, psihologID, predavanjeID);
 
-
-  const handleCreatePredbiljezba = (predbiljezbaID,psihologID,predavanjeID) => {
+    console.log(psihologID);
+    console.log(predavanjeID);
     console.log(predbiljezbaID);
-    socket.emit('createPredbiljezba', predbiljezbaID,psihologID,predavanjeID);
+    socket.emit('createPredbiljezba', predbiljezbaID, psihologID, predavanjeID[0]);
   };
+
+  // const handleCreatePredbiljezba = (predbiljezbaID,recievedData[0],recievedData[1]) => {
+  //   console.log(recievedData[0]);
+  //   console.log(recievedData[1]);
+  //   console.log(predbiljezbaID);
+  //   socket.emit('createPredbiljezba', predbiljezbaID,recievedData[0],recievedData[1]);
+  // };
 
   useEffect(() => {
     socket.emit('getPredavanja'); // Request predavanja options
@@ -27,22 +46,22 @@ export default function CreatePredbiljezba() {
       setPredavanjaOptions(options);
     });
    
-  socket.on('Psiholog_ID', (receivedPsihologID) => {
-    setPsihologID(receivedPsihologID);
-    console.log(receivedPsihologID);
-  });
+  // socket.on('Psiholog_ID', (receivedPsihologID) => {
+  //   setPsihologID(receivedPsihologID);
+  //   console.log(receivedPsihologID);
+  // });
 
-  // Listen for 'predavanje_ID'
-  socket.on('predavanje_ID', (receivedPredavanjeID) => {
-    setPredavanjeID(receivedPredavanjeID);
-    console.log(receivedPredavanjeID);
-  });
+  // // Listen for 'predavanje_ID'
+  // socket.on('predavanje_ID', (receivedPredavanjeID) => {
+  //   setPredavanjeID(receivedPredavanjeID);
+  //   console.log(receivedPredavanjeID);
+  // });
 
   // Clean up event listeners
-  return () => {
-    socket.off('Psiholog_ID');
-    socket.off('predavanje_ID');
-  };
+  // return () => {
+  //   socket.off('Psiholog_ID');
+  //   socket.off('predavanje_ID');
+  // };
     return () => {
       socket.off('predavanjaOptions');
     };
@@ -67,7 +86,7 @@ export default function CreatePredbiljezba() {
             ))}
           </Form.Control>
         </Form.Group>
-        <Button variant="primary" onClick={()=>handleCreatePredbiljezba(predbiljezbaID,psihologID,predavanjaOptions)}>Create Predbiljezba</Button> 
+        <Button variant="primary" onClick={()=>handleCreatePredbiljezba(predbiljezbaID,psihologID,predavanjeID)}>Create Predbiljezba</Button> 
       </Form>
     </>
   );

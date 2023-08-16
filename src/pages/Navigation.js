@@ -53,7 +53,7 @@ function Navigation() {
             Oblici sudjelovanja
           </NavDropdown.Item>
           <NavDropdown.Divider/>
-          <NavDropdown.Item href="/registrationfeesaccommodation/lectureselection">
+          <NavDropdown.Item href={"/registrationfeesaccommodation/lectureselection"}>
             Odabir seminara
           </NavDropdown.Item>
           <NavDropdown.Divider/>
