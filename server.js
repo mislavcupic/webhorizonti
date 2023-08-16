@@ -165,10 +165,14 @@ socket.on('deletePredavanje', async (predavanjeID) => {
   });
 
   // Event for creating predbiljezba
-  socket.on('createPredbiljezba', async (predbiljezbaData) => {
+  //zadnje dodano ...predavanjeID 
+  socket.on('createPredbiljezba', async (predbiljezbaID,psihologID,...predavanjeID) => {
     try {
-      const { predbiljezbaID, psihologID, predavanjeID } = predbiljezbaData;
-      const result = await createPredbiljezba (predbiljezbaID, psihologID, predavanjeID);
+     // const { predbiljezbaID, psihologID, predavanjeID } = predbiljezbaData;
+      console.log("Predbilježba_ID: "+predbiljezbaID);
+      console.log("Psiholog_ID: "+psihologID);
+      console.log("Predavanje_ID: "+[...predavanjeID])
+      const result = await createPredbiljezba (predbiljezbaID, psihologID, ...predavanjeID);
       if (result) {
         io.emit('predbiljezbaStatus', 'success'); // Emit success status
       } else {

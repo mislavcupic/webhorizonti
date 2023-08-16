@@ -131,24 +131,32 @@ catch(error){
 }
 }
 // // Create Predbiljezba operation
-const createPredbiljezba = async (predbiljezbaData) => {
+const createPredbiljezba = async (predbiljezbaID,psihologID,predavanjeID) => {
   try {
     let pool = await sql.connect(config);
-    console.log(predbiljezbaData.Psiholog_ID);
+    console.log(psihologID);
     // Check if the provided Psiholog_ID exists in the referenced table
     const psihologExists = await pool.request().query(`
-      SELECT * FROM EventRegistration2 WHERE Psiholog_ID = '${predbiljezbaData.Psiholog_ID}'
+      SELECT * FROM EventRegistration2 WHERE Psiholog_ID = '${psihologID}'
     `);
 
     if (!psihologExists.recordset.length) {
       throw new Error('Invalid Psiholog_ID');
     }
-
+// // Perform the insert operation for each predavanjeID
+// for (const predavanjeID of predavanjeIDs) {
+//   await pool.request().query(`
+//     INSERT INTO Predbiljezbe (Predbiljezbe_ID, Psiholog_ID, Predavanje_ID)
+//     VALUES ('${predbiljezbaID}', '${psihologID}', '${predavanjeID}')
+//   `);
+// }
     // Perform the insert operation
+
     await pool.request().query(`
       INSERT INTO Predbiljezbe (Predbiljezbe_ID, Psiholog_ID, Predavanje_ID)
-      VALUES ('${predbiljezbaData.Predbiljezbe_ID}', '${predbiljezbaData.Psiholog_ID}', '${predbiljezbaData.Predavanje_ID}')
+      VALUES ('${predbiljezbaID}', '${psihologID}', '${predavanjeID}')
     `);
+    
 
     return true; // Return success status
   } catch (error) {

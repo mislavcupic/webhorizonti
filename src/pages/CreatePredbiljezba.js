@@ -23,14 +23,29 @@ const psihologID = psihologIDArr.toString();
 const predavanjeID = predavanjeIDArr.toString();
   console.log(psihologID);
   console.log(predavanjeID);
-  
+  //zadnja promjena dodao sam ... na predavanjeID
+  //gpt suggestion
+  // ...
+// const handleCreatePredbiljezba = (predbiljezbaID, psihologID, selectedPredavanjeIDs) => {
+//   console.log("Creating predbiljezbe with:", predbiljezbaID, psihologID, selectedPredavanjeIDs);
+
+//   for (const predavanjeID of selectedPredavanjeIDs) {
+//     console.log("Creating predbiljezba for predavanjeID:", predavanjeID);
+//     socket.emit('createPredbiljezba', predbiljezbaID, psihologID, predavanjeID);
+//   }
+// };
+
+// // ...
+
+
+
   const handleCreatePredbiljezba = (predbiljezbaID, psihologID, predavanjeID ) => {
     console.log("Creating predbiljezba with:", predbiljezbaID, psihologID, predavanjeID);
 
     console.log(psihologID);
     console.log(predavanjeID);
     console.log(predbiljezbaID);
-    socket.emit('createPredbiljezba', predbiljezbaID, psihologID, predavanjeID[0]);
+    socket.emit('createPredbiljezba', predbiljezbaID, psihologID,predavanjeID);
   };
 
   // const handleCreatePredbiljezba = (predbiljezbaID,recievedData[0],recievedData[1]) => {
@@ -87,6 +102,9 @@ const predavanjeID = predavanjeIDArr.toString();
           </Form.Control>
         </Form.Group>
         <Button variant="primary" onClick={()=>handleCreatePredbiljezba(predbiljezbaID,psihologID,predavanjeID)}>Create Predbiljezba</Button> 
+        {/*gpt sugg: // <Button variant="primary" onClick={() => handleCreatePredbiljezba(predbiljezbaID, psihologID, selectedPredavanjeIDs)}>
+//   Create Predbiljezba
+// </Button> */}
       </Form>
     </>
   );
