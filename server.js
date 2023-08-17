@@ -164,40 +164,45 @@ socket.on('deletePredavanje', async (predavanjeID) => {
     }
   });
 
-  // Event for creating predbiljezba
-  //zadnje dodano ...predavanjeID 
-  socket.on('createPredbiljezba', async (predbiljezbaID,psihologID,...predavanjeID) => {
-    try {
-     // const { predbiljezbaID, psihologID, predavanjeID } = predbiljezbaData;
-      console.log("Predbilježba_ID: "+predbiljezbaID);
-      console.log("Psiholog_ID: "+psihologID);
-      console.log("Predavanje_ID: "+[...predavanjeID])
-      const result = await createPredbiljezba (predbiljezbaID, psihologID, ...predavanjeID);
-      if (result) {
-        io.emit('predbiljezbaStatus', 'success'); // Emit success status
-      } else {
-        io.emit('predbiljezbaStatus', 'error'); // Emit error status
-      }
-    } catch (error) {
-      console.log('Error while creating predbiljezba:', error);
-      io.emit('predbiljezbaStatus', 'error'); // Emit error status
-    }
-  });
-  // socket.on('createPredbiljezba', async (predbiljezbaID,psihologID,predavanjeID) => {
-  //   try{
-  //     const predbiljezbaData = await createPredbiljezba(predbiljezbaID,psihologID,predavanjeID);
-  //     io.emit('createPredbiljezba', predbiljezbaData);
-  //     console.log('Deleted predavanje with ID:', predbiljezbaID);
-  //   }
-  //   catch(error){
-  //     console.error('Error while fetching data:', error);
-  //     io.emit('fetchingError', 'An error occurred while fetching data.');
+  // Event for creating predbiljezba - gpt
+  
 
+  //ovaj je dobar i radi!!!!!!!!!
+  // socket.on('createPredbiljezba', async (predbiljezbaID,psihologID,predavanjeID) => {
+  //   try {
+  //    // const { predbiljezbaID, psihologID, predavanjeID } = predbiljezbaData;
+  //     console.log("Predbilježba_ID: "+predbiljezbaID);
+  //     console.log("Psiholog_ID: "+psihologID);
+  //     console.log("Predavanje_ID: "+predavanjeID)
+  //     const result = await createPredbiljezba (predbiljezbaID, psihologID, predavanjeID);
+  //     if (result) {
+  //       io.emit('predbiljezbaStatus', 'success'); // Emit success status
+  //     } else {
+  //       io.emit('predbiljezbaStatus', 'error'); // Emit error status
+  //     }
+  //   } catch (error) {
+  //     console.log('Error while creating predbiljezba:', error);
+  //     io.emit('predbiljezbaStatus', 'error'); // Emit error status
   //   }
-  //   // Perform validation and store predbiljezbaData in your database
-  //   // For simplicity, we'll just emit a success status here
-  //   socket.emit('predbiljezbaStatus', 'success');
   // });
+ //gpt 17.8.
+ socket.on('createPredbiljezba', async (predbiljezbaID, psihologID, ...predavanjeIDs) => {
+  try {
+    console.log("Predbilježba_ID: " + predbiljezbaID);
+    console.log("Psiholog_ID: " + psihologID);
+    console.log("Predavanje_ID: " + predavanjeIDs.join(', ')); // Join array elements for logging
+    const result = await createPredbiljezba(predbiljezbaID, psihologID, ...predavanjeIDs);
+    if (result) {
+      io.emit('predbiljezbaStatus', 'success');
+    } else {
+      io.emit('predbiljezbaStatus', 'error');
+    }
+  } catch (error) {
+    console.log('Error while creating predbiljezba:', error);
+    io.emit('predbiljezbaStatus', 'error');
+  }
+});
+
 
   socket.on('disconnect', () => {
     console.log('A user disconnected');

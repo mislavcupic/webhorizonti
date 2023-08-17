@@ -1,3 +1,5 @@
+
+//ovo je verzija do 16.8.2023. u 15:17h, poslije tog sam radio još verzija
 import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { io } from 'socket.io-client'; 
@@ -5,48 +7,50 @@ import { nanoid } from 'nanoid';
 
 
 export default function CreatePredbiljezba() {
-  let predbiljezbaID = nanoid(10);
+  const predbiljezbaID = nanoid(10);
  
 
-  const [selectedPredavanjeID, setSelectedPredavanjeID] = useState('');
+  const [selectedPredavanjeID, setSelectedPredavanjeID] = useState([]); //umjesto navodnika '' za probu
   const [predavanjaOptions, setPredavanjaOptions] = useState([]);
-  //const [psihologID, setPsihologID] = useState('');
-  const socket = io('http://localhost:8080');
- // const receivedData = JSON.parse(localStorage.getItem('myData'));
-//   const psihologID = receivedData?.[0];
-// const predavanjeID = receivedData?.[1]?.[0];
 
-const receivedData = JSON.parse(localStorage.getItem('myData'));
-const psihologIDArr = receivedData[0];
-const predavanjeIDArr = receivedData[1]; // This is the array of selected Predavanje_ID values
-const psihologID = psihologIDArr.toString();
-const predavanjeID = predavanjeIDArr.toString();
+  const socket = io('http://localhost:8080');
+ 
+
+const receivedPsiholog = JSON.parse(localStorage.getItem('psihologID'));
+const receivedPredavanja = JSON.parse(localStorage.getItem('myPredavanja'));
+//const psihologIDArr = receivedData[0];
+//const predavanjeIDArr = receivedData[1]; // This is the array of selected Predavanje_ID values
+const psihologID = receivedPsiholog; //to je viška, ali sam već tako konstr kod pa da se ne zezam
+const predavanjeID = receivedPredavanja;
   console.log(psihologID);
   console.log(predavanjeID);
   //zadnja promjena dodao sam ... na predavanjeID
   //gpt suggestion
   // ...
-// const handleCreatePredbiljezba = (predbiljezbaID, psihologID, selectedPredavanjeIDs) => {
-//   console.log("Creating predbiljezbe with:", predbiljezbaID, psihologID, selectedPredavanjeIDs);
+const handleCreatePredbiljezba = (predbiljezbaID, psihologID, predavanjeID) => {
+  console.log("Creating predbiljezbe with:", predbiljezbaID, psihologID, predavanjeID);
 
-//   for (const predavanjeID of selectedPredavanjeIDs) {
-//     console.log("Creating predbiljezba for predavanjeID:", predavanjeID);
-//     socket.emit('createPredbiljezba', predbiljezbaID, psihologID, predavanjeID);
-//   }
-// };
+  for (const predID of predavanjeID) {
+    const predbiljezbaID = nanoid(10);
+    console.log("Creating predbiljezba for predavanjeID:", predID);
+    socket.emit('createPredbiljezba', predbiljezbaID, psihologID, predID);
+  }
+};
 
 // // ...
 
 
 
-  const handleCreatePredbiljezba = (predbiljezbaID, psihologID, predavanjeID ) => {
-    console.log("Creating predbiljezba with:", predbiljezbaID, psihologID, predavanjeID);
+  // const handleCreatePredbiljezba = (predbiljezbaID, psihologID,predavanjeID  ) => {
+  //   console.log("Creating predbiljezba with:", predbiljezbaID, psihologID, predavanjeID);
 
-    console.log(psihologID);
-    console.log(predavanjeID);
-    console.log(predbiljezbaID);
-    socket.emit('createPredbiljezba', predbiljezbaID, psihologID,predavanjeID);
-  };
+  //   console.log(psihologID);
+  //   console.log(predavanjeID);
+  //   console.log(predbiljezbaID);
+  //   //socket.emit('createPredbiljezba', predbiljezbaID, psihologID, predavanjeID);
+    
+  //   socket.emit('createPredbiljezba', predbiljezbaID, psihologID, predavanjeID);
+  // };
 
   // const handleCreatePredbiljezba = (predbiljezbaID,recievedData[0],recievedData[1]) => {
   //   console.log(recievedData[0]);
@@ -81,7 +85,7 @@ const predavanjeID = predavanjeIDArr.toString();
       socket.off('predavanjaOptions');
     };
   }, []);
-
+//ovaj radi!!!!!!!!!!!! 16.8. s jednim id -om predavanje
   return (
     <>
       <p>Create Predbiljezba:</p>
@@ -101,11 +105,37 @@ const predavanjeID = predavanjeIDArr.toString();
             ))}
           </Form.Control>
         </Form.Group>
-        <Button variant="primary" onClick={()=>handleCreatePredbiljezba(predbiljezbaID,psihologID,predavanjeID)}>Create Predbiljezba</Button> 
-        {/*gpt sugg: // <Button variant="primary" onClick={() => handleCreatePredbiljezba(predbiljezbaID, psihologID, selectedPredavanjeIDs)}>
-//   Create Predbiljezba
-// </Button> */}
+        {/* <Button variant="primary" onClick={()=>handleCreatePredbiljezba(predbiljezbaID,psihologID,predavanjeID)}>Create Predbiljezba</Button> predavanjeID umj predavanjaOptions */}
+       <Button variant="primary" onClick={() => handleCreatePredbiljezba(predbiljezbaID, psihologID, predavanjeID)}>
+   Create Predbiljezba
+</Button> 
       </Form>
     </>
   );
+// (
+//   <>
+//     <p>Create Predbiljezba:</p>
+//     <Form>
+//       <Form.Group controlId="selectedPredavanjeID">
+//         <Form.Label>Select Lecture(s)</Form.Label>
+//         <Form.Control
+//           as="select"
+//           value={selectedPredavanjeIDs}
+//           onChange={(e) => handleCheckboxChange(e.target.value)}
+//           multiple // Allow multiple selections
+//         >
+//           {/* Render predavanja options as checkboxes */}
+//           {predavanjaOptions.map((predavanje) => (
+//             <option key={predavanje.Predavanje_ID} value={predavanje.Predavanje_ID}>
+//               {predavanje.naziv}
+//             </option>
+//           ))}
+//         </Form.Control>
+//       </Form.Group>
+//       <Button variant="primary" onClick={handleCreatePredbiljezba}>
+//         Create Predbiljezba
+//       </Button>
+//     </Form>
+//   </>
+// );
 }

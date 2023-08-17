@@ -130,11 +130,63 @@ catch(error){
     console.log(error);
 }
 }
-// // Create Predbiljezba operation
-const createPredbiljezba = async (predbiljezbaID,psihologID,predavanjeID) => {
+//suggestion 16.8.2023. 15:27
+// const createPredbiljezba = async (predbiljezbaID, psihologID, predavanjeIDs) => {
+//   try {
+//     let pool = await sql.connect(config);
+//     console.log(psihologID);
+
+//     // Check if the provided Psiholog_ID exists in the referenced table
+//     const psihologExists = await pool.request().query(`
+//       SELECT * FROM EventRegistration2 WHERE Psiholog_ID = '${psihologID}'
+//     `);
+
+//     if (!psihologExists.recordset.length) {
+//       throw new Error('Invalid Psiholog_ID');
+//     }
+
+//     // Begin a transaction
+//     const transaction = new sql.Transaction(pool);
+//     await transaction.begin();
+
+//     try {
+//       // Perform the insert operation for each predavanjeID
+//       for (const predavanjeID of predavanjeIDs) {
+//         await transaction.request().query(`
+//           INSERT INTO Predbiljezbe (Predbiljezbe_ID, Psiholog_ID, Predavanje_ID)
+//           VALUES ('${predbiljezbaID}', '${psihologID}', '${predavanjeID}')
+//         `);
+//       }
+
+//       // Commit the transaction
+//       await transaction.commit();
+
+//       return true; // Return success status
+//     } catch (error) {
+//       // Rollback the transaction if an error occurs
+//       await transaction.rollback();
+//       throw new Error('Error while creating predbiljezba');
+//     }
+//   } catch (error) {
+//     console.log(error);
+
+//     // Handle different types of errors
+//     if (error.message === 'Invalid Psiholog_ID') {
+//       throw new Error('Invalid Psiholog_ID');
+//     } else {
+//       throw new Error('Error while creating predbiljezba');
+//     }
+//   }
+// };
+
+// // Create Predbiljezba operation gpt sugg
+const createPredbiljezba = async (predbiljezbaID, psihologID, predavanjeIDs) => {
+  console.log(predavanjeIDs);
+  const myArray = predavanjeIDs.split(",");
+  console.log(myArray);
   try {
     let pool = await sql.connect(config);
-    console.log(psihologID);
+    
     // Check if the provided Psiholog_ID exists in the referenced table
     const psihologExists = await pool.request().query(`
       SELECT * FROM EventRegistration2 WHERE Psiholog_ID = '${psihologID}'
@@ -143,20 +195,15 @@ const createPredbiljezba = async (predbiljezbaID,psihologID,predavanjeID) => {
     if (!psihologExists.recordset.length) {
       throw new Error('Invalid Psiholog_ID');
     }
-// // Perform the insert operation for each predavanjeID
-// for (const predavanjeID of predavanjeIDs) {
-//   await pool.request().query(`
-//     INSERT INTO Predbiljezbe (Predbiljezbe_ID, Psiholog_ID, Predavanje_ID)
-//     VALUES ('${predbiljezbaID}', '${psihologID}', '${predavanjeID}')
-//   `);
-// }
-    // Perform the insert operation
 
-    await pool.request().query(`
-      INSERT INTO Predbiljezbe (Predbiljezbe_ID, Psiholog_ID, Predavanje_ID)
-      VALUES ('${predbiljezbaID}', '${psihologID}', '${predavanjeID}')
-    `);
-    
+    // Perform the insert operation for each predavanjeID
+    for (const predavanjeID of myArray) {
+      console.log('Ovo je predavanjeID iz dbOper: ' + predavanjeID);
+      await pool.request().query(`
+        INSERT INTO Predbiljezbe (Predbiljezbe_ID, Psiholog_ID, Predavanje_ID)
+        VALUES ('${predbiljezbaID}', '${psihologID}', '${predavanjeID}')
+      `);
+    }
 
     return true; // Return success status
   } catch (error) {
@@ -170,6 +217,85 @@ const createPredbiljezba = async (predbiljezbaID,psihologID,predavanjeID) => {
     }
   }
 };
+//ovo sam dosad koristio 17.8. 13.12h
+// const createPredbiljezba = async (predbiljezbaID, psihologID, predavanjeIDs) => {
+//   console.log(predavanjeIDs);
+//   const myArray = predavanjeIDs.split(",");
+//   console.log(myArray);
+//   try {
+//     let pool = await sql.connect(config);
+    
+//     // Check if the provided Psiholog_ID exists in the referenced table
+//     const psihologExists = await pool.request().query(`
+//       SELECT * FROM EventRegistration2 WHERE Psiholog_ID = '${psihologID}'
+//     `);
+
+//     if (!psihologExists.recordset.length) {
+//       throw new Error('Invalid Psiholog_ID');
+//     }
+
+//     // Perform the insert operation for each predavanjeID
+   
+//       console.log('Ovo je predavanjeID iz dbOper: ' + myArray);
+//       await pool.request().query(`
+//         INSERT INTO Predbiljezbe (Predbiljezbe_ID, Psiholog_ID, Predavanje_ID)
+//         VALUES ('${predbiljezbaID}', '${psihologID}', '${myArray}')
+//       `);
+    
+
+//     return true; // Return success status
+//   } catch (error) {
+//     console.log(error);
+
+//     // Handle different types of errors
+//     if (error.message === 'Invalid Psiholog_ID') {
+//       throw new Error('Invalid Psiholog_ID');
+//     } else {
+//       throw new Error('Error while creating predbiljezba');
+//     }
+//   }
+// };
+
+// const createPredbiljezba = async (predbiljezbaID,psihologID,predavanjeID) => {
+//   try {
+//     let pool = await sql.connect(config);
+//     console.log(psihologID);
+//     // Check if the provided Psiholog_ID exists in the referenced table
+//     const psihologExists = await pool.request().query(`
+//       SELECT * FROM EventRegistration2 WHERE Psiholog_ID = '${psihologID}'
+//     `);
+
+//     if (!psihologExists.recordset.length) {
+//       throw new Error('Invalid Psiholog_ID');
+//     }
+// // // Perform the insert operation for each predavanjeID
+// for (const pred of predavanjeID)  {  //
+//   console.log('Ovo je predavanjeID iz dbOper: '+pred);
+//   await pool.request().query(`
+//     INSERT INTO Predbiljezbe (Predbiljezbe_ID, Psiholog_ID, Predavanje_ID)
+//     VALUES ('${predbiljezbaID}', '${psihologID}', '${predavanjeID}')
+//   `);
+// }
+//     // Perform the insert operation
+
+//     // await pool.request().query(`
+//     //   INSERT INTO Predbiljezbe (Predbiljezbe_ID, Psiholog_ID, Predavanje_ID)
+//     //   VALUES ('${predbiljezbaID}', '${psihologID}', '${predavanjeID}')
+//     // `);
+    
+
+//     return true; // Return success status
+//   } catch (error) {
+//     console.log(error);
+
+//     // Handle different types of errors
+//     if (error.message === 'Invalid Psiholog_ID') {
+//       throw new Error('Invalid Psiholog_ID');
+//     } else {
+//       throw new Error('Error while creating predbiljezba');
+//     }
+//   }
+// };
 
 // const createPredbiljezba = async (predbiljezbaData) => {
 //   try {

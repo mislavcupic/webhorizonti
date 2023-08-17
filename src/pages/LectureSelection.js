@@ -1,7 +1,7 @@
+//zakomentirano 16.8. u 15.37 kad sam pokušavao napraviti multiple choice predavanja
 import React, { useState, useEffect } from 'react';
 import { Table, Container, Row, Button, Form } from 'react-bootstrap';
 import { io } from 'socket.io-client';
-import CreatePredbiljezba from './CreatePredbiljezba';
 import { useNavigate } from 'react-router-dom';
 
 export default function LectureSelection() {
@@ -13,7 +13,7 @@ export default function LectureSelection() {
   //const receivedPsiholog_ID = localStorage.getItem('psihologID');
   const receivedPsihologID = JSON.parse(localStorage.getItem('psihologID'));
   console.log(receivedPsihologID);
- // const dataToSend = [receivedPsihologID,selectedLectures];
+  const predavanjaToSend = [selectedLectures];
 
 
   const handleDeleteButton = (predavanjeID) => {
@@ -32,9 +32,12 @@ export default function LectureSelection() {
  
   
   const handleSendSelectedPredavanje = () => {
-    const dataToSend = [receivedPsihologID, selectedLectures];
-    console.log(dataToSend); // Add this line
-    localStorage.setItem('myData', JSON.stringify(dataToSend));
+   // const dataToSend = [receivedPsihologID, selectedLectures];
+   // console.log(dataToSend); // Add this line
+    localStorage.setItem('psihologID', JSON.stringify(receivedPsihologID));
+    console.log(receivedPsihologID);
+    localStorage.setItem('myPredavanja',JSON.stringify(selectedLectures));
+    console.log(selectedLectures);
     navigate('../createpredbiljezba');
   };
   
