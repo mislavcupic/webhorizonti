@@ -26,14 +26,14 @@ const predavanjeID = receivedPredavanja;
   console.log(predavanjeID);
   //zadnja promjena dodao sam ... na predavanjeID
   
-const handleCreatePredbiljezba = (predbiljezbaID, psihologID, predavanjeID,applicationDate) => {
-  console.log("Creating predbiljezbe with:", predbiljezbaID, psihologID, predavanjeID,applicationDate);
+const handleCreatePredbiljezba = (predbiljezbaID, psihologID,applicationDate,predavanjeID) => {
+  console.log("Creating predbiljezbe with:", predbiljezbaID, psihologID,applicationDate, predavanjeID);
 
   for (const predID of predavanjeID) {
     const predbiljezbaID = nanoid(10);
     console.log("Creating predbiljezba for predavanjeID:", predID);
     const applicationDate = new Date().toLocaleString();
-    socket.emit('createPredbiljezba', predbiljezbaID, psihologID, predID,applicationDate);
+    socket.emit('createPredbiljezba', predbiljezbaID, psihologID,applicationDate, predID );
   }
 };
 
@@ -82,7 +82,7 @@ const handleCreatePredbiljezba = (predbiljezbaID, psihologID, predavanjeID,appli
           </Form.Control>
         </Form.Group>
         {/* <Button variant="primary" onClick={()=>handleCreatePredbiljezba(predbiljezbaID,psihologID,predavanjeID)}>Create Predbiljezba</Button> predavanjeID umj predavanjaOptions */}
-       <Button variant="primary" onClick={() => handleCreatePredbiljezba(predbiljezbaID, psihologID, predavanjeID,applicationDate)}>
+       <Button variant="primary" onClick={() => handleCreatePredbiljezba(predbiljezbaID, psihologID,applicationDate, predavanjeID)}>
    Create Predbiljezba
 </Button> 
       </Form>

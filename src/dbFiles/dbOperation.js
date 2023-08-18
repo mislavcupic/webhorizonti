@@ -82,7 +82,7 @@ const createPredavanje = async (Predavanje) => {
 const getPredbiljezbe = async() => {
     try{
         let pool = await sql.connect(config);
-        let predbiljezbe = pool.request().query('SELECT EventRegistration2.ime, EventRegistration2.prezime, EventRegistration2.email, EventRegistration2.datetime, Predavanja.naziv, Predavanja.tip, Predavanja.opis FROM EventRegistration2, Predavanja, Predbiljezbe WHERE Predbiljezbe.Psiholog_ID = EventRegistration2.Psiholog_ID AND Predbiljezbe.Predavanje_ID = Predavanja.Predavanje_ID');  //tu treba osmisliti pravi upit
+        let predbiljezbe = pool.request().query('SELECT EventRegistration2.ime, EventRegistration2.prezime, EventRegistration2.email, EventRegistration2.datetime, Predavanja.naziv, Predavanja.tip, Predavanja.opis, Predbiljezbe.Vrijeme_predbiljezbe FROM EventRegistration2, Predavanja, Predbiljezbe WHERE Predbiljezbe.Psiholog_ID = EventRegistration2.Psiholog_ID AND Predbiljezbe.Predavanje_ID = Predavanja.Predavanje_ID');  //tu treba osmisliti pravi upit
         console.log(predbiljezbe);
         return predbiljezbe;
     }
@@ -93,7 +93,7 @@ catch(error){
 
 
 // // Create Predbiljezba operation gpt sugg
-const createPredbiljezba = async (predbiljezbaID, psihologID, predavanjeIDs,applicationDate) => {
+const createPredbiljezba = async (predbiljezbaID, psihologID, applicationDate, predavanjeIDs) => {
   console.log(predavanjeIDs);
   const myArray = predavanjeIDs.split(",");
   console.log(myArray);
@@ -113,8 +113,8 @@ const createPredbiljezba = async (predbiljezbaID, psihologID, predavanjeIDs,appl
     for (const predavanjeID of myArray) {
       console.log('Ovo je predavanjeID iz dbOper: ' + predavanjeID);
       await pool.request().query(`
-        INSERT INTO Predbiljezbe (Predbiljezbe_ID, Psiholog_ID, Predavanje_ID,Vrijeme_predbiljezbe)
-        VALUES ('${predbiljezbaID}', '${psihologID}', '${predavanjeID}', '${applicationDate}')
+        INSERT INTO Predbiljezbe (Predbiljezbe_ID, Psiholog_ID, Vrijeme_predbiljezbe, Predavanje_ID)
+        VALUES ('${predbiljezbaID}', '${psihologID}', '${applicationDate}', '${predavanjeID}')
       `);
     }
 

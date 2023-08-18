@@ -186,12 +186,14 @@ socket.on('deletePredavanje', async (predavanjeID) => {
   //   }
   // });
  //gpt 17.8.
- socket.on('createPredbiljezba', async (predbiljezbaID, psihologID, ...predavanjeIDs) => {
+ socket.on('createPredbiljezba', async (predbiljezbaID, psihologID,applicationDate, ...predavanjeIDs ) => {
   try {
     console.log("Predbilježba_ID: " + predbiljezbaID);
     console.log("Psiholog_ID: " + psihologID);
+    console.log("Vrijeme predbiljezbe: "+applicationDate)
     console.log("Predavanje_ID: " + predavanjeIDs.join(', ')); // Join array elements for logging
-    const result = await createPredbiljezba(predbiljezbaID, psihologID, ...predavanjeIDs);
+  
+    const result = await createPredbiljezba(predbiljezbaID, psihologID,applicationDate, ...predavanjeIDs );
     if (result) {
       io.emit('predbiljezbaStatus', 'success');
     } else {

@@ -136,7 +136,7 @@ const handleGetPredbiljezbe = () => {
       <td>{pred.naziv}</td>
       <td>{pred.tip}</td>
       <td>{pred.opis}</td>
-      <td>{pred.vrijemePredbiljezbe}</td>
+      <td>{pred.Vrijeme_predbiljezbe}</td>
    
     </tr>
   ))
