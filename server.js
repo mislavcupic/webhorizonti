@@ -47,7 +47,7 @@ function sendEmail (userPsiholog) {
           from: 'mislav.cupic@gmail.com',
           to:   userPsiholog.email,
           subject: "Potvrda prijave na stručni skup",
-          text: `Pozdrav ${userPsiholog.ime} ${userPsiholog.prezime}, Vaša prijava na stručni skup "Horizonti snage" uspješno je izvršena dana ${userPsiholog.date}. Vaša kontakt mail adresa je ${userPsiholog.email}`
+          text: `Pozdrav ${userPsiholog.ime} ${userPsiholog.prezime}, Vaša prijava na stručni skup "Horizonti snage" uspješno je izvršena dana ${userPsiholog.date}. Vaša kontakt mail adresa je ${userPsiholog.email}. Čuvajte ovu poruku jer se na njoj nalazi i token s kojim ćete se kasnije prijavljivati na predavanja. Vaš token za prijavu na predavanja: ${userPsiholog.Psiholog_ID}`
       };
       transporter.sendMail(mail_configs,function(err,info){
           if(err){
@@ -149,7 +149,7 @@ socket.on('deletePredavanje', async (predavanjeID) => {
   //     socket.emit('fetchingError', 'An error occurred while fetching data.');
   //   }
   // });
-  
+
 
 
 
@@ -165,7 +165,7 @@ socket.on('deletePredavanje', async (predavanjeID) => {
   });
 
   // Event for creating predbiljezba - gpt
-  
+
 
   //ovaj je dobar i radi!!!!!!!!!
   // socket.on('createPredbiljezba', async (predbiljezbaID,psihologID,predavanjeID) => {
@@ -208,32 +208,6 @@ socket.on('deletePredavanje', async (predavanjeID) => {
     console.log('A user disconnected');
   });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-//   socket.on('getPredavanja', async (data) => {
-//     try {
-//       const predavanja = await getPredavanja(data);
-//       io.emit('fetchedPredavanjaPost', predavanja.recordset);
-//     } catch (error) {
-//       console.error('Error while fetching data:', error);
-//       socket.emit('fetchingError', 'An error occurred while fetching data.');
-//     }
-//   });
-
-//   socket.on('disconnect', () => {
-//     console.log('A user disconnected');
-//   });
 });
 
 server.listen(port, () => {

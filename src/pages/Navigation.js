@@ -52,9 +52,13 @@ function Navigation() {
           <NavDropdown.Item href="/registrationfeesaccommodation/formsofparticipation">
             Oblici sudjelovanja
           </NavDropdown.Item>
-          <NavDropdown.Divider/>
+          {/* <NavDropdown.Divider/>
           <NavDropdown.Item href={"/registrationfeesaccommodation/lectureselection"}>
             Odabir seminara
+          </NavDropdown.Item> */}
+          <NavDropdown.Divider/>
+          <NavDropdown.Item href={"/registrationfeesaccommodation/inserttoken"}>
+            Token - prijava predavanja
           </NavDropdown.Item>
           <NavDropdown.Divider/>
           <NavDropdown.Item href="/registrationfeesaccommodation/lectureselectionpredb">

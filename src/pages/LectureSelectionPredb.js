@@ -109,6 +109,8 @@ const handleGetPredbiljezbe = () => {
               <th>Naziv: </th>
               <th>Tip: </th>
               <th>Opis: </th>
+              <th>Vrijeme predbilježbe</th>
+             
               
             
               {/* <th>Psiholog_ID: </th> */}
@@ -134,6 +136,8 @@ const handleGetPredbiljezbe = () => {
       <td>{pred.naziv}</td>
       <td>{pred.tip}</td>
       <td>{pred.opis}</td>
+      <td>{pred.vrijemePredbiljezbe}</td>
+   
     </tr>
   ))
 )}

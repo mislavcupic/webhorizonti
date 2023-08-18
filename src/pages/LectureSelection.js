@@ -12,7 +12,9 @@ export default function LectureSelection() {
   const navigate = useNavigate();
   //const receivedPsiholog_ID = localStorage.getItem('psihologID');
   const receivedPsihologID = JSON.parse(localStorage.getItem('psihologID'));
-  console.log(receivedPsihologID);
+  const tokenreceived = JSON.parse(localStorage.getItem('token'));
+  console.log('PsihologID: '+receivedPsihologID);
+  console.log('Token: '+tokenreceived);
   const predavanjaToSend = [selectedLectures];
 
 
@@ -34,6 +36,8 @@ export default function LectureSelection() {
   const handleSendSelectedPredavanje = () => {
    // const dataToSend = [receivedPsihologID, selectedLectures];
    // console.log(dataToSend); // Add this line
+   localStorage.setItem('token', JSON.stringify(tokenreceived));
+   console.log(receivedPsihologID);
     localStorage.setItem('psihologID', JSON.stringify(receivedPsihologID));
     console.log(receivedPsihologID);
     localStorage.setItem('myPredavanja',JSON.stringify(selectedLectures));
