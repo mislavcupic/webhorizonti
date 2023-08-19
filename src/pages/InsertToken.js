@@ -19,7 +19,7 @@ const [input,setInput] = useState('');
     const inputToken = document.getElementById('token');
    
 
-    if (inputToken === '' && inputToken.value.length()!== 10) {
+    if (inputToken.textContent === '' && input.length!== 10) {
       alert('Ispravi unos ili ponovno kopiraj token na ovo mjesto  da bi se nastavio proces prijave na stručni skup "Horizonti snage"');
       return;
     }
