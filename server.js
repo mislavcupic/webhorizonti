@@ -19,7 +19,7 @@ app.get('*', (req, res) => {
 
 // Import database operations
 // Import database operations
-const { createPsiholog, getPredavanja, getPredbiljezbe, createPredavanje, deletePredavanje, createPredbiljezba } = require('./src/dbFiles/dbOperation');
+const { createPsiholog, getPredavanja, getPredbiljezbe, createPredavanje, deletePredavanje, createPredbiljezba,updatePredavanje, getPredavanjeByID} = require('./src/dbFiles/dbOperation');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -186,7 +186,7 @@ socket.on('deletePredavanje', async (predavanjeID) => {
   //   }
   // });
  //gpt 17.8.
- socket.on('createPredbiljezba', async (predbiljezbaID, psihologID,applicationDate, ...predavanjeIDs ) => {
+ socket.on('createPredbiljezba', async (predbiljezbaID, psihologID, applicationDate, ...predavanjeIDs ) => {
   try {
     console.log("Predbilježba_ID: " + predbiljezbaID);
     console.log("Psiholog_ID: " + psihologID);
@@ -202,6 +202,47 @@ socket.on('deletePredavanje', async (predavanjeID) => {
   } catch (error) {
     console.log('Error while creating predbiljezba:', error);
     io.emit('predbiljezbaStatus', 'error');
+  }
+});
+
+// Event for updating Predavanje data
+// // Event for updating Predavanje data
+socket.on('updatePredavanje', async (updatedPredavanje, callback) => {
+  try {
+    // Update the Predavanje data in the database
+    const success = await updatePredavanje(updatedPredavanje);
+
+    if (success) {
+      // Emit the updated Predavanje data to all clients
+      io.emit('updatedPredavanje', updatedPredavanje);
+
+      callback({ success: true }); // Callback to acknowledge the update
+
+      // Additional logic for updating slobodnaMjesta and brojPolaznika
+      const predavanjeID = updatedPredavanje.Predavanje_ID;
+      const updatedPredavanjeData = await getPredavanjeByID(predavanjeID); // Fetch updated Predavanje data from the database
+
+      if (updatedPredavanjeData) {
+        // Calculate new values for slobodnaMjesta and brojPolaznika
+        const newSlobodnaMjesta = Math.max(0, updatedPredavanjeData.slobodnaMjesta);
+        const newBrojPolaznika = Math.min(updatedPredavanjeData.ukupnoMjesta, updatedPredavanjeData.brojPolaznika);
+
+        // Update the Predavanje data with new values
+        updatedPredavanjeData.slobodnaMjesta = newSlobodnaMjesta;
+        updatedPredavanjeData.brojPolaznika = newBrojPolaznika;
+
+        // Update the Predavanje data in the database
+        const updateResult = await updatePredavanje(updatedPredavanjeData);
+        if (updateResult) {
+          io.emit('updatedPredavanje', updatedPredavanjeData);
+        }
+      }
+    } else {
+      callback({ success: false, message: 'Failed to update Predavanje data in the database.' });
+    }
+  } catch (error) {
+    console.error('Error while updating Predavanje data:', error);
+    callback({ success: false, message: 'An error occurred while updating Predavanje data.' });
   }
 });
 

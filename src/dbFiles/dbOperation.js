@@ -132,6 +132,42 @@ const createPredbiljezba = async (predbiljezbaID, psihologID, applicationDate, p
 };
 
 
+const updatePredavanje = async (updatedPredavanje) => {
+  try {
+    let pool = await sql.connect(config);
+    await pool.request().query(`
+      UPDATE Predavanja
+      SET slobodnaMjesta = ${updatedPredavanje.slobodnaMjesta},
+          brojPolaznika = ${updatedPredavanje.brojPolaznika}
+      WHERE Predavanje_ID = '${updatedPredavanje.Predavanje_ID}'
+    `);
+    
+    return true; // Return success status
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+
+// Fetch Predavanje data by ID
+const getPredavanjeByID = async (predavanjeID) => {
+  try {
+    let pool = await sql.connect(config);
+    const result = await pool.request().query(`
+      SELECT *
+      FROM Predavanja
+      WHERE Predavanje_ID = '${predavanjeID}'
+    `);
+
+    return result.recordset[0]; // Return the fetched Predavanje data
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+
 module.exports = {
     getPsiholozi,
     createPsiholog,
@@ -139,5 +175,7 @@ module.exports = {
     getPredbiljezbe,
     createPredbiljezba,
     createPredavanje,
-    deletePredavanje
+    deletePredavanje,
+    updatePredavanje, 
+    getPredavanjeByID
 }

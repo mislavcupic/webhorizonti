@@ -1,8 +1,14 @@
 .NavApp {
     position: fixed;
   }
-  
-  
+  body {
+    background-color: black;
+    color: white;
+  }
+  .disabled-row {
+    background-color: darkgray;
+  }
+
   .App {
     text-align: center;
     background-color: black;
