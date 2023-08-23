@@ -10,6 +10,7 @@ import LectureSelectionPredb from './LectureSelectionPredb'
 import CreatePredavanje from './CreatePredavanje'
 import CreatePredbiljezba from './CreatePredbiljezba'
 import InsertToken from './InsertToken'
+import PopisSazetaka from './PopisSazetaka'
 
 export default function Fees() {
  
@@ -26,6 +27,7 @@ export default function Fees() {
      <Route path="createpredavanje" element={<CreatePredavanje/>}></Route>
      <Route path="createpredbiljezba" element={<CreatePredbiljezba/>}></Route>
      <Route path="inserttoken" element={<InsertToken/>}></Route>
+     <Route path="popissazetaka" element={<PopisSazetaka/>}></Route>
      </Routes>
      <Footer/>
      </>

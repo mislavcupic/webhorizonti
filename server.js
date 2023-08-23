@@ -22,7 +22,7 @@ app.get('*', (req, res) => {
 
 // Import database operations
 // Import database operations
-const { createPsiholog, getPredavanja, getPredbiljezbe, createPredavanje, deletePredavanje, createPredbiljezba,updatePredavanje, getPredavanjeByID, createSazetci} = require('./src/dbFiles/dbOperation');
+const { createPsiholog, getPredavanja, getPredbiljezbe, createPredavanje, deletePredavanje, createPredbiljezba,updatePredavanje, getPredavanjeByID, createSazetci,fetchSazetciWithPsihologData} = require('./src/dbFiles/dbOperation');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -188,6 +188,14 @@ socket.on('insertData', async (data) => {
   }
 });
 
+socket.on('fetchSazetci', async () => {
+  try {
+    const sazetciData = await fetchSazetciWithPsihologData(); // Implement this function
+    socket.emit('sazetciData', sazetciData);
+  } catch (error) {
+    console.error('Error fetching sažetci data:', error);
+  }
+});
 
 // ... (other server code)
 

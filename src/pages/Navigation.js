@@ -49,6 +49,10 @@ function Navigation() {
             <NavDropdown.Item href="/registrationfeesaccommodation/createpredbiljezba">
               Stvori novu predbiljezbu
             </NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item href="/registrationfeesaccommodation/popissazetaka">
+              Popis sažetaka
+            </NavDropdown.Item>
           </NavDropdown>
         </Nav>
         <Nav>

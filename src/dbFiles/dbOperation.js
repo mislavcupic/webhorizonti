@@ -59,6 +59,27 @@ const createSazetci = async (Sazetci_ID, Psiholog_ID, FileName, FileType, FileDa
   }
 };
 
+async function fetchSazetciWithPsihologData() {
+  try {
+    const pool = await sql.connect(config);
+
+    const query = `
+      SELECT
+        s.SažetakID,
+        s.FileName,
+        p.ime,
+        p.prezime,
+        p.email
+      FROM Sažetci s
+      INNER JOIN EventRegistration2 p ON s.Psiholog_ID = p.Psiholog_ID
+    `;
+
+    const result = await pool.request().query(query);
+    return result.recordset;
+  } catch (error) {
+    throw error;
+  }
+}
 
   // const createSazetci = async (Sazetci_ID, Psiholog_ID, FileName, FileType, FileData) => {
   //   try {
@@ -229,5 +250,6 @@ module.exports = {
     deletePredavanje,
     updatePredavanje, 
     getPredavanjeByID,
-    createSazetci
+    createSazetci,
+    fetchSazetciWithPsihologData
 }
