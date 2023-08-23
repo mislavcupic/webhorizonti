@@ -66,4 +66,77 @@ body {
   to {
     transform: rotate(360deg);
   }
+}
+.modern-navbar {
+  background-color: #333;
+  padding: 10px 20px;
+}
+.modern-navbar .navbar-brand {
+  display: flex;
+  align-items: center;
+  color: white;
+}
+.modern-navbar .navbar-brand img {
+  margin-right: 10px;
+}
+.modern-navbar .nav-link {
+  color: white;
+  transition: color 0.3s ease-in-out;
+}
+.modern-navbar .nav-link:hover {
+  color: #ffc107;
+}
+.modern-navbar .nav-item.dropdown:hover .nav-link {
+  color: #ffc107;
+}
+.modern-navbar .dropdown-menu {
+  background-color: #333;
+  border: none;
+}
+.modern-navbar .dropdown-item {
+  color: white;
+  transition: background-color 0.3s ease-in-out;
+}
+.modern-navbar .dropdown-item:hover {
+  background-color: #444;
+  color: #ffc107;
+}
+.modern-navbar .nav-item.active .nav-link {
+  color: #ffc107;
+}
+.modern-navbar .navbar-toggler-icon {
+  background-color: white;
+}
+
+body {
+  background-color: #282c34;
+  color: white;
+}
+
+/* Add custom styles for the Modal */
+.custom-toggler {
+  border: none;
+  padding: 0;
+  background-color: transparent;
+}
+
+.custom-toggler-icon {
+  width: 30px; /* Set width */
+  height: 3px; /* Set height */
+  background-color: #333; /* Customize color */
+  transition: all 0.3s ease-in-out; /* Add smooth transition */
+}
+
+.custom-toggler[aria-expanded=true] .custom-toggler-icon {
+  transform: rotate(45deg); /* Rotate icon for open state */
+}
+
+.custom-toggler[aria-expanded=true] .custom-toggler-icon::before {
+  top: 0;
+  transform: rotate(-90deg); /* Adjust top bar rotation for open state */
+}
+
+.custom-toggler[aria-expanded=true] .custom-toggler-icon::after {
+  bottom: 0;
+  transform: rotate(90deg); /* Adjust bottom bar rotation for open state */
 }/*# sourceMappingURL=App.css.map */

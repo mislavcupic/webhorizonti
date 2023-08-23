@@ -1,11 +1,32 @@
+// //sugg
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Form, Button, Modal, Spinner } from 'react-bootstrap';
-import Psiholog from '../dbFiles/Psiholog';
 import { nanoid } from 'nanoid';
 import CarouselComponent from './CarouselComponent';
 import { io } from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
 import horizonti_velik_cropped from '../assets/media/horizonti_velik_cropped.png';
+import '../App.css';
+
+
+
+const getFileDetails = async (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const buffer = event.target.result; // This is the actual file content
+      const name = file.name;
+      const type = file.type;
+      resolve({ name, type, content: buffer }); // Include the content along with metadata
+    };
+    reader.onerror = (error) => {
+      reject(error);
+    };
+    reader.readAsArrayBuffer(file);
+  });
+};
+
+
 
 export default function EventRegistration() {
   let Psiholog_ID = nanoid(10);
@@ -15,16 +36,18 @@ export default function EventRegistration() {
   const socket = io('http://localhost:8080');
 
   const [psiholog, setPsiholog] = useState({
-    Psiholog_ID: (Psiholog.Psiholog_ID = Psiholog_ID),
+    Psiholog_ID: Psiholog_ID,
     ime: '',
     prezime: '',
     email: '',
-    date: ''
+    date: '',
+    participantType: '',
+    uploadedFiles: [],
+    Sazetci_IDs: []
   });
 
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const [show, setShow] = useState(true);
+  const [currentStep, setCurrentStep] = useState(0);
   const [isWaitingForConfirmation, setIsWaitingForConfirmation] = useState(false);
 
   const handleInputIme = (e) => {
@@ -39,61 +62,91 @@ export default function EventRegistration() {
     setPsiholog({ ...psiholog, email: e.target.value });
   };
 
+  const handleParticipantType = (type) => {
+    setPsiholog({ ...psiholog, participantType: type, date: applicationDate });
+    setCurrentStep(1);
+  };
+
+  const handleFileUpload = (e) => {
+    const newFiles = Array.from(e.target.files);
+
+    setPsiholog((prevPsiholog) => ({
+      ...prevPsiholog,
+      uploadedFiles: [...prevPsiholog.uploadedFiles, ...newFiles],
+      Sazetci_IDs: [...prevPsiholog.Sazetci_IDs, ...newFiles.map(() => nanoid(5))]
+    }));
+  };
+
+  const handleRemoveFile = (index) => {
+    const updatedFiles = [...psiholog.uploadedFiles];
+    updatedFiles.splice(index, 1);
+
+    const updatedSazetciIDs = [...psiholog.Sazetci_IDs];
+    updatedSazetciIDs.splice(index, 1);
+
+    setPsiholog((prevPsiholog) => ({
+      ...prevPsiholog,
+      uploadedFiles: updatedFiles,
+      Sazetci_IDs: updatedSazetciIDs
+    }));
+  };
+
   const submitValues = async (e) => {
     e.preventDefault();
 
-    const inputIme = document.getElementById('ime');
-    const inputPrezime = document.getElementById('prezime');
-    const inputEmail = document.getElementById('email');
-
-    if (psiholog.ime === '' || psiholog.prezime === '' || psiholog.email === '') {
-      alert('Ispuni sva polja da bi se nastavio proces prijave na stručni skup "Horizonti snage"');
+    if (!psiholog.participantType) {
+      alert('Molimo vas odaberite tip sudionika.');
       return;
     }
 
-    const confirmWindow = window.confirm(`Želite li pospremiti ovako unesene podatke? 
-      Ime: ${psiholog.ime},
-      Prezime: ${psiholog.prezime},
-      Email: ${psiholog.email}`);
-
-    if (confirmWindow) {
-      try {
-        setIsWaitingForConfirmation(true);
-
-        const updatedPsiholog = {
-          ...psiholog,
-          Psiholog_ID: nanoid(10),
-          date: applicationDate,
-        };
-
-        setPsiholog(updatedPsiholog);
-
-        const dataToSend = updatedPsiholog.Psiholog_ID;
-        localStorage.setItem('psihologID', JSON.stringify(dataToSend));
-
-        socket.emit('insertData', updatedPsiholog);
-
-        // Set timeout only if submission takes longer than 5000 ms
-        const insertionTimeout = setTimeout(() => {
-          setIsWaitingForConfirmation(false);
-          alert('Insertion took longer than expected. Please try again.');
-        }, 15000);
-
-        socket.on('dataInserted', (insertedData) => {
-          console.log('Data inserted:', insertedData);
-          clearTimeout(insertionTimeout);
-          setIsWaitingForConfirmation(false);
-          alert('Uspješno pospremljeni prijavni podaci!');
-          navigate('../lectureselection');
-        });
-
-        inputIme.value = "";
-        inputPrezime.value = "";
-        inputEmail.value = "";
-      } catch (err) {
-        console.log(err);
-      }
+    if (
+      (psiholog.participantType === 'Aktivni sudionik' && psiholog.uploadedFiles.length === 0) ||
+      !psiholog.ime ||
+      !psiholog.prezime ||
+      !psiholog.email
+    ) {
+      alert('Molimo vas da ispunite sva polja.');
+      return;
     }
+
+    // Convert the uploaded files to an array of file details
+    const fileDetailsPromises = psiholog.uploadedFiles.map(async (file) => {
+      const fileDetails = await getFileDetails(file);
+      return {
+        file: fileDetails,
+      };
+    });
+    const filesWithDetails = await Promise.all(fileDetailsPromises);
+    
+    // const fileDetailsPromises = psiholog.uploadedFiles.map(async (file) => {
+    //   const fileDetails = await getFileDetails(file);
+    //   return {
+    //     file,
+    //     details: fileDetails,
+    //   };
+    // });
+    // const filesWithDetails = await Promise.all(fileDetailsPromises);
+
+    // Rest of the submission logic...
+
+    const insertionTimeout = setTimeout(() => {
+      setIsWaitingForConfirmation(false);
+      alert('Insertion took longer than expected. Please try again.');
+      setCurrentStep(1); // Go back to Step2
+    }, 20000);
+
+    // Store Psiholog_ID in local storage
+    localStorage.setItem('psihologID', JSON.stringify(psiholog.Psiholog_ID));
+    console.log('Data before sending to server:', { ...psiholog, uploadedFiles: filesWithDetails });
+    // Pass the modified filesWithDetails array to the server
+    socket.emit('insertData', { ...psiholog, uploadedFiles: filesWithDetails });
+    socket.on('dataInserted', (insertedData) => {
+      console.log('Data inserted:', insertedData);
+      clearTimeout(insertionTimeout); // Clear the timeout
+      setIsWaitingForConfirmation(false);
+      alert('Uspješno pospremljeni prijavni podaci!');
+      navigate('../lectureselection');
+    });
   };
 
   useEffect(() => {
@@ -107,83 +160,141 @@ export default function EventRegistration() {
       <CarouselComponent />
       <Container fluid>
         <Row>
-          <Button variant="primary" size="md" onClick={handleShow}>
-            <img width={50} height={40} src={horizonti_velik_cropped} />
-            Prijava na 'Horizonti snage'
-          </Button>
-        </Row>
-
-        <Modal show={show} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Prijava na konferenciju 'Horizonti snage'</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {isWaitingForConfirmation ? (
-              <div className="spinner-container">
-                <Spinner animation="border" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </Spinner>
-              </div>
-            ) : (
-              <Form onSubmit={submitValues}>
-                <Form.Group>
-                  <Form.Label htmlFor="ime">Ime:</Form.Label>
-                  <Form.Control
-                    type="name"
-                    placeholder="Unesi ime"
-                    id="ime"
-                    name="ime"
-                    onChange={handleInputIme}
-                  />
-                </Form.Group>
-                <Form.Group>
-                  <Form.Label htmlFor="prezime">Prezime:</Form.Label>
-                  <Form.Control
-                    type="prezime"
-                    placeholder="Unesi prezime"
-                    name="prezime"
-                    id="prezime"
-                    onChange={handleInputPrezime}
-                  />
-                </Form.Group>
-                <Form.Group>
-                  <Form.Label htmlFor="email">Unesite e-mail adresu:</Form.Label>
-                  <Form.Control
-                    type="email"
-                    name="email"
-                    placeholder="Unesite svoju e-mail adresu"
-                    id="email"
-                    onChange={handleInputEmail}
-                  />
-                </Form.Group>
-                <br />
-                <Button variant="primary" type="submit">
-                  Click here to submit form
+          <Modal show={show} onHide={() => setShow(false)} dialogClassName="custom-modal">
+            <Modal.Header closeButton>
+              <Modal.Title style={{ fontSize: '14px' }}>Prijava na konferenciju 'Horizonti snage'</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {currentStep === 0 && (
+                <Step1 chooseParticipantType={handleParticipantType} />
+              )}
+              {currentStep === 1 && (
+                <Step2
+                  participantType={psiholog.participantType}
+                  uploadFile={handleFileUpload}
+                  handleInputIme={handleInputIme}
+                  handleInputPrezime={handleInputPrezime}
+                  handleInputEmail={handleInputEmail}
+                  uploadedFiles={psiholog.uploadedFiles}
+                  removeFile={handleRemoveFile}
+                />
+              )}
+              {currentStep === 2 && (
+                <div className="spinner-container">
+                  <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </Spinner>
+                </div>
+              )}
+            </Modal.Body>
+            {currentStep !== 2 && (
+              <Modal.Footer>
+                <Button variant="secondary" onClick={() => setShow(false)}>
+                  Close
                 </Button>
-              </Form>
+                <Button variant="primary" onClick={submitValues}>
+                  Submit
+                </Button>
+              </Modal.Footer>
             )}
-          </Modal.Body>
-        </Modal>
+          </Modal>
+        </Row>
       </Container>
     </>
   );
 }
 
+function Step1({ chooseParticipantType }) {
+  return (
+    <div>
+      <h5>Choose Participant Type</h5>
+      <Button onClick={() => chooseParticipantType('Aktivni sudionik')} variant='outline-primary'>
+        Aktivni sudionik
+      </Button>
+      <br/>
+      <hr/>
+      <br/>
+      <Button onClick={() => chooseParticipantType('Pasivni sudionik')}variant='outline-primary'>
+        Pasivni sudionik
+      </Button>
+    </div>
+  );
+}
 
+function Step2({
+  participantType,
+  uploadFile,
+  handleInputIme,
+  handleInputPrezime,
+  handleInputEmail,
+  uploadedFiles,
+  removeFile
+}) {
+  return (
+    <div>
+      <h3>Enter Details</h3>
+      <Form.Group>
+        <Form.Label htmlFor="ime">Ime:</Form.Label>
+        <Form.Control id="ime" name="ime" type="text" placeholder="Unesi ime" onChange={handleInputIme} />
+      </Form.Group>
+      <Form.Group>
+        <Form.Label htmlFor="prezime">Prezime:</Form.Label>
+        <Form.Control id="prezime" type="text" placeholder="Unesi prezime" onChange={handleInputPrezime} />
+      </Form.Group>
+      <Form.Group>
+        <Form.Label htmlFor="email">Email:</Form.Label>
+        <Form.Control id="email" type="email" placeholder="Unesi email" onChange={handleInputEmail} />
+      </Form.Group>
+      {participantType === 'Aktivni sudionik' && (
+        <Form.Group>
+          <Form.Label htmlFor="sazetci">Sažetci:</Form.Label>
+          <Form.Control id="sazetci" type="file" accept=".docx,.pdf,.xlsx" multiple onChange={uploadFile} />
+        </Form.Group>
+      )}
+      
+      {uploadedFiles.length > 0 && (
+        <div>
+          <h5>Uploaded Files:</h5>
+          <ul>
+            {uploadedFiles.map((file, index) => (
+              <li key={index}>
+                <span>{file.name}</span>
+                <button onClick={() => removeFile(index)}>Remove</button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
 
-
-//ovaj kod sigurno radi
 // import React, { useState, useEffect } from 'react';
-// import { Container, Row, Form, Button, Modal } from 'react-bootstrap';
-// import Psiholog from '../dbFiles/Psiholog';
+// import { Container, Row, Form, Button, Modal, Spinner } from 'react-bootstrap';
 // import { nanoid } from 'nanoid';
 // import CarouselComponent from './CarouselComponent';
 // import { io } from 'socket.io-client';
 // import { useNavigate } from 'react-router-dom';
-// import horizonti_velik_cropped from '../assets/media/horizonti_velik_cropped.png'
+// import horizonti_velik_cropped from '../assets/media/horizonti_velik_cropped.png';
+// import '../App.css';
 
+// const getFileDetails = (file) => {
+//   const { name, type } = file;
+//   const reader = new FileReader();
 
+//   return new Promise((resolve, reject) => {
+//     reader.onload = (event) => {
+//       const data = event.target.result;
+//       resolve({ name, type, data });
+//     };
 
+//     reader.onerror = (error) => {
+//       reject(error);
+//     };
+
+//     reader.readAsDataURL(file);
+//   });
+// };
 // export default function EventRegistration() {
 //   let Psiholog_ID = nanoid(10);
 //   let validates = true;
@@ -192,19 +303,19 @@ export default function EventRegistration() {
 //   const socket = io('http://localhost:8080');
 
 //   const [psiholog, setPsiholog] = useState({
-//   Psiholog_ID: (Psiholog.Psiholog_ID = Psiholog_ID),
-//   ime: '',
-//   prezime: '',
-//   email: '',
-//   date: ''
-
+//     Psiholog_ID: Psiholog_ID,
+//     ime: '',
+//     prezime: '',
+//     email: '',
+//     date: '',
+//     participantType: '',
+//     uploadedFiles: [],
+//     Sazetci_IDs: []
 //   });
-  
-//   //const dataToSend = psiholog.Psiholog_ID;
-//   const [show, setShow] = useState(false);
-//   const handleClose = () => setShow(false);
-//   const handleShow = () => setShow(true);
 
+//   const [show, setShow] = useState(true);
+//   const [currentStep, setCurrentStep] = useState(0);
+//   const [isWaitingForConfirmation, setIsWaitingForConfirmation] = useState(false);
 
 //   const handleInputIme = (e) => {
 //     setPsiholog({ ...psiholog, ime: e.target.value });
@@ -217,133 +328,205 @@ export default function EventRegistration() {
 //   const handleInputEmail = (e) => {
 //     setPsiholog({ ...psiholog, email: e.target.value });
 //   };
-//   const psiho = new Psiholog(
-//     psiholog.Psiholog_ID,
-//     psiholog.ime,
-//     psiholog.prezime,
-//     psiholog.email,
-//     applicationDate // Use the formatted date here
-//   );
-//   const submitValues = (e) => {
-//     e.preventDefault();
-//     const inputIme = document.getElementById('ime');
-//     const inputPrezime = document.getElementById('prezime');
-//     const inputEmail = document.getElementById('email');
 
-//     if (psiholog.ime === '' || psiholog.prezime === '' || psiholog.email === '') {
-//       alert('Ispuni sva polja da bi se nastavio proces prijave na stručni skup "Horizonti snage"');
+//   const handleParticipantType = (type) => {
+//     setPsiholog({ ...psiholog, participantType: type,date: applicationDate });
+//     setCurrentStep(1);
+//   };
+
+//   const handleFileUpload = (e) => {
+//     const newFiles = Array.from(e.target.files);
+
+//     setPsiholog((prevPsiholog) => ({
+//       ...prevPsiholog,
+//       uploadedFiles: [...prevPsiholog.uploadedFiles, ...newFiles],
+//       Sazetci_IDs: [...prevPsiholog.Sazetci_IDs, ...newFiles.map(() => nanoid(5))]
+//     }));
+//   };
+
+//   const handleRemoveFile = (index) => {
+//     const updatedFiles = [...psiholog.uploadedFiles];
+//     updatedFiles.splice(index, 1);
+
+//     const updatedSazetciIDs = [...psiholog.Sazetci_IDs];
+//     updatedSazetciIDs.splice(index, 1);
+
+//     setPsiholog((prevPsiholog) => ({
+//       ...prevPsiholog,
+//       uploadedFiles: updatedFiles,
+//       Sazetci_IDs: updatedSazetciIDs
+//     }));
+//   };
+
+ 
+//   const submitValues = async (e) => {
+//     e.preventDefault();
+  
+//     if (!psiholog.participantType) {
+//       alert('Molimo vas odaberite tip sudionika.');
 //       return;
 //     }
-
-//     const confirmWindow = window.confirm(`Želite li pospremiti ovako unesene podatke? 
-//       Ime: ${psiholog.ime},
-//       Prezime: ${psiholog.prezime},
-//       Email: ${psiholog.email}`);
-      
-
-//       if (confirmWindow) {
-//         try {
-//           const updatedPsiholog = {
-//             ...psiholog,
-//             Psiholog_ID: nanoid(10),
-//             date: applicationDate,
-//           };
-//           setPsiholog(updatedPsiholog); // Update state with the updated Psiholog object
-//           socket.emit('insertData', updatedPsiholog);
-//           const dataToSend = updatedPsiholog.Psiholog_ID;
-//           //send this Psiholog_ID to CreatePredbiljezba.js
-//          // socket.emit('Psiholog_ID',updatedPsiholog.Psiholog_ID);
-//           console.log(updatedPsiholog.Psiholog_ID);
-//           //localStorage.setItem('psihologID', dataToSend);
-//           localStorage.setItem('psihologID', JSON.stringify(dataToSend));
-//           console.log(dataToSend);
-//           inputIme.value = "";
-//           inputPrezime.value = "";
-//           inputEmail.value = "";
-//         } catch (err) {
-//           console.log(err);
-//         } finally {
-//           alert('Uspješno pospremljeni prijavni podaci!');
-          
-//         }
-//       }
-//     };
-   
-
+  
+//     if (
+//       (psiholog.participantType === 'Aktivni sudionik' && psiholog.uploadedFiles.length === 0) ||
+//       !psiholog.ime ||
+//       !psiholog.prezime ||
+//       !psiholog.email
+//     ) {
+//       alert('Molimo vas da ispunite sva polja.');
+//       return;
+//     }
+  
+//     // Convert the uploaded files to an array of file details
+//     const fileDetailsPromises = psiholog.uploadedFiles.map(async (file) => {
+//       const fileDetails = await getFileDetails(file);
+//       return {
+//         file,
+//         details: fileDetails,
+//       };
+//     });
+//     const filesWithDetails = await Promise.all(fileDetailsPromises);
+  
+//     // Rest of the submission logic...
+  
+//     const insertionTimeout = setTimeout(() => {
+//       setIsWaitingForConfirmation(false);
+//       alert('Insertion took longer than expected. Please try again.');
+//       setCurrentStep(1); // Go back to Step2
+//     }, 20000);
+  
+//     // Store Psiholog_ID in local storage
+//     localStorage.setItem('psihologID', JSON.stringify(psiholog.Psiholog_ID));
+  
+//     // Pass the modified filesWithDetails array to the server
+//     socket.emit('insertData', { ...psiholog, uploadedFiles: filesWithDetails });
+//     socket.on('dataInserted', (insertedData) => {
+//       console.log('Data inserted:', insertedData);
+//       clearTimeout(insertionTimeout); // Clear the timeout
+//       setIsWaitingForConfirmation(false);
+//       alert('Uspješno pospremljeni prijavni podaci!');
+//       navigate('../lectureselection');
+//     });
+//   };
+  
+  
 //   useEffect(() => {
 //     socket.on('insertionError', (errorMessage) => {
 //       console.error('Error while inserting data:', errorMessage);
-//       // Handle the error and show a notification to the user
 //     });
 //   }, []);
-  
-//   useEffect(() => {
-//     socket.on('dataInserted', (insertedData) => {
-//       console.log('Data inserted:', insertedData);
-      
-//       navigate('../lectureselection');
-//     }); },[]);
 
 //   return (
 //     <>
 //       <CarouselComponent />
 //       <Container fluid>
 //         <Row>
-//           <Button variant="primary" size="md" onClick={handleShow}> <img width={50} height={40} src={horizonti_velik_cropped} /> 
-//             Prijava na 'Horizonti snage'
-//           </Button>
+//           <Modal show={show} onHide={() => setShow(false)} dialogClassName="custom-modal">
+//             <Modal.Header closeButton>
+//               <Modal.Title style={{ fontSize: '14px' }}>Prijava na konferenciju 'Horizonti snage'</Modal.Title>
+//             </Modal.Header>
+//             <Modal.Body>
+//               {currentStep === 0 && (
+//                 <Step1 chooseParticipantType={handleParticipantType} />
+//               )}
+//               {currentStep === 1 && (
+//                 <Step2
+//                   participantType={psiholog.participantType}
+//                   uploadFile={handleFileUpload}
+//                   handleInputIme={handleInputIme}
+//                   handleInputPrezime={handleInputPrezime}
+//                   handleInputEmail={handleInputEmail}
+//                   uploadedFiles={psiholog.uploadedFiles}
+//                   removeFile={handleRemoveFile}
+//                 />
+//               )}
+//               {currentStep === 2 && (
+//                 <div className="spinner-container">
+//                   <Spinner animation="border" role="status">
+//                     <span className="visually-hidden">Loading...</span>
+//                   </Spinner>
+//                 </div>
+//               )}
+//             </Modal.Body>
+//             {currentStep !== 2 && (
+//               <Modal.Footer>
+//                 <Button variant="secondary" onClick={() => setShow(false)}>
+//                   Close
+//                 </Button>
+//                 <Button variant="primary" onClick={submitValues}>
+//                   Submit
+//                 </Button>
+//               </Modal.Footer>
+//             )}
+//           </Modal>
 //         </Row>
-
-//         <Modal show={show} onHide={handleClose}> {/* style={{width: '60%',
-//                       height: '60%',
-//                       display: 'flex',
-//                       justifyContent: 'center',
-//                       alignItems: 'center'}} */}
-//           <Modal.Header closeButton>
-//             <Modal.Title>Prijava na konferenciju 'Horizonti snage'</Modal.Title>
-//           </Modal.Header>
-//           <Modal.Body>
-//             <Form onSubmit={submitValues}>
-//               <Form.Group>
-//                 <Form.Label htmlFor="ime">Ime:</Form.Label>
-//                 <Form.Control
-//                   type="name"
-//                   placeholder="Unesi ime"
-//                   id="ime"
-//                   name="ime"
-//                   onChange={handleInputIme}
-//                 />
-//               </Form.Group>
-//               <Form.Group>
-//                 <Form.Label htmlFor="prezime">Prezime:</Form.Label>
-//                 <Form.Control
-//                   type="prezime"
-//                   placeholder="Unesi prezime"
-//                   name="prezime"
-//                   id="prezime"
-//                   onChange={handleInputPrezime}
-//                 />
-//               </Form.Group>
-//               <Form.Group>
-//                 <Form.Label htmlFor="email">Unesite e-mail adresu:</Form.Label>
-//                 <Form.Control
-//                   type="email"
-//                   name="email"
-//                   placeholder="Unesite svoju e-mail adresu"
-//                   id="email"
-//                   onChange={handleInputEmail}
-//                 />
-//               </Form.Group>
-//               <br />
-//               <Button variant="primary" type="submit">
-//                 Click here to submit form
-//               </Button>
-//             </Form>
-//           </Modal.Body>
-//         </Modal>
 //       </Container>
 //     </>
 //   );
 // }
 
+// function Step1({ chooseParticipantType }) {
+//   return (
+//     <div>
+  
+//       <h5>Choose Participant Type</h5>
+//       <Button onClick={() => chooseParticipantType('Aktivni sudionik')} variant='outline-primary'>
+//         Aktivni sudionik
+//       </Button>
+//       <br/>
+//       <hr/>
+//       <br/>
+//       <Button onClick={() => chooseParticipantType('Pasivni sudionik')}variant='outline-primary'>
+//         Pasivni sudionik
+//       </Button>
+//     </div>
+//   );
+// }
 
+// function Step2({
+//   participantType,
+//   uploadFile,
+//   handleInputIme,
+//   handleInputPrezime,
+//   handleInputEmail,
+//   uploadedFiles,
+//   removeFile
+// }) {
+//   return (
+//     <div>
+//       <h3>Enter Details</h3>
+//       <Form.Group>
+//   <Form.Label htmlFor="ime">Ime:</Form.Label>
+//   <Form.Control id="ime" name="ime" type="text" placeholder="Unesi ime" onChange={handleInputIme} />
+// </Form.Group>
+// <Form.Group>
+//   <Form.Label htmlFor="prezime">Prezime:</Form.Label>
+//   <Form.Control id="prezime" type="text" placeholder="Unesi prezime" onChange={handleInputPrezime} />
+// </Form.Group>
+// <Form.Group>
+//   <Form.Label htmlFor="email">Email:</Form.Label>
+//   <Form.Control id="email" type="email" placeholder="Unesi email" onChange={handleInputEmail} />
+// </Form.Group>
+// {participantType === 'Aktivni sudionik' && (
+//   <Form.Group>
+//     <Form.Label htmlFor="sazetci">Sažetci:</Form.Label>
+//     <Form.Control id="sazetci" type="file" accept=".docx,.pdf,.xlsx" multiple onChange={uploadFile} />
+//   </Form.Group>
+// )}
+      
+//       {uploadedFiles.length > 0 && (
+//         <div>
+//           <h5>Uploaded Files:</h5>
+//           <ul>
+//             {uploadedFiles.map((file, index) => (
+//               <li key={index}>
+//                 <span>{file.name}</span>
+//                 <button onClick={() => removeFile(index)}>Remove</button>
+//               </li>
+//             ))}
+//           </ul>
+//         </div>
+//       )}
+//     </div>
+//   );
+// }

@@ -33,6 +33,57 @@ const createPsiholog = async (Psiholog) => {
     }
   };
 
+const createSazetci = async (Sazetci_ID, Psiholog_ID, FileName, FileType, FileData) => {
+  try {
+    let pool = await sql.connect(config);
+
+    const query = `
+      INSERT INTO Sažetci
+      (SažetakID, Psiholog_ID, FileName, FileType, FileData)
+      VALUES
+      (@Sazetci_ID, @Psiholog_ID, @FileName, @FileType, @FileData)
+    `;
+
+    await pool.request()
+      .input('Sazetci_ID', sql.VarChar(200), Sazetci_ID)
+      .input('Psiholog_ID', sql.VarChar(200), Psiholog_ID)
+      .input('FileName', sql.NVarChar(255), FileName)
+      .input('FileType', sql.NVarChar(50), FileType)
+      .input('FileData', sql.VarBinary(sql.MAX), Buffer.from(FileData, 'hex')) // Convert hex data to buffer
+      .query(query);
+
+    console.log('Sažetak inserted successfully');
+  } catch (error) {
+    console.error('Error inserting Sažetak:', error);
+    throw error;
+  }
+};
+
+
+  // const createSazetci = async (Sazetci_ID, Psiholog_ID, FileName, FileType, FileData) => {
+  //   try {
+  //     let pool = await sql.connect(config);
+      
+  //     const query = `
+  //       INSERT INTO Sažetci
+  //       (Sažetak_ID, Psiholog_ID, FileName, FileType, FileData)
+  //       VALUES
+  //       (@Sazetci_ID, @Psiholog_ID, @FileName, @FileType, @FileData)
+  //     `;
+      
+  //     await pool.request()
+  //       .input('Sazetci_ID', sql.VarChar(200), Sazetci_ID)
+  //       .input('Psiholog_ID', sql.VarChar(200), Psiholog_ID)
+  //       .input('FileName', sql.NVarChar(255), FileName)
+  //       .input('FileType', sql.NVarChar(50), FileType)
+  //       .input('FileData', sql.VarBinary(sql.MAX), Buffer.from(FileData, 'hex'))
+  //       .query(query);
+  //   } catch (error) {
+  //     console.log(error);
+  //     throw error;
+  //   }
+  // };
+
   // Create Psiholog operation
 const createPredavanje = async (Predavanje) => {
   try {
@@ -177,5 +228,6 @@ module.exports = {
     createPredavanje,
     deletePredavanje,
     updatePredavanje, 
-    getPredavanjeByID
+    getPredavanjeByID,
+    createSazetci
 }

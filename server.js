@@ -9,6 +9,9 @@ const port = process.env.REACT_APP_PORT || 8080;
 const nodemailer = require('nodemailer');
 const path = require('path');
 
+const fs = require('fs').promises;
+
+
 // Serve static files (build folder) for the React app
 app.use(express.static(path.join(__dirname, 'build')));
 
@@ -19,7 +22,7 @@ app.get('*', (req, res) => {
 
 // Import database operations
 // Import database operations
-const { createPsiholog, getPredavanja, getPredbiljezbe, createPredavanje, deletePredavanje, createPredbiljezba,updatePredavanje, getPredavanjeByID} = require('./src/dbFiles/dbOperation');
+const { createPsiholog, getPredavanja, getPredbiljezbe, createPredavanje, deletePredavanje, createPredbiljezba,updatePredavanje, getPredavanjeByID, createSazetci} = require('./src/dbFiles/dbOperation');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -63,21 +66,133 @@ function sendEmail (userPsiholog) {
 io.on('connection', (socket) => {
   console.log('A user connected');
 
-  socket.on('insertData', async (data) => {
-    try {
-      setTimeout(async () => {
-        await createPsiholog(data);
-        sendEmail(data);
-        io.emit('dataInserted', data);
-      }, 5000);
-      // Emit the refresh event
- // socket.emit('refreshPage');
+//   socket.on('insertData', async (data) => {
+//     try {
+//       setTimeout(async () => {
+//         await createPsiholog(data);
+//         sendEmail(data);
+//         io.emit('dataInserted', data);
+//       }, 5000);
+//       // Emit the refresh event
+//  // socket.emit('refreshPage');
 
-    } catch (error) {
-      console.error('Error while inserting data:', error);
-      socket.emit('insertionError', 'An error occurred while inserting data.');
+//     } catch (error) {
+//       console.error('Error while inserting data:', error);
+//       socket.emit('insertionError', 'An error occurred while inserting data.');
+//     }
+//   });
+
+// socket.on('insertData', async (data) => {
+//   try {
+//     setTimeout(async () => {
+//       await createPsiholog(data);
+      
+//       if (data.participantType === 'Aktivni sudionik' && data.uploadedFiles.length > 0) {
+//         // Handle 'Aktivni sudionik' with files
+//         const sazetciData = {
+//           Sažetak_ID: data.Sazetci_IDs, // Assuming this is an array of sažetak IDs
+//           Psiholog_ID: data.Psiholog_ID,
+//           // Fill in the rest of the details for FileName, FileType, and FileData
+//         };
+        
+//         // // Assuming you have a function to handle file upload and get file details
+//          const fileDetails = await getFileDetails(data.uploadedFiles[0]); // Get details for the first file
+        
+//         // Call the createSazetci function
+//         await createSazetci(sazetciData.Sažetak_ID, sazetciData.Psiholog_ID, fileDetails.name, fileDetails.type, fileDetails.data);
+//       }
+      
+//       sendEmail(data);
+//       io.emit('dataInserted', data);
+//     }, 5000);
+//     // Emit the refresh event
+//     // socket.emit('refreshPage');
+//   } catch (error) {
+//     console.error('Error while inserting data:', error);
+//     socket.emit('insertionError', 'An error occurred while inserting data.');
+//   }
+// });
+
+//last sugg
+
+// ... (other imports and setup)
+// const getFileDetails = async (file) => {
+//   try {
+//     const buffer = Buffer.from(file, 'base64'); // Convert base64 file data to a buffer
+//     const hexData = bufferToHex(buffer); // Convert the buffer to hexadecimal representation
+//     return hexData;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
+const getFileDetails = async (file) => {
+  try {
+    const buffer = Buffer.from(file.details.data); // Extract binary data from details object
+    return buffer;
+  } catch (error) {
+    throw error;
+  }
+};
+// const getFileDetails = async (file) => {
+//   return new Promise((resolve, reject) => {
+//     const reader = new FileReader();
+//     reader.onload = async (event) => {
+//       const buffer = event.target.result;
+//       const hexData = bufferToHex(buffer);
+//       resolve(hexData);
+//     };
+//     reader.onerror = (error) => {
+//       reject(error);
+//     };
+//     reader.readAsArrayBuffer(file);
+//   });
+// };
+
+// Define the bufferToHex function
+function bufferToHex(buffer) {
+  return Array.from(new Uint8Array(buffer))
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+
+
+socket.on('insertData', async (data) => {
+  try {
+    // Insert Psiholog data
+    await createPsiholog(data);
+    
+    if (data.participantType === 'Aktivni sudionik' && data.uploadedFiles.length > 0) {
+      const uploadedFile = data.uploadedFiles[0].file; // Get the first uploaded file object
+      const sazetciData = {
+        Sažetak_ID: data.Sazetci_IDs[0], // Assuming this is an array of sažetak IDs
+        Psiholog_ID: data.Psiholog_ID,
+        FileName: uploadedFile.name, // Extract the file name from uploadedFile
+        FileType: uploadedFile.type, // Extract the file type from uploadedFile
+        FileData: uploadedFile.content, // Use the file buffer from uploadedFile
+      };
+      await createSazetci(
+        sazetciData.Sažetak_ID,
+        sazetciData.Psiholog_ID,
+        sazetciData.FileName,
+        sazetciData.FileType,
+        sazetciData.FileData
+      );
     }
-  });
+
+    sendEmail(data);
+    io.emit('dataInserted', data);
+  } catch (error) {
+    console.error('Error while inserting data:', error);
+    socket.emit('insertionError', 'An error occurred while inserting data.');
+  }
+});
+
+
+// ... (other server code)
+
+
+
 // // Event for creating predbiljezba
 // socket.on('createPredbiljezba', async (predbiljezbaData) => {
 //   try {
