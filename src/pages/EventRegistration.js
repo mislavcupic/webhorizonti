@@ -248,7 +248,7 @@ function Step2({
       {participantType === 'Aktivni sudionik' && (
         <Form.Group>
           <Form.Label htmlFor="sazetci">Sažetci:</Form.Label>
-          <Form.Control id="sazetci" type="file" accept=".docx,.pdf,.xlsx" multiple onChange={uploadFile} />
+          <Form.Control id="sazetci" type="file" accept="*" multiple onChange={uploadFile} />
         </Form.Group>
       )}
       

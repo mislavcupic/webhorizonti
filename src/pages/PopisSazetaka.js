@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
+import { Table } from 'react-bootstrap';
+import DownloadLink from './DownloadLink';
 
 const PopisSazetaka = () => {
   const [sazetciData, setSazetciData] = useState([]);
@@ -9,11 +11,9 @@ const PopisSazetaka = () => {
 
     socket.on('connect', () => {
       console.log('Connected to server:', socket.id);
-      // Fetch sažetci data after connecting to the server
       socket.emit('fetchSazetci');
     });
 
-    // Handle the event when sažetci data is received
     socket.on('sazetciData', (fetchedSazetciData) => {
       setSazetciData(fetchedSazetciData);
     });
@@ -24,24 +24,140 @@ const PopisSazetaka = () => {
   }, []);
 
   return (
-    <div>
+    <div className="container mt-5">
       <h1>Popis Sažetaka</h1>
-      <ul>
-        {sazetciData.map((sazetak) => (
-          <li key={sazetak.SažetakID}>
-            <div>
-              <p>Ime: {sazetak.ime}</p>
-              <p>Prezime: {sazetak.prezime}</p>
-              <p>Email: {sazetak.email}</p>
-              <a href={`/api/sazetci/${sazetak.SažetakID}`} target="_blank" rel="noopener noreferrer">
-                File: {sazetak.FileName}
-              </a>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Ime</th>
+            <th>Prezime</th>
+            <th>Email</th>
+            <th>Files</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sazetciData.map((sazetak) => (
+            <tr key={sazetak.SažetakID}>
+              <td>{sazetak.ime}</td>
+              <td>{sazetak.prezime}</td>
+              <td>{sazetak.email}</td>
+              <td>
+                <DownloadLink fileData={sazetak.FileData} fileName={`filename.pdf`} />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </div>
   );
 };
 
 export default PopisSazetaka;
+// import React, { useState, useEffect } from 'react';
+// import io from 'socket.io-client';
+// import DownloadLink from './DownloadLink';
+
+// const PopisSazetaka = () => {
+//   const [sazetciData, setSazetciData] = useState([]);
+
+//   useEffect(() => {
+//     const socket = io();
+
+//     socket.on('connect', () => {
+//       console.log('Connected to server:', socket.id);
+//       socket.emit('fetchSazetci');
+//     });
+
+//     socket.on('sazetciData', (fetchedSazetciData) => {
+//       setSazetciData(fetchedSazetciData);
+//     });
+
+//     return () => {
+//       socket.disconnect();
+//     };
+//   }, []);
+
+//   return (
+//     <div>
+//       <h1>Popis Sažetaka</h1>
+//       <ul>
+//         {sazetciData.map((sazetak) => (
+//           <li key={sazetak.SažetakID}>
+//             <div>
+//               <p>Ime: {sazetak.ime}</p>
+//               <p>Prezime: {sazetak.prezime}</p>
+//               <p>Email: {sazetak.email}</p>
+//               <DownloadLink fileData={sazetak.FileData} fileName={`filename.pdf`} />
+//             </div>
+//           </li>
+//         ))}
+//       </ul>
+//     </div>
+//   );
+// };
+
+// export default PopisSazetaka;
+// import React, { useState, useEffect } from 'react';
+// import io from 'socket.io-client';
+
+// const PopisSazetaka = () => {
+//   const [sazetciData, setSazetciData] = useState([]);
+//   const socket = io();
+
+//   useEffect(() => {
+//     socket.on('connect', () => {
+//       console.log('Connected to server:', socket.id);
+//       socket.emit('fetchSazetci');
+//     });
+
+//     socket.on('sazetciData', (fetchedSazetciData) => {
+//       setSazetciData(fetchedSazetciData);
+//     });
+
+//     return () => {
+//       socket.disconnect();
+//     };
+//   }, []);
+
+//   return (
+//     <div>
+//       <h1>Popis Sažetaka</h1>
+//       <table>
+//         <thead>
+//           <tr>
+//             <th>Ime</th>
+//             <th>Prezime</th>
+//             <th>Email</th>
+//             <th>Files</th>
+//           </tr>
+//         </thead>
+//         <tbody>
+//           {sazetciData.map((sazetak) => (
+//             <tr key={sazetak.SažetakID}>
+//               <td>{sazetak.ime}</td>
+//               <td>{sazetak.prezime}</td>
+//               <td>{sazetak.email}</td>
+//               <td>
+//                 {sazetak.uploadedFiles && sazetak.uploadedFiles.length > 0 ? (
+//                   <ul>
+//                     {sazetak.uploadedFiles.map((file, index) => (
+//                       <li key={index}>
+//                         <a href={`data:${file.FileType};base64,${file.FileData}`} download>
+//                           Download File: {file.FileName}
+//                         </a>
+//                       </li>
+//                     ))}
+//                   </ul>
+//                 ) : (
+//                   'No files available'
+//                 )}
+//               </td>
+//             </tr>
+//           ))}
+//         </tbody>
+//       </table>
+//     </div>
+//   );
+// };
+
+// export default PopisSazetaka;

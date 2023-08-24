@@ -67,6 +67,8 @@ async function fetchSazetciWithPsihologData() {
       SELECT
         s.SažetakID,
         s.FileName,
+        s.FileType,
+        s.FileData,
         p.ime,
         p.prezime,
         p.email
