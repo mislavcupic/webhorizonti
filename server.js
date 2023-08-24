@@ -52,7 +52,9 @@ function sendEmail (userPsiholog) {
           subject: "Potvrda prijave na stručni skup",
           text: `Pozdrav ${userPsiholog.ime} ${userPsiholog.prezime}, Vaša prijava na stručni skup "Horizonti snage" uspješno je izvršena dana ${userPsiholog.date}. Vaša kontakt mail adresa je ${userPsiholog.email}. Čuvajte ovu poruku jer se na njoj nalazi i token s kojim ćete se kasnije prijavljivati na predavanja. Vaš token za prijavu na predavanja: ${userPsiholog.Psiholog_ID}`
       };
-      transporter.sendMail(mail_configs,function(err,info){
+    //   text: `Pozdrav ${userPsiholog.ime} ${userPsiholog.prezime},Vaša prijava na stručni skup "Horizonti snage" uspješno je izvršena dana ${userPsiholog.date}.Vaša kontakt mail adresa je ${userPsiholog.email}.Čuvajte ovu poruku jer se na njoj nalazi i token s kojim ćete se kasnije prijavljivati na predavanja.Vaš token za prijavu na predavanja: <a href="http://localhost:8080/registrationfeesaccommodation/inserttoken?token=${userPsiholog.Psiholog_ID}">Kliknite ovdje da potvrdite</a>.`
+    // };
+     transporter.sendMail(mail_configs,function(err,info){
           if(err){
               console.log(err);
               return reject({message: 'an error has occured'});
@@ -154,30 +156,30 @@ function bufferToHex(buffer) {
     .map((byte) => byte.toString(16).padStart(2, '0'))
     .join('');
 }
-
-
-
+//works with multiple sazetci :)
 socket.on('insertData', async (data) => {
   try {
     // Insert Psiholog data
     await createPsiholog(data);
-    
+
     if (data.participantType === 'Aktivni sudionik' && data.uploadedFiles.length > 0) {
-      const uploadedFile = data.uploadedFiles[0].file; // Get the first uploaded file object
-      const sazetciData = {
-        Sažetak_ID: data.Sazetci_IDs[0], // Assuming this is an array of sažetak IDs
-        Psiholog_ID: data.Psiholog_ID,
-        FileName: uploadedFile.name, // Extract the file name from uploadedFile
-        FileType: uploadedFile.type, // Extract the file type from uploadedFile
-        FileData: uploadedFile.content, // Use the file buffer from uploadedFile
-      };
-      await createSazetci(
-        sazetciData.Sažetak_ID,
-        sazetciData.Psiholog_ID,
-        sazetciData.FileName,
-        sazetciData.FileType,
-        sazetciData.FileData
-      );
+      for (let i = 0; i < data.uploadedFiles.length; i++) {
+        const uploadedFile = data.uploadedFiles[i].file; // Get the uploaded file object
+        const sazetciData = {
+          Sažetak_ID: data.Sazetci_IDs[i], // Get the corresponding Sažetak ID
+          Psiholog_ID: data.Psiholog_ID,
+          FileName: uploadedFile.name,
+          FileType: uploadedFile.type,
+          FileData: uploadedFile.content,
+        };
+        await createSazetci(
+          sazetciData.Sažetak_ID,
+          sazetciData.Psiholog_ID,
+          sazetciData.FileName,
+          sazetciData.FileType,
+          sazetciData.FileData
+        );
+      }
     }
 
     sendEmail(data);
@@ -187,6 +189,38 @@ socket.on('insertData', async (data) => {
     socket.emit('insertionError', 'An error occurred while inserting data.');
   }
 });
+
+// //this worked with one sazetak
+// socket.on('insertData', async (data) => {
+//   try {
+//     // Insert Psiholog data
+//     await createPsiholog(data);
+    
+//     if (data.participantType === 'Aktivni sudionik' && data.uploadedFiles.length > 0) {
+//       const uploadedFile = data.uploadedFiles[0].file; // Get the first uploaded file object
+//       const sazetciData = {
+//         Sažetak_ID: data.Sazetci_IDs[0], // Assuming this is an array of sažetak IDs
+//         Psiholog_ID: data.Psiholog_ID,
+//         FileName: uploadedFile.name, // Extract the file name from uploadedFile
+//         FileType: uploadedFile.type, // Extract the file type from uploadedFile
+//         FileData: uploadedFile.content, // Use the file buffer from uploadedFile
+//       };
+//       await createSazetci(
+//         sazetciData.Sažetak_ID,
+//         sazetciData.Psiholog_ID,
+//         sazetciData.FileName,
+//         sazetciData.FileType,
+//         sazetciData.FileData
+//       );
+//     }
+
+//     sendEmail(data);
+//     io.emit('dataInserted', data);
+//   } catch (error) {
+//     console.error('Error while inserting data:', error);
+//     socket.emit('insertionError', 'An error occurred while inserting data.');
+//   }
+// });
 
 socket.on('fetchSazetci', async () => {
   try {
@@ -376,9 +410,9 @@ socket.on('updatePredavanje', async (updatedPredavanje, callback) => {
 
 });
 
-// server.listen(port, () => {
-//   console.log(`Listening on port: ${port}`);
-// });
+server.listen(port, () => {
+  console.log(`Listening on port: ${port}`);
+});
 
 
 

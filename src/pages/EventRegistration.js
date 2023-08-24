@@ -1,6 +1,6 @@
 // //sugg
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Form, Button, Modal, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Modal, Spinner } from 'react-bootstrap';
 import { nanoid } from 'nanoid';
 import CarouselComponent from './CarouselComponent';
 import { io } from 'socket.io-client';
@@ -205,22 +205,40 @@ export default function EventRegistration() {
 }
 
 function Step1({ chooseParticipantType }) {
-  return (
-    <div>
-      <h5>Choose Participant Type</h5>
-      <Button onClick={() => chooseParticipantType('Aktivni sudionik')} variant='outline-primary'>
-        Aktivni sudionik
-      </Button>
-      <br/>
-      <hr/>
-      <br/>
-      <Button onClick={() => chooseParticipantType('Pasivni sudionik')}variant='outline-primary'>
-        Pasivni sudionik
-      </Button>
-    </div>
-  );
-}
+//   return (
+//     <div>
+//       <h5>Choose Participant Type</h5>
+//       <Button onClick={() => chooseParticipantType('Aktivni sudionik')} variant='outline-primary'>
+//         Aktivni sudionik
+//       </Button>
+//       <br/>
+//       <hr/>
+//       <br/>
+//       <Button onClick={() => chooseParticipantType('Pasivni sudionik')}variant='outline-primary'>
+//         Pasivni sudionik
+//       </Button>
+//     </div>
+//   );
+// }
+return (
+ <Container className="text-center mt-5">
+ <h6 color='dark-blue'>Odaberi tip sudjelovanja na konferenciji 'Horizonti snage': </h6>
 
+   
+    <Button onClick={() => chooseParticipantType('Aktivni sudionik')} variant="outline-primary">
+       Aktivni sudionik
+     </Button>
+    
+   <hr/>
+   
+     <Button onClick={() => chooseParticipantType('Pasivni sudionik')} variant="outline-primary">
+       Pasivni sudionik
+     </Button>
+   
+
+</Container>
+);
+};
 function Step2({
   participantType,
   uploadFile,
@@ -248,7 +266,9 @@ function Step2({
       {participantType === 'Aktivni sudionik' && (
         <Form.Group>
           <Form.Label htmlFor="sazetci">Sažetci:</Form.Label>
-          <Form.Control id="sazetci" type="file" accept="*" multiple onChange={uploadFile} />
+          {/* <Form.Control id="sazetci" type="file" accept="*" multiple onChange={uploadFile} /> */}
+          <Form.Control id="sazetci" type="file" accept=".docx, .pdf, .xlsx" multiple onChange={uploadFile} />
+
         </Form.Group>
       )}
       
@@ -265,6 +285,8 @@ function Step2({
           </ul>
         </div>
       )}
+     
+
     </div>
   );
 }
