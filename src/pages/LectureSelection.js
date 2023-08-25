@@ -365,9 +365,7 @@
 //   );
 // }
 import React, { useState, useEffect } from 'react';
-import { Table, Container, Row, Button, Form } from 'react-bootstrap';
-import { OverlayTrigger } from 'react-bootstrap';
-import {Tooltip} from 'react-bootstrap'
+import { Table, Container, Row, Button, Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { io } from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
 
@@ -379,7 +377,7 @@ export default function LectureSelection() {
   const navigate = useNavigate();
   const receivedPsihologID = JSON.parse(localStorage.getItem('psihologID'));
   const tokenreceived = JSON.parse(localStorage.getItem('token'));
-  
+
   const handleDeleteButton = (predavanjeID) => {
     socket.emit('deletePredavanje', predavanjeID);
   };
@@ -458,15 +456,22 @@ export default function LectureSelection() {
                     <td>
                       {pred.slobodnaMjesta <= 0 || pred.ukupnoMjesta === pred.brojPolaznika ? (
                         <td>
-                        <OverlayTrigger
-                          overlay={<Tooltip>Ovo predavanje je popunjeno!</Tooltip>}
-                          placement="right"
-                        >
-                          <Form.Check
-                            type="checkbox"
-                            disabled
-                          />
-                        </OverlayTrigger>
+                          <OverlayTrigger
+                            overlay={
+                              <Tooltip
+                                style={{
+                                  fontSize: '14px',
+                                  backgroundColor: 'red',
+                                  border: '1px solid black',
+                                }}
+                              >
+                                Ovo predavanje je popunjeno!
+                              </Tooltip>
+                            }
+                            placement="right"
+                          >
+                            <Form.Check type="checkbox" disabled />
+                          </OverlayTrigger>
                         </td>
                       ) : (
                         <Form.Check
@@ -508,4 +513,6 @@ export default function LectureSelection() {
     </>
   );
 }
+
+
 

@@ -1,14 +1,16 @@
 import React from 'react'
 import { MDBFooter, MDBContainer, MDBRow, MDBCol, MDBIcon } from 'mdb-react-ui-kit';
-
+import horizonti_velik_cropped from '../assets/media/horizonti_velik_cropped.png'
 
 
 export default function Footer() {
   return (
     <div className='App'>
+      
       <MDBFooter bgColor='light' className='text-center text-lg-start text-muted'>
       <section className='d-flex justify-content-center justify-content-lg-between p-4 border-bottom'>
         <div className='me-5 d-none d-lg-block'>
+          
           <span>Get connected with us on social networks:</span>
         </div>
 
@@ -37,7 +39,7 @@ export default function Footer() {
           <MDBRow className='mt-3'>
             <MDBCol md='3' lg='4' xl='3' className='mx-auto mb-4'>
               <h6 className='text-uppercase fw-bold mb-4'>
-                <MDBIcon color='secondary' icon='gem' className='me-3' />
+                <MDBIcon color='secondary' icon='gem' className='me-3' />  <img width={40} height={30} src={horizonti_velik_cropped} type="file" alt="logo"/> 
                 Horizonti snage
               </h6>
               <p>
