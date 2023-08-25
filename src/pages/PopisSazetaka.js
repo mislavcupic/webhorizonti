@@ -42,9 +42,13 @@ const PopisSazetaka = () => {
               <td>{sazetak.prezime}</td>
               <td>{sazetak.email}</td>
               <td>
-                {sazetak.FileData.map((file, index) => (
-                  <DownloadLink key={index} fileData={file} fileName={`filename${index}.pdf`} />
-                ))}
+                {Array.isArray(sazetak.FileData) ? (
+                  sazetak.FileData.map((fileData, index) => (
+                    <DownloadLink key={index} fileData={fileData} fileName={`filename${index}.pdf`} />
+                  ))
+                ) : (
+                  <DownloadLink fileData={sazetak.FileData} fileName={`filename.pdf`} />
+                )}
               </td>
             </tr>
           ))}
@@ -55,6 +59,7 @@ const PopisSazetaka = () => {
 };
 
 export default PopisSazetaka;
+
 //ovaj je bio ok
 // import React, { useState, useEffect } from 'react';
 // import io from 'socket.io-client';
