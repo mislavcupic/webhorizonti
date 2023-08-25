@@ -139,4 +139,17 @@ body {
 .custom-toggler[aria-expanded=true] .custom-toggler-icon::after {
   bottom: 0;
   transform: rotate(90deg); /* Adjust bottom bar rotation for open state */
+}
+
+.carousel-wrapper .carousel-indicators li {
+  background-color: transparent;
+  border: 2px solid #6c757d; /* Change color as needed */
+  width: 12px;
+  height: 12px;
+  margin: 0 4px;
+}
+
+.carousel-wrapper .carousel-indicators .active {
+  background-color: #6c757d; /* Change color as needed */
+  border-color: #6c757d;
 }/*# sourceMappingURL=App.css.map */
