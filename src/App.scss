@@ -75,6 +75,10 @@ $text-color: white;
   .modern-navbar {
     background-color: $primary-color;
     padding: 10px 20px;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0; /* Adjust as needed */
+    z-index: 1000; /* Ensure the navbar stays above other content */
   
     .navbar-brand {
       display: flex;
@@ -166,3 +170,4 @@ body {
   background-color: #6c757d; /* Change color as needed */
   border-color: #6c757d;
 }
+

@@ -70,6 +70,9 @@ body {
 .modern-navbar {
   background-color: #333;
   padding: 10px 20px;
+  position: sticky;
+  top: 0; /* Adjust as needed */
+  z-index: 1000; /* Ensure the navbar stays above other content */
 }
 .modern-navbar .navbar-brand {
   display: flex;

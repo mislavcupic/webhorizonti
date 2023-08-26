@@ -6,7 +6,7 @@ import horizonti_velik_cropped from '../assets/media/horizonti_velik_cropped.png
 
 export default function Footer() {
   return (
-    <footer className='bg-warning text-black'>
+    <footer   style={{ backgroundColor: 'hsla(210, 70%, 50%, 0.8)' }} className='text-white'>
       <div className='p-4'>
         <Container>
           <Row className='py-4 align-items-center'>

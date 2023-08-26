@@ -5,8 +5,8 @@ import '../App.css'; // You can create a CSS file for custom styling
 
 function Navigation() {
   return (
-    <Navbar expand="lg" bg="primary" variant="dark" className="modern-navbar">
-      <Navbar.Brand href="#home">
+    <Navbar expand="lg"  style={{ backgroundColor: 'hsla(210, 70%, 50%, 0.8)', height: '80px' }} variant="dark" className="modern-navbar sticky-top">
+      <Navbar.Brand href="7">
         <Logo alt="" width="30" height="30" className="d-inline-block align-top" type="file" />
         Horizonti
       </Navbar.Brand>
@@ -59,6 +59,7 @@ function Navigation() {
           <Nav.Link href="/registrationfeesaccommodation/eventregistration">Prijava</Nav.Link>
         </Nav>
       </Navbar.Collapse>
+    
     </Navbar>
   );
 }
