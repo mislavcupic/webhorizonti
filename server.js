@@ -10,7 +10,7 @@ const nodemailer = require('nodemailer');
 const path = require('path');
 
 const fs = require('fs').promises;
-
+// const {authPage,authPred} = require('./src/middlewares')
 
 // Serve static files (build folder) for the React app
 app.use(express.static(path.join(__dirname, 'build')));

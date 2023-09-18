@@ -1,19 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import Logo from './Logo';
 import '../App.css'; // You can create a CSS file for custom styling
+import HamburgerIcon from '../assets/media/hamburger-icon.png'; // Import your hamburger icon image
 
 function Navigation() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
   return (
-    <Navbar expand="lg"  style={{ backgroundColor: 'hsla(210, 70%, 50%, 0.8)', height: '80px' }} variant="dark" className="modern-navbar sticky-top">
-      <Navbar.Brand href="7">
+    <Navbar expand="lg" style={{ backgroundColor: 'hsla(232, 87%, 98%, 0.8)', height: '90px' }} variant="dark" className={`modern-navbar sticky-top ${menuOpen ? 'opened' : ''}`}>
+      <Navbar.Brand href="/">
         <Logo alt="" width="30" height="30" className="d-inline-block align-top" type="file" />
         Horizonti
       </Navbar.Brand>
-      <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
+      <Navbar.Toggle onClick={toggleMenu} aria-controls="responsive-navbar-nav" className="menu">
+        <img src={HamburgerIcon} style={{width:'42px', height:'30px', backgroundColor: 'hsla(210, 70%, 50%, 0.8)'}} alt="Hamburger Menu" className={`hamburger-icon ${menuOpen ? 'opened' : ''}`} />
+      </Navbar.Toggle>
       <Navbar.Collapse id="responsive-navbar-nav">
-        <Nav className="mr-auto">
-          <Nav.Link href="/">Home</Nav.Link>
+        <Nav className={`mr-auto ${menuOpen ? 'nav-open' : ''}`}>
+          <Nav.Link href="/" className={`nav-link ${menuOpen ? 'nav-link-open' : ''}`}>Home</Nav.Link>
           <NavDropdown title="About" id="collasible-nav-dropdown">
             <NavDropdown.Item href="/about">O nama</NavDropdown.Item>
             <NavDropdown.Divider />
@@ -56,12 +65,12 @@ function Navigation() {
           </NavDropdown>
         </Nav>
         <Nav>
-          <Nav.Link href="/registrationfeesaccommodation/eventregistration">Prijava</Nav.Link>
+          <Nav.Link href="/registrationfeesaccommodation/eventregistration" className={`nav-link ${menuOpen ? 'nav-link-open' : ''}`}>Prijava</Nav.Link>
         </Nav>
       </Navbar.Collapse>
-    
     </Navbar>
   );
 }
 
 export default Navigation;
+

@@ -68,52 +68,50 @@ body {
   }
 }
 .modern-navbar {
-  background-color: #333;
+  background-color: hsla(210, 70%, 50%, 0.8);
   padding: 10px 20px;
   position: sticky;
-  top: 0; /* Adjust as needed */
-  z-index: 1000; /* Ensure the navbar stays above other content */
+  top: 0;
+  z-index: 1000;
 }
 .modern-navbar .navbar-brand {
   display: flex;
   align-items: center;
-  color: white;
+  color: black;
 }
 .modern-navbar .navbar-brand img {
   margin-right: 10px;
 }
 .modern-navbar .nav-link {
-  color: white;
-  transition: color 0.3s ease-in-out;
+  color: black;
+  transition: background-color 0.3s ease-in-out;
+  text-shadow: #333;
 }
-.modern-navbar .nav-link:hover {
-  color: #ffc107;
-}
-.modern-navbar .nav-item.dropdown:hover .nav-link {
-  color: #ffc107;
+.modern-navbar .nav-link:hover, .modern-navbar .nav-link .opened .nav-link {
+  color: rgba(14, 73, 249, 0.8980392157);
 }
 .modern-navbar .dropdown-menu {
   background-color: #333;
   border: none;
 }
-.modern-navbar .dropdown-item {
-  color: white;
+.modern-navbar .dropdown-menu .dropdown-item {
+  color: black;
   transition: background-color 0.3s ease-in-out;
 }
-.modern-navbar .dropdown-item:hover {
+.modern-navbar .dropdown-menu .dropdown-item:hover {
   background-color: #444;
-  color: #ffc107;
+  color: rgba(14, 73, 249, 0.8980392157);
 }
 .modern-navbar .nav-item.active .nav-link {
-  color: #ffc107;
+  color: rgba(14, 73, 249, 0.8980392157);
 }
 .modern-navbar .navbar-toggler-icon {
-  background-color: white;
+  background-color: black;
 }
 
 body {
   background-color: #282c34;
-  color: white;
+  color: black;
 }
 
 /* Add custom styles for the Modal */

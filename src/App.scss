@@ -1,9 +1,9 @@
 
 // Colors
 $primary-color: #333;
-$secondary-color: #ffc107;
+$secondary-color: #0e49f9e5;
 $background-color: #282c34; // Dark background color
-$text-color: white;
+$text-color: black;
 .NavApp {
     position: fixed;
   }
@@ -73,12 +73,12 @@ $text-color: white;
 
 
   .modern-navbar {
-    background-color: $primary-color;
+    background-color: hsla(210, 70%, 50%, 0.8);
     padding: 10px 20px;
     position: -webkit-sticky;
     position: sticky;
-    top: 0; /* Adjust as needed */
-    z-index: 1000; /* Ensure the navbar stays above other content */
+    top: 0;
+    z-index: 1000;
   
     .navbar-brand {
       display: flex;
@@ -92,29 +92,32 @@ $text-color: white;
   
     .nav-link {
       color: $text-color;
-      transition: color 0.3s ease-in-out;
-  
-      &:hover {
+      transition: background-color  0.3s ease-in-out;
+      text-shadow: #333;
+
+      &:hover,.opened .nav-link {
         color: $secondary-color;
+     
       }
     }
   
-    .nav-item.dropdown:hover .nav-link {
-      color: $secondary-color;
-    }
+    // .nav-item.dropdown:hover .nav-link,
+    // .opened .nav-item.dropdown .nav-link {
+    //   background-color: hsla(210, 70%, 50%, 0.8);
+    // }
   
     .dropdown-menu {
       background-color: $primary-color;
       border: none;
-    }
   
-    .dropdown-item {
-      color: $text-color;
-      transition: background-color 0.3s ease-in-out;
+      .dropdown-item {
+        color: $text-color;
+        transition: background-color 0.3s ease-in-out;
   
-      &:hover {
-        background-color: #444; // Adjust as needed
-        color: $secondary-color;
+        &:hover {
+          background-color: #444;
+          color: $secondary-color;
+        }
       }
     }
   
@@ -126,6 +129,9 @@ $text-color: white;
       background-color: $text-color;
     }
   }
+  
+
+
   
 body {
   background-color: $background-color;
