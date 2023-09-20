@@ -96,7 +96,7 @@ $text-color: black;
       text-shadow: #333;
 
       &:hover,.opened .nav-link {
-        color: $secondary-color;
+        color: darkgray;
      
       }
     }
@@ -107,16 +107,16 @@ $text-color: black;
     // }
   
     .dropdown-menu {
-      background-color: $primary-color;
+      background-color: #333;
       border: none;
   
       .dropdown-item {
-        color: $text-color;
+        color: white;
         transition: background-color 0.3s ease-in-out;
   
         &:hover {
-          background-color: #444;
-          color: $secondary-color;
+          
+          color: darkgray;
         }
       }
     }

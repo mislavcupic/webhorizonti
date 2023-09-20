@@ -12,7 +12,7 @@ function Navigation() {
   };
 
   return (
-    <Navbar expand="lg" style={{ backgroundColor: 'hsla(232, 87%, 98%, 0.8)', height: '100px' }} variant="dark" className={`modern-navbar sticky-top ${menuOpen ? 'opened' : ''}`}>
+    <Navbar expand="lg" style={{ backgroundColor: 'hsla(232, 87%, 98%, 0.8)', height: '120px' }} variant="dark" className={`modern-navbar sticky-top ${menuOpen ? 'opened' : ''}`}>
       <Navbar.Brand href="/">
         <Logo alt="" width="30" height="30" className="d-inline-block align-top" type="file" />
         Horizonti

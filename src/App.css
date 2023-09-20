@@ -88,19 +88,18 @@ body {
   text-shadow: #333;
 }
 .modern-navbar .nav-link:hover, .modern-navbar .nav-link .opened .nav-link {
-  color: rgba(14, 73, 249, 0.8980392157);
+  color: darkgray;
 }
 .modern-navbar .dropdown-menu {
   background-color: #333;
   border: none;
 }
 .modern-navbar .dropdown-menu .dropdown-item {
-  color: black;
+  color: white;
   transition: background-color 0.3s ease-in-out;
 }
 .modern-navbar .dropdown-menu .dropdown-item:hover {
-  background-color: #444;
-  color: rgba(14, 73, 249, 0.8980392157);
+  color: darkgray;
 }
 .modern-navbar .nav-item.active .nav-link {
   color: rgba(14, 73, 249, 0.8980392157);
