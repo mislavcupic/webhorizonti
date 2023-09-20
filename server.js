@@ -410,9 +410,9 @@ socket.on('updatePredavanje', async (updatedPredavanje, callback) => {
 
 });
 
-// server.listen(port, () => {
-//   console.log(`Listening on port: ${port}`);
-// });
+server.listen(port, () => {
+  console.log(`Listening on port: ${port}`);
+});
 
 
 
