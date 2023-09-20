@@ -6,7 +6,10 @@ export default function CardsMental() {
     <div>
    
        <Card > 
+       <div className="custom-card">
         <Card.Img variant="top" className='card-img' src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Nature-View.jpg"/>
+        <div className="img-overlay"></div>
+                </div>
         {/* // src={require('C:\\Users\\misla\\web-jelk\\src\\assets\\jelkovec-zrak2.jpg')}  */}
         <Card.Body>
           <Card.Title>Kako do mentalnog zdravlja?</Card.Title>

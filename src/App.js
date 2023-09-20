@@ -18,7 +18,7 @@ function App() {
       <Link to="/" >Home</Link>
       <br/> 
       <Link>
-      <Link to="/about" >ONama</Link>
+      <Link to="/about" >O Nama</Link>
       <br/> 
       <Link to="/about/introductionspeech" >Pozdravni govor</Link>
       <br/> 
