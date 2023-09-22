@@ -161,26 +161,50 @@ socket.on('insertData', async (data) => {
   try {
     // Insert Psiholog data
     await createPsiholog(data);
-
     if (data.participantType === 'Aktivni sudionik' && data.uploadedFiles.length > 0) {
       for (let i = 0; i < data.uploadedFiles.length; i++) {
-        const uploadedFile = data.uploadedFiles[i].file; // Get the uploaded file object
+        const uploadedFile = data.uploadedFiles[i].file;
+        const oblikSudjelovanja = data.oblikSudjelovanja[i]; // Get the Oblik sudjelovanja for this file
+    
         const sazetciData = {
-          Sažetak_ID: data.Sazetci_IDs[i], // Get the corresponding Sažetak ID
+          Sažetak_ID: data.Sazetci_IDs[i],
           Psiholog_ID: data.Psiholog_ID,
           FileName: uploadedFile.name,
           FileType: uploadedFile.type,
           FileData: uploadedFile.content,
+          OblikSudjelovanja: oblikSudjelovanja, // Pass Oblik sudjelovanja
         };
+    
         await createSazetci(
           sazetciData.Sažetak_ID,
           sazetciData.Psiholog_ID,
           sazetciData.FileName,
           sazetciData.FileType,
-          sazetciData.FileData
+          sazetciData.FileData,
+          sazetciData.OblikSudjelovanja
         );
       }
     }
+    
+    // if (data.participantType === 'Aktivni sudionik' && data.uploadedFiles.length > 0) {
+    //   for (let i = 0; i < data.uploadedFiles.length; i++) {
+    //     const uploadedFile = data.uploadedFiles[i].file; // Get the uploaded file object
+    //     const sazetciData = {
+    //       Sažetak_ID: data.Sazetci_IDs[i], // Get the corresponding Sažetak ID
+    //       Psiholog_ID: data.Psiholog_ID,
+    //       FileName: uploadedFile.name,
+    //       FileType: uploadedFile.type,
+    //       FileData: uploadedFile.content,
+    //     };
+    //     await createSazetci(
+    //       sazetciData.Sažetak_ID,
+    //       sazetciData.Psiholog_ID,
+    //       sazetciData.FileName,
+    //       sazetciData.FileType,
+    //       sazetciData.FileData
+    //     );
+    //   }
+    // }
 
     sendEmail(data);
     io.emit('dataInserted', data);

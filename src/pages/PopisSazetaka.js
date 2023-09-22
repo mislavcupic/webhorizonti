@@ -33,6 +33,7 @@ const PopisSazetaka = () => {
             <th>Prezime</th>
             <th>Email</th>
             <th>Files</th>
+            <th>Oblik sudjelovanja</th>
           </tr>
         </thead>
         <tbody>
@@ -41,6 +42,7 @@ const PopisSazetaka = () => {
               <td>{sazetak.ime}</td>
               <td>{sazetak.prezime}</td>
               <td>{sazetak.email}</td>
+              <td>{sazetak.Oblik_sudjelovanja}</td>
               <td>
                 {Array.isArray(sazetak.FileData) ? (
                   sazetak.FileData.map((fileData, index) => (

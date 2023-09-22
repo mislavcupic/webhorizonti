@@ -37,8 +37,8 @@ function Navigation() {
       </Navbar.Toggle>
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className={`mr-auto ${menuOpen ? 'nav-open' : ''}`}>
-          <Nav.Link href="/" className={`nav-link ${menuOpen ? 'nav-link-open' : ''}`}>Home</Nav.Link>
-          <NavDropdown title="About" id="collasible-nav-dropdown">
+          <Nav.Link href="/" className={`nav-link ${menuOpen ? 'nav-link-open' : ''}`}>Naslovna</Nav.Link>
+          <NavDropdown title="O nama" id="collasible-nav-dropdown">
             <NavDropdown.Item href="/about">O nama</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="/about/introductionspeech">Pozdravni govor</NavDropdown.Item>

@@ -32,32 +32,58 @@ const createPsiholog = async (Psiholog) => {
       throw error;
     }
   };
+  const createSazetci = async (Sazetci_ID, Psiholog_ID, FileName, FileType, FileData, OblikSudjelovanja) => {
+    try {
+      let pool = await sql.connect(config);
+  
+      const query = `
+        INSERT INTO Sažetci
+        (SažetakID, Psiholog_ID, FileName, FileType, FileData, Oblik_Sudjelovanja)
+        VALUES
+        (@Sazetci_ID, @Psiholog_ID, @FileName, @FileType, @FileData, @OblikSudjelovanja)
+      `;
+  
+      await pool.request()
+        .input('Sazetci_ID', sql.VarChar(200), Sazetci_ID)
+        .input('Psiholog_ID', sql.VarChar(200), Psiholog_ID)
+        .input('FileName', sql.NVarChar(255), FileName)
+        .input('FileType', sql.NVarChar(50), FileType)
+        .input('FileData', sql.VarBinary(sql.MAX), Buffer.from(FileData, 'hex'))
+        .input('OblikSudjelovanja', sql.NVarChar(50), OblikSudjelovanja) // Include OblikSudjelovanja
+        .query(query);
+  
+      console.log('Sažetak inserted successfully');
+    } catch (error) {
+      console.error('Error inserting Sažetak:', error);
+      throw error;
+    }
+  };
+  
+// const createSazetci = async (Sazetci_ID, Psiholog_ID, FileName, FileType, FileData) => {
+//   try {
+//     let pool = await sql.connect(config);
 
-const createSazetci = async (Sazetci_ID, Psiholog_ID, FileName, FileType, FileData) => {
-  try {
-    let pool = await sql.connect(config);
+//     const query = `
+//       INSERT INTO Sažetci
+//       (SažetakID, Psiholog_ID, FileName, FileType, FileData)
+//       VALUES
+//       (@Sazetci_ID, @Psiholog_ID, @FileName, @FileType, @FileData)
+//     `;
 
-    const query = `
-      INSERT INTO Sažetci
-      (SažetakID, Psiholog_ID, FileName, FileType, FileData)
-      VALUES
-      (@Sazetci_ID, @Psiholog_ID, @FileName, @FileType, @FileData)
-    `;
+//     await pool.request()
+//       .input('Sazetci_ID', sql.VarChar(200), Sazetci_ID)
+//       .input('Psiholog_ID', sql.VarChar(200), Psiholog_ID)
+//       .input('FileName', sql.NVarChar(255), FileName)
+//       .input('FileType', sql.NVarChar(50), FileType)
+//       .input('FileData', sql.VarBinary(sql.MAX), Buffer.from(FileData, 'hex')) // Convert hex data to buffer
+//       .query(query);
 
-    await pool.request()
-      .input('Sazetci_ID', sql.VarChar(200), Sazetci_ID)
-      .input('Psiholog_ID', sql.VarChar(200), Psiholog_ID)
-      .input('FileName', sql.NVarChar(255), FileName)
-      .input('FileType', sql.NVarChar(50), FileType)
-      .input('FileData', sql.VarBinary(sql.MAX), Buffer.from(FileData, 'hex')) // Convert hex data to buffer
-      .query(query);
-
-    console.log('Sažetak inserted successfully');
-  } catch (error) {
-    console.error('Error inserting Sažetak:', error);
-    throw error;
-  }
-};
+//     console.log('Sažetak inserted successfully');
+//   } catch (error) {
+//     console.error('Error inserting Sažetak:', error);
+//     throw error;
+//   }
+// };
 
 async function fetchSazetciWithPsihologData() {
   try {
@@ -69,6 +95,7 @@ async function fetchSazetciWithPsihologData() {
         s.FileName,
         s.FileType,
         s.FileData,
+        s.Oblik_sudjelovanja,
         p.ime,
         p.prezime,
         p.email
