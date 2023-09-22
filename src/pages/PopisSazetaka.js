@@ -94,7 +94,7 @@ const PopisSazetaka = () => {
     return (
       sazetak.ime.toLowerCase().includes(searchStr) ||
       sazetak.prezime.toLowerCase().includes(searchStr) ||
-      sazetak.email.toLowerCase().includes(searchStr) || sazetak.Oblik_sudjelovanja.toLowerCase.includes(searchStr)
+      sazetak.email.toLowerCase().includes(searchStr) || sazetak.Oblik_sudjelovanja.toLowerCase().includes(searchStr)
     );
   });
 
