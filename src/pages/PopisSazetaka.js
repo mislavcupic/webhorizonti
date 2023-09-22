@@ -32,8 +32,9 @@ const PopisSazetaka = () => {
             <th>Ime</th>
             <th>Prezime</th>
             <th>Email</th>
-            <th>Files</th>
             <th>Oblik sudjelovanja</th>
+            <th>Files</th>
+         
           </tr>
         </thead>
         <tbody>
