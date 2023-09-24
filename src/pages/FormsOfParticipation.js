@@ -3,6 +3,15 @@
 import { Container, Row, Col } from 'react-bootstrap';
 import { Card, CardGroup } from 'react-bootstrap';
 import '../App.css'; // Import your CSS file
+import audience from '../assets/media/audience-speech-speaker-presentation.jpg'
+import team from '../assets/media/team-table-playmobil-round-table-preview.jpg'
+import practice from '../assets/media/practice.jpg'
+import tedTalk from '../assets/media/TEDWomen2015_attend_hero.jpg'
+import outOfTheBox from '../assets/media/think-outside-the-box-1544911323dIW.jpg'
+import brains from '../assets/media/brain-mind-psychology-idea.jpg'
+import people from '../assets/media/faculty-workshop-professional-training-academic-preview.jpg'
+import poster from '../assets/media/knowledge-spark-flash-hand.jpg'
+
 
 export default function FormsOfParticipation() {
   const list = [
@@ -54,7 +63,7 @@ export default function FormsOfParticipation() {
                   <Card.Img
                     variant="top"
                     className="card-img"
-                    src="https://i0.hippopx.com/photos/168/829/316/faculty-workshop-professional-training-academic-preview.jpg"
+                    src={people}
                   />
                   <div className="img-overlay"></div>
                 </div>
@@ -75,7 +84,7 @@ export default function FormsOfParticipation() {
                   <Card.Img
                     variant="top"
                     className="card-img"
-                    src="https://www.thebluediamondgallery.com/handwriting/images/practice.jpg"
+                    src={practice}
                   />
                   <div className="img-overlay"></div>
                 </div>
@@ -96,7 +105,7 @@ export default function FormsOfParticipation() {
                   <Card.Img
                     variant="top"
                     className="card-img"
-                    src="https://c0.wallpaperflare.com/preview/817/823/802/knowledge-spark-flash-hand.jpg"
+                    src={brains}
                   />
                   <div className="img-overlay"></div>
                 </div>
@@ -119,7 +128,7 @@ export default function FormsOfParticipation() {
                   <Card.Img
                     variant="top"
                     className="card-img"
-                    src="https://c1.wallpaperflare.com/preview/812/952/1011/brain-mind-psychology-idea.jpg"
+                    src={poster}
                   />
                   <div className="img-overlay"></div>
                 </div>
@@ -144,7 +153,7 @@ export default function FormsOfParticipation() {
                   <Card.Img
                     variant="top"
                     className="card-img"
-                    src="https://i0.hippopx.com/photos/495/478/444/team-table-playmobil-round-table-preview.jpg"
+                    src={team}
                   />
                   <div className="img-overlay"></div>
                 </div>
@@ -167,7 +176,7 @@ export default function FormsOfParticipation() {
                   <Card.Img
                     variant="top"
                     className="card-img"
-                    src="https://c1.wallpaperflare.com/preview/677/164/866/audience-speech-speaker-presentation.jpg"
+                    src={audience}
                   />
                   <div className="img-overlay"></div>
                 </div>
@@ -190,7 +199,7 @@ export default function FormsOfParticipation() {
                   <Card.Img
                     variant="top"
                     className="card-img"
-                    src="https://pb-assets.tedcdn.com/system/baubles/files/000/001/441/original/TEDWomen2015_attend_hero.jpg"
+                    src={tedTalk}
                   />
                   <div className="img-overlay"></div>
                 </div>
@@ -213,7 +222,7 @@ export default function FormsOfParticipation() {
                   <Card.Img
                     variant="top"
                     className="card-img"
-                    src="https://upload.wikimedia.org/wikipedia/commons/1/11/Thinking_out_of_the_box_4.svg"
+                    src={outOfTheBox}
                   />
                   <div className="img-overlay"></div>
                 </div>
