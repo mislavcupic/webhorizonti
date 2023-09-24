@@ -67,10 +67,11 @@ const PopisSazetaka = () => {
               <td>
                 {Array.isArray(sazetak.FileData) ? (
                   sazetak.FileData.map((fileData, index) => (
-                    <DownloadLink key={index} fileData={fileData} fileName={`filename${sazetak.FileName}.pdf`} />
+                    <DownloadLink key={index} fileData={fileData} fileName={sazetak.FileName}
+                   />
                   ))
                 ) : (
-                  <DownloadLink fileData={sazetak.FileData} fileName={`filename.pdf`} />
+                  <DownloadLink fileData={sazetak.FileData} fileName={sazetak.FileName} />
                 )}
               </td>
             </tr>
