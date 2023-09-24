@@ -118,6 +118,8 @@ $text-color: black;
     position: sticky;
     top: 0;
     z-index: 1000;
+    
+  
   
     .navbar-brand {
       display: flex;
@@ -140,10 +142,6 @@ $text-color: black;
       }
     }
   
-    // .nav-item.dropdown:hover .nav-link,
-    // .opened .nav-item.dropdown .nav-link {
-    //   background-color: hsla(210, 70%, 50%, 0.8);
-    // }
   
     .dropdown-menu {
       background-color: #333;
@@ -161,7 +159,7 @@ $text-color: black;
     }
   
     .nav-item.active .nav-link {
-      color: $secondary-color;
+      color: white;
     }
   
     .navbar-toggler-icon {

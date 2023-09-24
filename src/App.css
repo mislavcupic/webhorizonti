@@ -131,7 +131,7 @@ body {
   color: darkgray;
 }
 .modern-navbar .nav-item.active .nav-link {
-  color: rgba(14, 73, 249, 0.8980392157);
+  color: white;
 }
 .modern-navbar .navbar-toggler-icon {
   background-color: black;
