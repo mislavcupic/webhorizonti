@@ -67,6 +67,7 @@
 import React from "react";
 import Carousel from "react-bootstrap/Carousel";
 import "../App.css"; // Import a CSS file for custom styling
+import mental_health_treatment from '../assets/media/mental_health_treatment.jpg'
 
 function CarouselComponent() {
   return (
@@ -106,10 +107,10 @@ function CarouselComponent() {
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
-          <img
+        <img
             className="d-block w-100"
-            src="https://www.picpedia.org/chalkboard/images/mental-health-treatment.jpg"
-            alt="Mental Health 4"
+            src={mental_health_treatment}
+            alt="Mental Health 3"
           />
           <Carousel.Caption>
             <h3>Fourth slide label</h3>
