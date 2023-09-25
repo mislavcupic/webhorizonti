@@ -4,6 +4,8 @@ import io from 'socket.io-client';
 import { Table, Form } from 'react-bootstrap';
 import DownloadLink from './DownloadLink';
 
+
+const storedRole = localStorage.getItem('userRole');
 const PopisSazetaka = () => {
   const [sazetciData, setSazetciData] = useState([]);
   const [searchString, setSearchString] = useState('');
@@ -35,51 +37,106 @@ const PopisSazetaka = () => {
     );
   });
 
-  return (
-    <div className="container mt-5">
-      <h1>Popis Sažetaka</h1>
-      <Form.Group controlId="search">
-        <Form.Label>Search</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="Enter search string"
-          value={searchString}
-          onChange={(e) => setSearchString(e.target.value)}
-        />
-      </Form.Group>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Ime</th>
-            <th>Prezime</th>
-            <th>Email</th>
-            <th>Oblik sudjelovanja</th>
-            <th>Files</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredSazetci.map((sazetak) => (
-            <tr key={sazetak.SažetakID}>
-              <td>{sazetak.ime}</td>
-              <td>{sazetak.prezime}</td>
-              <td>{sazetak.email}</td>
-              <td>{sazetak.Oblik_sudjelovanja}</td>
-              <td>
-                {Array.isArray(sazetak.FileData) ? (
-                  sazetak.FileData.map((fileData, index) => (
-                    <DownloadLink key={index} fileData={fileData} fileName={sazetak.FileName}
-                   />
-                  ))
-                ) : (
-                  <DownloadLink fileData={sazetak.FileData} fileName={sazetak.FileName} />
-                )}
-              </td>
+//   return (
+//     <div className="container mt-5">
+//       {storedRole === 'admin' && (
+//         <>
+//           <h1>Popis Sažetaka</h1>
+//           <Form.Group controlId="search">
+//             <Form.Label>Search</Form.Label>
+//             <Form.Control
+//               type="text"
+//               placeholder="Enter search string"
+//               value={searchString}
+//               onChange={(e) => setSearchString(e.target.value)}
+//             />
+//           </Form.Group>
+//           <Table striped bordered hover>
+//         <thead>
+//           <tr>
+//             <th>Ime</th>
+//             <th>Prezime</th>
+//             <th>Email</th>
+//             <th>Oblik sudjelovanja</th>
+//             <th>Files</th>
+//           </tr>
+//         </thead>
+//         <tbody>
+//           {filteredSazetci.map((sazetak) => (
+//             <tr key={sazetak.SažetakID}>
+//               <td>{sazetak.ime}</td>
+//               <td>{sazetak.prezime}</td>
+//               <td>{sazetak.email}</td>
+//               <td>{sazetak.Oblik_sudjelovanja}</td>
+//               <td>
+//                 {Array.isArray(sazetak.FileData) ? (
+//                   sazetak.FileData.map((fileData, index) => (
+//                     <DownloadLink key={index} fileData={fileData} fileName={sazetak.FileName}
+//                    />
+//                   ))
+//                 ) : (
+//                   <DownloadLink fileData={sazetak.FileData} fileName={sazetak.FileName} />
+//                 )}
+//               </td>
+//             </tr>
+//           ))}
+//         </tbody>
+//       </Table>
+//       </>
+//       )}
+//     </div>
+      
+//   );
+// };
+return (
+  <div className="container mt-5">
+    {storedRole === 'admin' ? (
+      <>
+        <h1>Popis Sažetaka</h1>
+        <Form.Group controlId="search">
+          <Form.Label>Search</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter search string"
+            value={searchString}
+            onChange={(e) => setSearchString(e.target.value)}
+          />
+        </Form.Group>
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>Ime</th>
+              <th>Prezime</th>
+              <th>Email</th>
+              <th>Oblik sudjelovanja</th>
+              <th>Files</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
-    </div>
-  );
-};
-
+          </thead>
+          <tbody>
+            {filteredSazetci.map((sazetak) => (
+              <tr key={sazetak.SažetakID}>
+                <td>{sazetak.ime}</td>
+                <td>{sazetak.prezime}</td>
+                <td>{sazetak.email}</td>
+                <td>{sazetak.Oblik_sudjelovanja}</td>
+                <td>
+                  {Array.isArray(sazetak.FileData) ? (
+                    sazetak.FileData.map((fileData, index) => (
+                      <DownloadLink key={index} fileData={fileData} fileName={sazetak.FileName} />
+                    ))
+                  ) : (
+                    <DownloadLink fileData={sazetak.FileData} fileName={sazetak.FileName} />
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </>
+    ) : (
+      <div>You do not have permission to enter this page.</div>
+    )}
+  </div>
+);
+}
 export default PopisSazetaka;

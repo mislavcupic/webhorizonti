@@ -373,7 +373,7 @@ const getFileDetails = async (file) => {
   });
 };
 
-export default function EventRegistration() {
+export default function EventRegistration({role}) {
   let Psiholog_ID = nanoid(10);
   let validates = true;
   const applicationDate = new Date().toLocaleString();
@@ -413,9 +413,11 @@ export default function EventRegistration() {
     if (email === process.env.REACT_APP_ADMIN_MAIL) {
       role = 'admin';
     } else if (odborMails.includes(email)) {
+      console.log(odborMails);
       role = 'odbor';
     }
-
+// When the user selects a role, store it in localStorage
+   localStorage.setItem('userRole', role);
     setPsiholog({ ...psiholog, email, role });
   };
 
