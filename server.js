@@ -68,65 +68,6 @@ function sendEmail (userPsiholog) {
 io.on('connection', (socket) => {
   console.log('A user connected');
 
-//   socket.on('insertData', async (data) => {
-//     try {
-//       setTimeout(async () => {
-//         await createPsiholog(data);
-//         sendEmail(data);
-//         io.emit('dataInserted', data);
-//       }, 5000);
-//       // Emit the refresh event
-//  // socket.emit('refreshPage');
-
-//     } catch (error) {
-//       console.error('Error while inserting data:', error);
-//       socket.emit('insertionError', 'An error occurred while inserting data.');
-//     }
-//   });
-
-// socket.on('insertData', async (data) => {
-//   try {
-//     setTimeout(async () => {
-//       await createPsiholog(data);
-      
-//       if (data.participantType === 'Aktivni sudionik' && data.uploadedFiles.length > 0) {
-//         // Handle 'Aktivni sudionik' with files
-//         const sazetciData = {
-//           Sažetak_ID: data.Sazetci_IDs, // Assuming this is an array of sažetak IDs
-//           Psiholog_ID: data.Psiholog_ID,
-//           // Fill in the rest of the details for FileName, FileType, and FileData
-//         };
-        
-//         // // Assuming you have a function to handle file upload and get file details
-//          const fileDetails = await getFileDetails(data.uploadedFiles[0]); // Get details for the first file
-        
-//         // Call the createSazetci function
-//         await createSazetci(sazetciData.Sažetak_ID, sazetciData.Psiholog_ID, fileDetails.name, fileDetails.type, fileDetails.data);
-//       }
-      
-//       sendEmail(data);
-//       io.emit('dataInserted', data);
-//     }, 5000);
-//     // Emit the refresh event
-//     // socket.emit('refreshPage');
-//   } catch (error) {
-//     console.error('Error while inserting data:', error);
-//     socket.emit('insertionError', 'An error occurred while inserting data.');
-//   }
-// });
-
-//last sugg
-
-// ... (other imports and setup)
-// const getFileDetails = async (file) => {
-//   try {
-//     const buffer = Buffer.from(file, 'base64'); // Convert base64 file data to a buffer
-//     const hexData = bufferToHex(buffer); // Convert the buffer to hexadecimal representation
-//     return hexData;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
 const getFileDetails = async (file) => {
   try {
     const buffer = Buffer.from(file.details.data); // Extract binary data from details object
@@ -135,20 +76,7 @@ const getFileDetails = async (file) => {
     throw error;
   }
 };
-// const getFileDetails = async (file) => {
-//   return new Promise((resolve, reject) => {
-//     const reader = new FileReader();
-//     reader.onload = async (event) => {
-//       const buffer = event.target.result;
-//       const hexData = bufferToHex(buffer);
-//       resolve(hexData);
-//     };
-//     reader.onerror = (error) => {
-//       reject(error);
-//     };
-//     reader.readAsArrayBuffer(file);
-//   });
-// };
+
 
 // Define the bufferToHex function
 function bufferToHex(buffer) {
@@ -173,6 +101,7 @@ socket.on('insertData', async (data) => {
           FileType: uploadedFile.type,
           FileData: uploadedFile.content,
           OblikSudjelovanja: oblikSudjelovanja, // Pass Oblik sudjelovanja
+          Role: data.role, // Include the role in the data
         };
     
         await createSazetci(
@@ -434,9 +363,9 @@ socket.on('updatePredavanje', async (updatedPredavanje, callback) => {
 
 });
 
-// server.listen(port, () => {
-//   console.log(`Listening on port: ${port}`);
-// });
+server.listen(port, () => {
+  console.log(`Listening on port: ${port}`);
+});
 
 
 

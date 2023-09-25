@@ -25,7 +25,8 @@ const createPsiholog = async (Psiholog) => {
                 '${Psiholog.ime}',
                 '${Psiholog.prezime}',
                 '${Psiholog.email}',
-                '${Psiholog.date}')
+                '${Psiholog.date}',
+                '${Psiholog.role}')
       `);
     } catch (error) {
       console.log(error);

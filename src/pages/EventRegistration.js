@@ -1,14 +1,10 @@
-// // //sugg
 // import React, { useState, useEffect } from 'react';
 // import { Container, Row, Col, Form, Button, Modal, Spinner } from 'react-bootstrap';
 // import { nanoid } from 'nanoid';
 // import CarouselComponent from './CarouselComponent';
 // import { io } from 'socket.io-client';
 // import { useNavigate } from 'react-router-dom';
-// import horizonti_velik_cropped from '../assets/media/horizonti_velik_cropped.png';
 // import '../App.css';
-
-
 
 // const getFileDetails = async (file) => {
 //   return new Promise((resolve, reject) => {
@@ -26,8 +22,6 @@
 //   });
 // };
 
-
-
 // export default function EventRegistration() {
 //   let Psiholog_ID = nanoid(10);
 //   let validates = true;
@@ -43,7 +37,8 @@
 //     date: '',
 //     participantType: '',
 //     uploadedFiles: [],
-//     Sazetci_IDs: []
+//     Sazetci_IDs: [],
+//     oblikSudjelovanja: [], // Add an array for 'Oblik sudjelovanja'
 //   });
 
 //   const [show, setShow] = useState(true);
@@ -69,11 +64,13 @@
 
 //   const handleFileUpload = (e) => {
 //     const newFiles = Array.from(e.target.files);
+//     const oblikSudjelovanja = newFiles.map(() => ''); // Initialize with empty values
 
 //     setPsiholog((prevPsiholog) => ({
 //       ...prevPsiholog,
 //       uploadedFiles: [...prevPsiholog.uploadedFiles, ...newFiles],
-//       Sazetci_IDs: [...prevPsiholog.Sazetci_IDs, ...newFiles.map(() => nanoid(5))]
+//       Sazetci_IDs: [...prevPsiholog.Sazetci_IDs, ...newFiles.map(() => nanoid(5))],
+//       oblikSudjelovanja: [...prevPsiholog.oblikSudjelovanja, ...oblikSudjelovanja], // Add the array to state
 //     }));
 //   };
 
@@ -84,10 +81,14 @@
 //     const updatedSazetciIDs = [...psiholog.Sazetci_IDs];
 //     updatedSazetciIDs.splice(index, 1);
 
+//     const updatedOblikSudjelovanja = [...psiholog.oblikSudjelovanja];
+//     updatedOblikSudjelovanja.splice(index, 1);
+
 //     setPsiholog((prevPsiholog) => ({
 //       ...prevPsiholog,
 //       uploadedFiles: updatedFiles,
-//       Sazetci_IDs: updatedSazetciIDs
+//       Sazetci_IDs: updatedSazetciIDs,
+//       oblikSudjelovanja: updatedOblikSudjelovanja,
 //     }));
 //   };
 
@@ -117,15 +118,6 @@
 //       };
 //     });
 //     const filesWithDetails = await Promise.all(fileDetailsPromises);
-    
-//     // const fileDetailsPromises = psiholog.uploadedFiles.map(async (file) => {
-//     //   const fileDetails = await getFileDetails(file);
-//     //   return {
-//     //     file,
-//     //     details: fileDetails,
-//     //   };
-//     // });
-//     // const filesWithDetails = await Promise.all(fileDetailsPromises);
 
 //     // Rest of the submission logic...
 
@@ -177,6 +169,13 @@
 //                   handleInputEmail={handleInputEmail}
 //                   uploadedFiles={psiholog.uploadedFiles}
 //                   removeFile={handleRemoveFile}
+//                   // Add 'Oblik sudjelovanja' prop and handler
+//                   oblikSudjelovanja={psiholog.oblikSudjelovanja}
+//                   handleOblikSudjelovanjaChange={(index, value) => {
+//                     const updatedOblikSudjelovanja = [...psiholog.oblikSudjelovanja];
+//                     updatedOblikSudjelovanja[index] = value;
+//                     setPsiholog({ ...psiholog, oblikSudjelovanja: updatedOblikSudjelovanja });
+//                   }}
 //                 />
 //               )}
 //               {currentStep === 2 && (
@@ -205,40 +204,20 @@
 // }
 
 // function Step1({ chooseParticipantType }) {
-// //   return (
-// //     <div>
-// //       <h5>Choose Participant Type</h5>
-// //       <Button onClick={() => chooseParticipantType('Aktivni sudionik')} variant='outline-primary'>
-// //         Aktivni sudionik
-// //       </Button>
-// //       <br/>
-// //       <hr/>
-// //       <br/>
-// //       <Button onClick={() => chooseParticipantType('Pasivni sudionik')}variant='outline-primary'>
-// //         Pasivni sudionik
-// //       </Button>
-// //     </div>
-// //   );
-// // }
-// return (
-//  <Container className="text-center mt-5">
-//  <h6 color='dark-blue'>Odaberi tip sudjelovanja na konferenciji 'Horizonti snage': </h6>
+//   return (
+//     <Container className="text-center mt-5">
+//       <h6 color='dark-blue'>Odaberi tip sudjelovanja na konferenciji 'Horizonti snage': </h6>
+//       <Button onClick={() => chooseParticipantType('Aktivni sudionik')} variant="outline-primary">
+//         Aktivni sudionik
+//       </Button>
+//       <hr />
+//       <Button onClick={() => chooseParticipantType('Pasivni sudionik')} variant="outline-primary">
+//         Pasivni sudionik
+//       </Button>
+//     </Container>
+//   );
+// }
 
-   
-//     <Button onClick={() => chooseParticipantType('Aktivni sudionik')} variant="outline-primary">
-//        Aktivni sudionik
-//      </Button>
-    
-//    <hr/>
-   
-//      <Button onClick={() => chooseParticipantType('Pasivni sudionik')} variant="outline-primary">
-//        Pasivni sudionik
-//      </Button>
-   
-
-// </Container>
-// );
-// };
 // function Step2({
 //   participantType,
 //   uploadFile,
@@ -246,7 +225,9 @@
 //   handleInputPrezime,
 //   handleInputEmail,
 //   uploadedFiles,
-//   removeFile
+//   removeFile,
+//   oblikSudjelovanja,
+//   handleOblikSudjelovanjaChange,
 // }) {
 //   return (
 //     <div>
@@ -266,12 +247,9 @@
 //       {participantType === 'Aktivni sudionik' && (
 //         <Form.Group>
 //           <Form.Label htmlFor="sazetci">Sažetci:</Form.Label>
-//           {/* <Form.Control id="sazetci" type="file" accept="*" multiple onChange={uploadFile} /> */}
 //           <Form.Control id="sazetci" type="file" accept=".docx, .pdf, .xlsx" multiple onChange={uploadFile} />
-
 //         </Form.Group>
 //       )}
-      
 //       {uploadedFiles.length > 0 && (
 //         <div>
 //           <h5>Uploaded Files:</h5>
@@ -279,14 +257,95 @@
 //             {uploadedFiles.map((file, index) => (
 //               <li key={index}>
 //                 <span>{file.name}</span>
+//                 <Form.Group>
+//                   <Form.Label>Oblik sudjelovanja:</Form.Label>
+//                   <div>
+//                     {/* Radio buttons for 'Oblik sudjelovanja' */}
+//                     <Form.Check
+//                       type="radio"
+//                       name={`oblikSudjelovanja_${index}`}
+//                       id={`oblikSudjelovanja_${index}_predavanje`}
+//                       label="Predavanje"
+//                       value="Predavanje"
+//                       checked={oblikSudjelovanja[index] === 'Predavanje'}
+//                       onChange={(e) => handleOblikSudjelovanjaChange(index, e.target.value)}
+//                     />
+//                       <Form.Check
+//                       type="radio"
+//                       name={`oblikSudjelovanja_${index}`}
+//                       id={`oblikSudjelovanja_${index}_primjerdobreprakse`}
+//                       label="Primjer dobre prakse"
+//                       value="Primjer dobre prakse"
+//                       checked={oblikSudjelovanja[index] === 'Primjer dobre prakse'}
+//                       onChange={(e) => handleOblikSudjelovanjaChange(index, e.target.value)}
+//                     />
+
+//                       <Form.Check
+//                       type="radio"
+//                       name={`oblikSudjelovanja_${index}`}
+//                       id={`oblikSudjelovanja_${index}_znanstvenirad`}
+//                       label="Znanstveni rad"
+//                       value="Znanstveni rad"
+//                       checked={oblikSudjelovanja[index] === 'Znanstveni rad'}
+//                       onChange={(e) => handleOblikSudjelovanjaChange(index, e.target.value)}
+//                     />
+//                       <Form.Check
+//                       type="radio"
+//                       name={`oblikSudjelovanja_${index}`}
+//                       id={`oblikSudjelovanja_${index}_radionica`}
+//                       label="Radionica"
+//                       value="Radionica"
+//                       checked={oblikSudjelovanja[index] === 'Radionica'}
+//                       onChange={(e) => handleOblikSudjelovanjaChange(index, e.target.value)}
+//                     />
+
+// <Form.Check
+//                       type="radio"
+//                       name={`oblikSudjelovanja_${index}`}
+//                       id={`oblikSudjelovanja_${index}_simpozij`}
+//                       label="Simpozij"
+//                       value="Simpozij"
+//                       checked={oblikSudjelovanja[index] === 'Simpozij'}
+//                       onChange={(e) => handleOblikSudjelovanjaChange(index, e.target.value)}
+//                     />
+// <Form.Check
+//                       type="radio"
+//                       name={`oblikSudjelovanja_${index}`}
+//                       id={`oblikSudjelovanja_${index}_okruglistol`}
+//                       label="Okrugli stol"
+//                       value="Okrugli stol"
+//                       checked={oblikSudjelovanja[index] === 'Okrugli stol'}
+//                       onChange={(e) => handleOblikSudjelovanjaChange(index, e.target.value)}
+//                     />
+//                     <Form.Check
+//                       type="radio"
+//                       name={`oblikSudjelovanja_${index}`}
+//                       id={`oblikSudjelovanja_${index}_tedtalk`}
+//                       label="Ted talk"
+//                       value="Ted talk"
+//                       checked={oblikSudjelovanja[index] === 'Ted talk'}
+//                       onChange={(e) => handleOblikSudjelovanjaChange(index, e.target.value)}
+//                     />
+//                     <Form.Check
+//                       type="radio"
+//                       name={`oblikSudjelovanja_${index}`}
+//                       id={`oblikSudjelovanja_${index}_outofthebox`}
+//                       label="Out of the box"
+//                       value="Out of the box"
+//                       checked={oblikSudjelovanja[index] === 'Out of the box'}
+//                       onChange={(e) => handleOblikSudjelovanjaChange(index, e.target.value)}
+//                     />
+
+
+//                     {/* Add radio buttons for other 'Oblik sudjelovanja' options here */}
+//                   </div>
+//                 </Form.Group>
 //                 <button onClick={() => removeFile(index)}>Remove</button>
 //               </li>
 //             ))}
 //           </ul>
 //         </div>
 //       )}
-     
-
 //     </div>
 //   );
 // }
@@ -302,10 +361,10 @@ const getFileDetails = async (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = (event) => {
-      const buffer = event.target.result; // This is the actual file content
+      const buffer = event.target.result;
       const name = file.name;
       const type = file.type;
-      resolve({ name, type, content: buffer }); // Include the content along with metadata
+      resolve({ name, type, content: buffer });
     };
     reader.onerror = (error) => {
       reject(error);
@@ -330,8 +389,10 @@ export default function EventRegistration() {
     participantType: '',
     uploadedFiles: [],
     Sazetci_IDs: [],
-    oblikSudjelovanja: [], // Add an array for 'Oblik sudjelovanja'
+    oblikSudjelovanja: [],
+    role: 'user',
   });
+  const odborMails = process.env.REACT_APP_ODBOR_MAILS.split(',').map((email) => email.trim());
 
   const [show, setShow] = useState(true);
   const [currentStep, setCurrentStep] = useState(0);
@@ -346,7 +407,16 @@ export default function EventRegistration() {
   };
 
   const handleInputEmail = (e) => {
-    setPsiholog({ ...psiholog, email: e.target.value });
+    const email = e.target.value;
+    let role = 'user';
+
+    if (email === process.env.REACT_APP_ADMIN_MAIL) {
+      role = 'admin';
+    } else if (odborMails.includes(email)) {
+      role = 'odbor';
+    }
+
+    setPsiholog({ ...psiholog, email, role });
   };
 
   const handleParticipantType = (type) => {
@@ -356,13 +426,13 @@ export default function EventRegistration() {
 
   const handleFileUpload = (e) => {
     const newFiles = Array.from(e.target.files);
-    const oblikSudjelovanja = newFiles.map(() => ''); // Initialize with empty values
+    const oblikSudjelovanja = newFiles.map(() => '');
 
     setPsiholog((prevPsiholog) => ({
       ...prevPsiholog,
       uploadedFiles: [...prevPsiholog.uploadedFiles, ...newFiles],
       Sazetci_IDs: [...prevPsiholog.Sazetci_IDs, ...newFiles.map(() => nanoid(5))],
-      oblikSudjelovanja: [...prevPsiholog.oblikSudjelovanja, ...oblikSudjelovanja], // Add the array to state
+      oblikSudjelovanja: [...prevPsiholog.oblikSudjelovanja, ...oblikSudjelovanja],
     }));
   };
 
@@ -402,7 +472,6 @@ export default function EventRegistration() {
       return;
     }
 
-    // Convert the uploaded files to an array of file details
     const fileDetailsPromises = psiholog.uploadedFiles.map(async (file) => {
       const fileDetails = await getFileDetails(file);
       return {
@@ -411,22 +480,19 @@ export default function EventRegistration() {
     });
     const filesWithDetails = await Promise.all(fileDetailsPromises);
 
-    // Rest of the submission logic...
-
     const insertionTimeout = setTimeout(() => {
       setIsWaitingForConfirmation(false);
       alert('Insertion took longer than expected. Please try again.');
-      setCurrentStep(1); // Go back to Step2
+      setCurrentStep(1);
     }, 20000);
 
-    // Store Psiholog_ID in local storage
     localStorage.setItem('psihologID', JSON.stringify(psiholog.Psiholog_ID));
     console.log('Data before sending to server:', { ...psiholog, uploadedFiles: filesWithDetails });
-    // Pass the modified filesWithDetails array to the server
+
     socket.emit('insertData', { ...psiholog, uploadedFiles: filesWithDetails });
     socket.on('dataInserted', (insertedData) => {
       console.log('Data inserted:', insertedData);
-      clearTimeout(insertionTimeout); // Clear the timeout
+      clearTimeout(insertionTimeout);
       setIsWaitingForConfirmation(false);
       alert('Uspješno pospremljeni prijavni podaci!');
       navigate('../lectureselection');
@@ -449,9 +515,7 @@ export default function EventRegistration() {
               <Modal.Title style={{ fontSize: '14px' }}>Prijava na konferenciju 'Horizonti snage'</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              {currentStep === 0 && (
-                <Step1 chooseParticipantType={handleParticipantType} />
-              )}
+              {currentStep === 0 && <Step1 chooseParticipantType={handleParticipantType} />}
               {currentStep === 1 && (
                 <Step2
                   participantType={psiholog.participantType}
@@ -461,7 +525,6 @@ export default function EventRegistration() {
                   handleInputEmail={handleInputEmail}
                   uploadedFiles={psiholog.uploadedFiles}
                   removeFile={handleRemoveFile}
-                  // Add 'Oblik sudjelovanja' prop and handler
                   oblikSudjelovanja={psiholog.oblikSudjelovanja}
                   handleOblikSudjelovanjaChange={(index, value) => {
                     const updatedOblikSudjelovanja = [...psiholog.oblikSudjelovanja];
@@ -473,7 +536,7 @@ export default function EventRegistration() {
               {currentStep === 2 && (
                 <div className="spinner-container">
                   <Spinner animation="border" role="status">
-                    <span className="visually-hidden">Loading...</span>
+                    <span className="visually-impaired">Loading...</span>
                   </Spinner>
                 </div>
               )}
