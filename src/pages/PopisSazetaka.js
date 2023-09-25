@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import { Table, Form } from 'react-bootstrap';
 import DownloadLink from './DownloadLink';
-
+import forbidden from '../assets/media/png-transparent-prohibited-forbidden-no-banned-road-sign-roadsign-unauthorised-ban-thumbnail.png'
 
 const storedRole = localStorage.getItem('userRole');
 const PopisSazetaka = () => {
@@ -90,7 +90,7 @@ const PopisSazetaka = () => {
 // };
 return (
   <div className="container mt-5">
-    {storedRole === 'admin' ? (
+    {storedRole === 'admin' || storedRole==='odbor' ? (
       <>
         <h1>Popis Sažetaka</h1>
         <Form.Group controlId="search">
@@ -134,7 +134,7 @@ return (
         </Table>
       </>
     ) : (
-      <div>You do not have permission to enter this page.</div>
+      <div><img src={forbidden} alt='forbidden'></img>You do not have permission to enter this page.</div>
     )}
   </div>
 );
