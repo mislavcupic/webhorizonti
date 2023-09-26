@@ -277,8 +277,8 @@ socket.on('deletePredavanje', async (predavanjeID) => {
   socket.on('getYourOwnPredbiljezbe', async (psihologID) => {
     try {
       const predbiljezbe = await getYourOwnPredbiljezbe(psihologID);
-      console.log(predbiljezbe);
-      io.emit('getYourOwnPredbiljezbe', JSON.stringify(predbiljezbe.recordset));
+      console.log("Ovo je na serveru: "+JSON.stringify(predbiljezbe));
+      io.emit('getYourOwnPredbiljezbe', JSON.stringify(predbiljezbe));
       // Emit the array directly
 
     } catch (error) {
