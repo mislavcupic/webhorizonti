@@ -5,7 +5,9 @@ import { io } from 'socket.io-client';
 
 export default function LectureSelectionPredb() {
   const storedRole = localStorage.getItem('userRole');
-  const psihologID = JSON.parse(localStorage.getItem('psihologID'));
+  const psihologID = JSON.parse(localStorage.getItem('psihologID').toString());
+  console.log(typeof psihologID);
+
   const [lista, setLista] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
