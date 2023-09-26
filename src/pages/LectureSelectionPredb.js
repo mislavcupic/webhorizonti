@@ -13,26 +13,44 @@ export default function LectureSelectionPredb() {
   const [searchQuery, setSearchQuery] = useState('');
   const socket = io('http://localhost:8080');
 
-  socket.on('getYourOwnPredbiljezbe', (data) => {
-    try {
-      if (data && data.recordset) {
-        const predbiljezbeArray = data.recordset;
-        setLista(predbiljezbeArray);
-        setLoading(false);
-      } else {
-        console.error('Received invalid data:', data);
-        setLoading(false);
-      }
-    } catch (error) {
-      console.error('Error while processing data:', error);
+  // socket.on('getYourOwnPredbiljezbe', (data) => {
+  //   try {
+  //     if (data && data.recordset) {
+  //       const predbiljezbeArray = data.recordset;
+  //       setLista(predbiljezbeArray);
+  //       setLoading(false);
+  //     } else {
+  //       console.error('Received invalid data:', data);
+  //       setLoading(false);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error while processing data:', error);
+  //     setLoading(false);
+  //   }
+  // });
+
+  // socket.on('fetchingError', (errorMessage) => {
+  //   console.error('Error fetching data:', errorMessage);
+  //   setLoading(false);
+  // });
+// Listen for the 'getYourOwnPredbiljezbe' event here
+socket.on('getYourOwnPredbiljezbe', (data) => {
+  console.log('Received data:', data); // Log the received data for debugging
+
+  try {
+    if (data && data.recordset) {
+      const predbiljezbeArray = data.recordset;
+      setLista(predbiljezbeArray);
+      setLoading(false);
+    } else {
+      console.error('Received invalid data:', data);
       setLoading(false);
     }
-  });
-
-  socket.on('fetchingError', (errorMessage) => {
-    console.error('Error fetching data:', errorMessage);
+  } catch (error) {
+    console.error('Error while processing data:', error);
     setLoading(false);
-  });
+  }
+});
 
   // return () => {
   //   socket.off('getYourOwnPredbiljezbe');

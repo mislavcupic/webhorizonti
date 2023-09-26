@@ -278,7 +278,8 @@ socket.on('deletePredavanje', async (predavanjeID) => {
     try {
       const predbiljezbe = await getYourOwnPredbiljezbe(psihologID);
       console.log(predbiljezbe);
-      io.emit('getYourOwnPredbiljezbe', predbiljezbe.recordset); // Emit the array directly
+      io.emit('getYourOwnPredbiljezbe', JSON.stringify(predbiljezbe.recordset));
+      // Emit the array directly
 
     } catch (error) {
       console.error('Error while fetching data:', error);
