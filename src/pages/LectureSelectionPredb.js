@@ -10,7 +10,7 @@ export default function LectureSelectionPredb() {
   const [searchQuery, setSearchQuery] = useState('');
   const socket = io('http://localhost:8080');
 
-  const handleGetPredbiljezbe = () => {ć
+  const handleGetPredbiljezbe = () => {
     if(storedRole==='admin' || storedRole ==='odbor'){
     socket.emit('getPredbiljezbe');
     }
