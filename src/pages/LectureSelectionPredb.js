@@ -10,12 +10,38 @@ export default function LectureSelectionPredb() {
   const [searchQuery, setSearchQuery] = useState('');
   const socket = io('http://localhost:8080');
 
-  const handleGetPredbiljezbe = () => {
+  const handleGetPredbiljezbe = () => {ć
+    if(storedRole==='admin' || storedRole ==='odbor'){
     socket.emit('getPredbiljezbe');
+    }
+    else if (storedRole ==='user'){
+      socket.emit('getYourOwnPredbiljezbe');
+    }
+    else {<div>You don't have permission to enter this page!</div>}
   };
+ 
+
 
   useEffect(() => {
     socket.on('getPredbiljezbe', (data) => {
+      const predbiljezbeArray = data.recordset;
+      setLista(predbiljezbeArray);
+      setLoading(false);
+    });
+
+    socket.on('fetchingError', (errorMessage) => {
+      console.error('Error fetching data:', errorMessage);
+      setLoading(false);
+    });
+
+    return () => {
+      socket.off('getPredbiljezbe');
+      socket.off('fetchingError');
+    };
+  }, []);
+
+  useEffect(() => {
+    socket.on('getYourOwnPredbiljezbe', (data) => {
       const predbiljezbeArray = data.recordset;
       setLista(predbiljezbeArray);
       setLoading(false);
@@ -63,45 +89,45 @@ export default function LectureSelectionPredb() {
 //        <br/>
 //        <hr/>
          
-//           <Table striped bordered hover>
+          // <Table striped bordered hover>
             
-//             <thead className="bg-primary">
-//               <tr>
-//                 <th>Ime: </th>
-//                 <th>Prezime: </th>
-//                 <th>Email: </th>
-//                 <th>Datum: </th>
-//                 <th>Naziv: </th>
-//                 <th>Tip: </th>
-//                 <th>Opis: </th>
-//                 <th>Vrijeme predbilježbe</th>
-//               </tr>
-//             </thead>
-//             <tbody>
-//               {loading ? (
-//                 <tr>
-//                   <td colSpan="8">Loading...</td>
-//                 </tr>
-//               ) : filteredList.length === 0 ? (
-//                 <tr>
-//                   <td colSpan="8">No data available.</td>
-//                 </tr>
-//               ) : (
-//                 filteredList.map((pred) => (
-//                   <tr className="bg-warning" key={pred.Predbiljezbe_ID}>
-//                     <td>{pred.ime}</td>
-//                     <td>{pred.prezime}</td>
-//                     <td>{pred.email}</td>
-//                     <td>{pred.datetime}</td>
-//                     <td>{pred.naziv}</td>
-//                     <td>{pred.tip}</td>
-//                     <td>{pred.opis}</td>
-//                     <td>{pred.Vrijeme_predbiljezbe}</td>
-//                   </tr>
-//                 ))
-//               )}
-//             </tbody>
-//           </Table>
+          //   <thead className="bg-primary">
+          //     <tr>
+          //       <th>Ime: </th>
+          //       <th>Prezime: </th>
+          //       <th>Email: </th>
+          //       <th>Datum: </th>
+          //       <th>Naziv: </th>
+          //       <th>Tip: </th>
+          //       <th>Opis: </th>
+          //       <th>Vrijeme predbilježbe</th>
+          //     </tr>
+          //   </thead>
+          //   <tbody>
+          //     {loading ? (
+          //       <tr>
+          //         <td colSpan="8">Loading...</td>
+          //       </tr>
+          //     ) : filteredList.length === 0 ? (
+          //       <tr>
+          //         <td colSpan="8">No data available.</td>
+          //       </tr>
+          //     ) : (
+          //       filteredList.map((pred) => (
+          //         <tr className="bg-warning" key={pred.Predbiljezbe_ID}>
+          //           <td>{pred.ime}</td>
+          //           <td>{pred.prezime}</td>
+          //           <td>{pred.email}</td>
+          //           <td>{pred.datetime}</td>
+          //           <td>{pred.naziv}</td>
+          //           <td>{pred.tip}</td>
+          //           <td>{pred.opis}</td>
+          //           <td>{pred.Vrijeme_predbiljezbe}</td>
+          //         </tr>
+          //       ))
+          //     )}
+          //   </tbody>
+          // </Table>
 //           <Button onClick={handleGetPredbiljezbe}>Prikaz predbiljezbi</Button>
 //         </Row>
 //       </Container>
@@ -132,8 +158,44 @@ return (
             <hr />
 
             <Table striped bordered hover>
-              {/* ... Rest of your table JSX */}
-            </Table>
+            
+            <thead className="bg-primary">
+              <tr>
+                <th>Ime: </th>
+                <th>Prezime: </th>
+                <th>Email: </th>
+                <th>Datum: </th>
+                <th>Naziv: </th>
+                <th>Tip: </th>
+                <th>Opis: </th>
+                <th>Vrijeme predbilježbe</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr>
+                  <td colSpan="8">Loading...</td>
+                </tr>
+              ) : filteredList.length === 0 ? (
+                <tr>
+                  <td colSpan="8">No data available.</td>
+                </tr>
+              ) : (
+                filteredList.map((pred) => (
+                  <tr className="bg-warning" key={pred.Predbiljezbe_ID}>
+                    <td>{pred.ime}</td>
+                    <td>{pred.prezime}</td>
+                    <td>{pred.email}</td>
+                    <td>{pred.datetime}</td>
+                    <td>{pred.naziv}</td>
+                    <td>{pred.tip}</td>
+                    <td>{pred.opis}</td>
+                    <td>{pred.Vrijeme_predbiljezbe}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </Table>
             <Button onClick={handleGetPredbiljezbe}>Prikaz predbiljezbi</Button>
           </>
         ) : (

@@ -193,6 +193,29 @@ catch(error){
 }
 }
 
+const getYourOwnPredbiljezbe = async (psihologID) => {
+  try {
+    let pool = await sql.connect(config);
+    const query = `
+      SELECT EventRegistration2.ime, EventRegistration2.prezime, EventRegistration2.email, EventRegistration2.datetime, 
+             Predavanja.naziv, Predavanja.tip, Predavanja.opis, Predbiljezbe.Vrijeme_predbiljezbe 
+      FROM EventRegistration2, Predavanja, Predbiljezbe 
+      WHERE Predbiljezbe.Psiholog_ID = EventRegistration2.Psiholog_ID 
+        AND Predbiljezbe.Predavanje_ID = Predavanja.Predavanje_ID 
+        AND EventRegistration2.Psiholog_ID = @psihologID`; // Use parameterized query
+
+    let predbiljezbe = await pool
+      .request()
+      .input('psihologID', sql.Int, psihologID)
+      .query(query);
+
+    return predbiljezbe.recordset;
+  } catch (error) {
+    console.error(error);
+    throw error; // Rethrow the error to handle it elsewhere
+  }
+};
+
 
 // // Create Predbiljezba operation gpt sugg
 const createPredbiljezba = async (predbiljezbaID, psihologID, applicationDate, predavanjeIDs) => {
@@ -281,5 +304,6 @@ module.exports = {
     updatePredavanje, 
     getPredavanjeByID,
     createSazetci,
-    fetchSazetciWithPsihologData
+    fetchSazetciWithPsihologData,
+    getYourOwnPredbiljezbe
 }

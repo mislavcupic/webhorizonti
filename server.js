@@ -22,7 +22,7 @@ app.get('*', (req, res) => {
 
 // Import database operations
 // Import database operations
-const { createPsiholog, getPredavanja, getPredbiljezbe, createPredavanje, deletePredavanje, createPredbiljezba,updatePredavanje, getPredavanjeByID, createSazetci,fetchSazetciWithPsihologData} = require('./src/dbFiles/dbOperation');
+const { createPsiholog, getPredavanja, getPredbiljezbe, createPredavanje, deletePredavanje, createPredbiljezba,updatePredavanje, getPredavanjeByID, createSazetci,fetchSazetciWithPsihologData,getYourOwnPredbiljezbe} = require('./src/dbFiles/dbOperation');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -273,6 +273,18 @@ socket.on('deletePredavanje', async (predavanjeID) => {
       io.emit('fetchingError', 'An error occurred while fetching data.');
     }
   });
+
+  socket.on('getYourOwnPredbiljezbe', async (psihologID) => {
+    try {
+      const predbiljezbe = await getYourOwnPredbiljezbe(psihologID);
+      console.log(predbiljezbe);
+      io.emit('getYourOwnPredbiljezbe', predbiljezbe);
+    } catch (error) {
+      console.error('Error while fetching data:', error);
+      io.emit('fetchingError', 'An error occurred while fetching data.');
+    }
+  });
+  
 
   // Event for creating predbiljezba - gpt
 
