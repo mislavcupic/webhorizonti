@@ -39,7 +39,8 @@ socket.on('getYourOwnPredbiljezbe', (data) => {
 
   try {
     if (data && data.recordset) {
-      const predbiljezbeArray = data.recordset;
+      const predbiljezbeArray = JSON.parse(data);
+      // const predbiljezbeArray = data.recordset;
       setLista(predbiljezbeArray);
       setLoading(false);
     } else {
