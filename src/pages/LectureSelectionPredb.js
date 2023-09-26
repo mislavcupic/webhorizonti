@@ -13,7 +13,32 @@ export default function LectureSelectionPredb() {
   const [searchQuery, setSearchQuery] = useState('');
   const socket = io('http://localhost:8080');
 
+  socket.on('getYourOwnPredbiljezbe', (data) => {
+    try {
+      if (data && data.recordset) {
+        const predbiljezbeArray = data.recordset;
+        setLista(predbiljezbeArray);
+        setLoading(false);
+      } else {
+        console.error('Received invalid data:', data);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error('Error while processing data:', error);
+      setLoading(false);
+    }
+  });
 
+  socket.on('fetchingError', (errorMessage) => {
+    console.error('Error fetching data:', errorMessage);
+    setLoading(false);
+  });
+
+  return () => {
+    socket.off('getYourOwnPredbiljezbe');
+    socket.off('fetchingError');
+  };
+  
   const handleGetPredbiljezbe = () => {
   
     socket.emit('getPredbiljezbe');
@@ -59,32 +84,7 @@ export default function LectureSelectionPredb() {
     //     console.error('Received data is invalid');
     //   }
     // });
-    socket.on('getYourOwnPredbiljezbe', (data) => {
-      try {
-        if (data && data.recordset) {
-          const predbiljezbeArray = data.recordset;
-          setLista(predbiljezbeArray);
-          setLoading(false);
-        } else {
-          console.error('Received invalid data:', data);
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error('Error while processing data:', error);
-        setLoading(false);
-      }
-    });
   
-    socket.on('fetchingError', (errorMessage) => {
-      console.error('Error fetching data:', errorMessage);
-      setLoading(false);
-    });
-  
-    return () => {
-      socket.off('getYourOwnPredbiljezbe');
-      socket.off('fetchingError');
-    };
-    
 
    
   }, []);
