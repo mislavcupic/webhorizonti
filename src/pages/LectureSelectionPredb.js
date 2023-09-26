@@ -3,37 +3,19 @@ import React, { useState, useEffect } from 'react';
 import { Table, Container, Row, Button, Form } from 'react-bootstrap';
 import { io } from 'socket.io-client';
 import forbiden from '../assets/media/forbiden.jpg'
+import { useNavigate } from 'react-router-dom';
 
 export default function LectureSelectionPredb() {
   const storedRole = localStorage.getItem('userRole');
   const psihologID = localStorage.getItem('psihologID') ? JSON.parse(localStorage.getItem('psihologID')) : null;
-
-  //const psihologID = JSON.parse(localStorage.getItem('psihologID') || 'null');
+  let navigate = useNavigate();
 
   const [lista, setLista] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const socket = io('http://localhost:8080');
 
-  // Listen for the 'getYourOwnPredbiljezbe' event here
-// socket.on('getYourOwnPredbiljezbe', (data) => {
-//   console.log('Received data:', JSON.parse(data)); // Log the received data for debugging
-
-//   try {
-//     if (JSON.parse(data)) {
-//       const predbiljezbeArray = JSON.parse(data);
-//       // const predbiljezbeArray = data.recordset;
-//       setLista(predbiljezbeArray);
-//       setLoading(false);
-//     } else {
-//       console.error('Received invalid data:', JSON.parse(data));
-//       setLoading(false);
-//     }
-//   } catch (error) {
-//     console.error('Error while processing data:', error);
-//     setLoading(false);
-//   }
-// });
+  
 socket.on('getYourOwnPredbiljezbe', (data) => {
   console.log('Received data:', data); // No need for JSON.parse here
 
@@ -46,6 +28,9 @@ socket.on('getYourOwnPredbiljezbe', (data) => {
     setLoading(false);
   }
 });
+const handleNavigate = () => {
+  navigate('../registrationfeesaccommodation/eventregistration');
+}
   const handleGetPredbiljezbe = () => {
     socket.emit('getPredbiljezbe');
   };
@@ -55,18 +40,7 @@ socket.on('getYourOwnPredbiljezbe', (data) => {
   };
 
   useEffect(() => {
-    // socket.on('getPredbiljezbe', (data) => {
-    //   try {
-        
-    //       const predbiljezbeArray = JSON.parse(data);
-    //       setLista(predbiljezbeArray);
-    //       setLoading(false);
-      
-    //   } catch (error) {
-    //     console.error('Error while processing data:', error);
-    //     setLoading(false);
-    //   }
-    // });
+   
     socket.on('getPredbiljezbe', (data) => {
       console.log('Received data:', data);
     
@@ -113,7 +87,7 @@ socket.on('getYourOwnPredbiljezbe', (data) => {
   return (
     <>
       {storedRole === null || psihologID === null ? (
-        <div><img src={forbiden} style={{width:'50px', height:'50p'}} alt='STOP'></img>You must login to see this page. You have not permission to enter this page. Go to Prijava!</div>
+        <div><img src={forbiden} style={{width:'50px', height:'50p'}} alt='STOP'></img>You must login to see this page. You have not permission to enter this page. Go to ${handleNavigate} </div>
       ) : (
         <>
           <p>Predbilježbe:</p>
