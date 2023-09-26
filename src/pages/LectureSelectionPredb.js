@@ -71,13 +71,12 @@ socket.on('getYourOwnPredbiljezbe', (data) => {
       console.log('Received data:', data);
     
       try {
-        // Check if the data is a string before parsing it as JSON
-        if (typeof data === 'string') {
-          const predbiljezbeArray = JSON.parse(data);
+        if (data && data.recordset) {
+          const predbiljezbeArray = data.recordset;
           setLista(predbiljezbeArray);
           setLoading(false);
         } else {
-          console.error('Received data is not a valid JSON string:', data);
+          console.error('Received data is in an unexpected format:', data);
           setLoading(false);
         }
       } catch (error) {
@@ -85,6 +84,7 @@ socket.on('getYourOwnPredbiljezbe', (data) => {
         setLoading(false);
       }
     });
+    
     
     
 
