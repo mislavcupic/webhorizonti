@@ -34,10 +34,11 @@ export default function LectureSelectionPredb() {
     setLoading(false);
   });
 
-  return () => {
-    socket.off('getYourOwnPredbiljezbe');
-    socket.off('fetchingError');
-  };
+  // return () => {
+  //   socket.off('getYourOwnPredbiljezbe');
+  //   socket.off('fetchingError');
+  // };
+// }
   
   const handleGetPredbiljezbe = () => {
   
