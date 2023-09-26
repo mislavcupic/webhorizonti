@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Container, Row, Button, Form } from 'react-bootstrap';
 import { io } from 'socket.io-client';
-import forbiden from '../assets/media/forbiden.jpg'
+import forbidden from '../assets/media/forbiden.jpg'
 import { useNavigate } from 'react-router-dom';
 
 export default function LectureSelectionPredb() {
@@ -87,7 +87,14 @@ const handleNavigate = () => {
   return (
     <>
       {storedRole === null || psihologID === null ? (
-        <div><img src={forbiden} style={{width:'50px', height:'50p'}} alt='STOP'></img>You must login to see this page. You have not permission to enter this page. Go to ${handleNavigate} </div>
+        // <div><img src={forbiden} style={{width:'50px', height:'50p'}} alt='STOP'></img>You must login to see this page. You have not permission to enter this page. Go to ${handleNavigate} </div>
+        <div>
+    <img src={forbidden} style={{ width: '50px', height: '50px' }} alt='STOP' />
+    You must log in to see this page. You do not have permission to enter this page.{' '}
+    <span onClick={() => navigate('../registrationfeesaccommodation/eventregistration')}>
+      Go to navigate!
+    </span>
+  </div>
       ) : (
         <>
           <p>Predbilježbe:</p>
