@@ -5,19 +5,23 @@ import { io } from 'socket.io-client';
 
 export default function LectureSelectionPredb() {
   const storedRole = localStorage.getItem('userRole');
+  const psihologID = localStorage.getItem('psihologID');
   const [lista, setLista] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const socket = io('http://localhost:8080');
+  
 
   const handleGetPredbiljezbe = () => {
-    if(storedRole==='admin' || storedRole ==='odbor'){
+  
     socket.emit('getPredbiljezbe');
-    }
-    else if (storedRole ==='user'){
-      socket.emit('getYourOwnPredbiljezbe');
-    }
-    else {<div>You don't have permission to enter this page!</div>}
+    
+  };
+
+  const handleGetYourOwnPredbiljezbe = () => {
+
+    socket.emit('getYourOwnPredbiljezbe'); //tu sam dodao drugi arg
+
   };
  
 
@@ -68,144 +72,191 @@ export default function LectureSelectionPredb() {
       pred.Vrijeme_predbiljezbe.toLowerCase().includes(loweredSearchQuery)
     );
   });
-
-//   return (
-//     <>
-//       <p>Predbilježbe:</p>
-//       <Container>
-//         <Row>
-//         <Form.Group> <Form.Label
-//             htmlFor='pretraga'
-//           >Pretraži predbilježbe:</Form.Label>
-//           <Form.Control
-//             name="pretraga"
-//             id="pretraga"
-//             type="text"
-//             placeholder="Pretraga po nazivu, imenu, prezimenu, tipu predavanja ili vremenu predbilježbe..."
-//             value={searchQuery}
-//             onChange={(e) => setSearchQuery(e.target.value)}
-//           /></Form.Group>
-         
-//        <br/>
-//        <hr/>
-         
-          // <Table striped bordered hover>
-            
-          //   <thead className="bg-primary">
-          //     <tr>
-          //       <th>Ime: </th>
-          //       <th>Prezime: </th>
-          //       <th>Email: </th>
-          //       <th>Datum: </th>
-          //       <th>Naziv: </th>
-          //       <th>Tip: </th>
-          //       <th>Opis: </th>
-          //       <th>Vrijeme predbilježbe</th>
-          //     </tr>
-          //   </thead>
-          //   <tbody>
-          //     {loading ? (
-          //       <tr>
-          //         <td colSpan="8">Loading...</td>
-          //       </tr>
-          //     ) : filteredList.length === 0 ? (
-          //       <tr>
-          //         <td colSpan="8">No data available.</td>
-          //       </tr>
-          //     ) : (
-          //       filteredList.map((pred) => (
-          //         <tr className="bg-warning" key={pred.Predbiljezbe_ID}>
-          //           <td>{pred.ime}</td>
-          //           <td>{pred.prezime}</td>
-          //           <td>{pred.email}</td>
-          //           <td>{pred.datetime}</td>
-          //           <td>{pred.naziv}</td>
-          //           <td>{pred.tip}</td>
-          //           <td>{pred.opis}</td>
-          //           <td>{pred.Vrijeme_predbiljezbe}</td>
-          //         </tr>
-          //       ))
-          //     )}
-          //   </tbody>
-          // </Table>
-//           <Button onClick={handleGetPredbiljezbe}>Prikaz predbiljezbi</Button>
-//         </Row>
-//       </Container>
-//     </>
-//   );
-// }
-return (
-  <>
-    <p>Predbilježbe:</p>
-    <Container>
-      <Row>
-        {storedRole === 'admin' || storedRole === 'odbor' ? (
-          // Content for 'admin' or 'odbor' role
-          <>
-            <Form.Group>
-              <Form.Label htmlFor='pretraga'>Pretraži predbilježbe:</Form.Label>
-              <Form.Control
-                name="pretraga"
-                id="pretraga"
-                type="text"
-                placeholder="Pretraga po nazivu, imenu, prezimenu, tipu predavanja ili vremenu predbilježbe..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </Form.Group>
-
-            <br />
-            <hr />
-
-            <Table striped bordered hover>
-            
-            <thead className="bg-primary">
-              <tr>
-                <th>Ime: </th>
-                <th>Prezime: </th>
-                <th>Email: </th>
-                <th>Datum: </th>
-                <th>Naziv: </th>
-                <th>Tip: </th>
-                <th>Opis: </th>
-                <th>Vrijeme predbilježbe</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
+  return (
+    <>
+      <p>Predbilježbe:</p>
+      <Container>
+        <Row>
+          {storedRole === 'admin' || storedRole === 'odbor' ? (
+            <>
+              <Form.Group>
+                <Form.Label htmlFor='pretraga'>Pretraži predbilježbe:</Form.Label>
+                <Form.Control
+                  name="pretraga"
+                  id="pretraga"
+                  type="text"
+                  placeholder="Pretraga po nazivu, imenu, prezimenu, tipu predavanja ili vremenu predbilježbe..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </Form.Group>
+  
+              <br />
+              <hr />
+  
+              <Table striped bordered hover>
+              
+              <thead className="bg-primary">
                 <tr>
-                  <td colSpan="8">Loading...</td>
+                  <th>Ime: </th>
+                  <th>Prezime: </th>
+                  <th>Email: </th>
+                  <th>Datum: </th>
+                  <th>Naziv: </th>
+                  <th>Tip: </th>
+                  <th>Opis: </th>
+                  <th>Vrijeme predbilježbe</th>
                 </tr>
-              ) : filteredList.length === 0 ? (
-                <tr>
-                  <td colSpan="8">No data available.</td>
-                </tr>
-              ) : (
-                filteredList.map((pred) => (
-                  <tr className="bg-warning" key={pred.Predbiljezbe_ID}>
-                    <td>{pred.ime}</td>
-                    <td>{pred.prezime}</td>
-                    <td>{pred.email}</td>
-                    <td>{pred.datetime}</td>
-                    <td>{pred.naziv}</td>
-                    <td>{pred.tip}</td>
-                    <td>{pred.opis}</td>
-                    <td>{pred.Vrijeme_predbiljezbe}</td>
+              </thead>
+              <tbody>
+                {loading ? (
+                  <tr>
+                    <td colSpan="8">Loading...</td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </Table>
-            <Button onClick={handleGetPredbiljezbe}>Prikaz predbiljezbi</Button>
-          </>
-        ) : (
-          // Content for other roles
-          <p>You don't have permission to enter this page.</p>
-        )}
-      </Row>
-    </Container>
-  </>
-);
+                ) : filteredList.length === 0 ? (
+                  <tr>
+                    <td colSpan="8">No data available.</td>
+                  </tr>
+                ) : (
+                  filteredList.map((pred) => (
+                    <tr className="bg-warning" key={pred.Predbiljezbe_ID}>
+                      <td>{pred.ime}</td>
+                      <td>{pred.prezime}</td>
+                      <td>{pred.email}</td>
+                      <td>{pred.datetime}</td>
+                      <td>{pred.naziv}</td>
+                      <td>{pred.tip}</td>
+                      <td>{pred.opis}</td>
+                      <td>{pred.Vrijeme_predbiljezbe}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </Table>
+              <Button onClick={handleGetPredbiljezbe}>Prikaz predbiljezbi</Button>
+            </>
+          ) : storedRole === 'user' && psihologID ? (<>
+             <Table striped bordered hover>
+              
+              <thead className="bg-primary">
+                <tr>
+                  <th>Ime: </th>
+                  <th>Prezime: </th>
+                  <th>Email: </th>
+                  <th>Datum: </th>
+                  <th>Naziv: </th>
+                  <th>Tip: </th>
+                  <th>Opis: </th>
+                  <th>Vrijeme predbilježbe</th>
+                </tr>
+              </thead>
+              <tbody>
+                {loading ? (
+                  <tr>
+                    <td colSpan="8">Loading...</td>
+                  </tr>
+                ) : filteredList.length === 0 ? (
+                  <tr>
+                    <td colSpan="8">No data available.</td>
+                  </tr>
+                ) : (
+                  filteredList.map((pred) => (
+                    <tr className="bg-warning" key={pred.Predbiljezbe_ID}>
+                      <td>{pred.ime}</td>
+                      <td>{pred.prezime}</td>
+                      <td>{pred.email}</td>
+                      <td>{pred.datetime}</td>
+                      <td>{pred.naziv}</td>
+                      <td>{pred.tip}</td>
+                      <td>{pred.opis}</td>
+                      <td>{pred.Vrijeme_predbiljezbe}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </Table>
+              <Button onClick={handleGetYourOwnPredbiljezbe}>Prikaz predbiljezbi</Button>
+              </>
+          ) : (
+            <p>You don't have permission to enter this page.</p>
+          )}
+        </Row>
+      </Container>
+    </>
+  );
+
+// return (
+//   <>
+//     <p>Predbilježbe:</p>
+//     <Container>
+//       <Row>
+//         {storedRole === 'admin' || storedRole === 'odbor' ? (
+//           // Content for 'admin' or 'odbor' role
+//           <>
+//             <Form.Group>
+//               <Form.Label htmlFor='pretraga'>Pretraži predbilježbe:</Form.Label>
+//               <Form.Control
+//                 name="pretraga"
+//                 id="pretraga"
+//                 type="text"
+//                 placeholder="Pretraga po nazivu, imenu, prezimenu, tipu predavanja ili vremenu predbilježbe..."
+//                 value={searchQuery}
+//                 onChange={(e) => setSearchQuery(e.target.value)}
+//               />
+//             </Form.Group>
+
+//             <br />
+//             <hr />
+
+//             <Table striped bordered hover>
+            
+//             <thead className="bg-primary">
+//               <tr>
+//                 <th>Ime: </th>
+//                 <th>Prezime: </th>
+//                 <th>Email: </th>
+//                 <th>Datum: </th>
+//                 <th>Naziv: </th>
+//                 <th>Tip: </th>
+//                 <th>Opis: </th>
+//                 <th>Vrijeme predbilježbe</th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {loading ? (
+//                 <tr>
+//                   <td colSpan="8">Loading...</td>
+//                 </tr>
+//               ) : filteredList.length === 0 ? (
+//                 <tr>
+//                   <td colSpan="8">No data available.</td>
+//                 </tr>
+//               ) : (
+//                 filteredList.map((pred) => (
+//                   <tr className="bg-warning" key={pred.Predbiljezbe_ID}>
+//                     <td>{pred.ime}</td>
+//                     <td>{pred.prezime}</td>
+//                     <td>{pred.email}</td>
+//                     <td>{pred.datetime}</td>
+//                     <td>{pred.naziv}</td>
+//                     <td>{pred.tip}</td>
+//                     <td>{pred.opis}</td>
+//                     <td>{pred.Vrijeme_predbiljezbe}</td>
+//                   </tr>
+//                 ))
+//               )}
+//             </tbody>
+//           </Table>
+//             <Button onClick={handleGetPredbiljezbe}>Prikaz predbiljezbi</Button>
+//           </>
+//         ) : (
+//           // Content for other roles
+//           <p>You don't have permission to enter this page.</p>
+//         )}
+//       </Row>
+//     </Container>
+//   </>
+// );
         }
 
 

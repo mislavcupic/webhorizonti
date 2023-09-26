@@ -192,7 +192,7 @@ catch(error){
     console.log(error);
 }
 }
-
+//predbiljezbe samo za usera
 const getYourOwnPredbiljezbe = async (psihologID) => {
   try {
     let pool = await sql.connect(config);
