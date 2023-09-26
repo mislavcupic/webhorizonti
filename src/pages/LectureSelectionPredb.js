@@ -5,26 +5,23 @@ import { io } from 'socket.io-client';
 
 export default function LectureSelectionPredb() {
   const storedRole = localStorage.getItem('userRole');
-  const psihologID = localStorage.getItem('psihologID');
+  const psihologID = JSON.parse(localStorage.getItem('psihologID'));
   const [lista, setLista] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const socket = io('http://localhost:8080');
-  
+
 
   const handleGetPredbiljezbe = () => {
   
     socket.emit('getPredbiljezbe');
     
   };
-
-  const handleGetYourOwnPredbiljezbe = () => {
-
-    socket.emit('getYourOwnPredbiljezbe'); //tu sam dodao drugi arg
-
-  };
- 
-
+  console.log('psihologID: '+psihologID);
+ const handleGetYourOwnPredbiljezbe = (psihologID) => {
+  
+  socket.emit('getYourOwnPredbiljezbe', psihologID); // Emit the event with psihologID
+};
 
   useEffect(() => {
     socket.on('getPredbiljezbe', (data) => {
@@ -45,21 +42,49 @@ export default function LectureSelectionPredb() {
   }, []);
 
   useEffect(() => {
-    socket.on('getYourOwnPredbiljezbe', (data) => {
-      const predbiljezbeArray = data.recordset;
-      setLista(predbiljezbeArray);
-      setLoading(false);
-    });
+    // socket.on('getYourOwnPredbiljezbe', (data) => {
+    //   const predbiljezbeArray = data.recordset;
+    //   setLista(predbiljezbeArray);
+    //   setLoading(false);
+    // });
 
+    // socket.on('getYourOwnPredbiljezbe', (data) => {
+    //   if (data && data.recordset) {
+    //     const predbiljezbeArray = data.recordset;
+    //     setLista(predbiljezbeArray);
+    //     setLoading(false);
+    //   } else {
+    //     console.error('Received data is invalid');
+    //   }
+    // });
+    socket.on('getYourOwnPredbiljezbe', (data) => {
+      try {
+        if (data && data.recordset) {
+          const predbiljezbeArray = data.recordset;
+          setLista(predbiljezbeArray);
+          setLoading(false);
+        } else {
+          console.error('Received invalid data:', data);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error('Error while processing data:', error);
+        setLoading(false);
+      }
+    });
+  
     socket.on('fetchingError', (errorMessage) => {
       console.error('Error fetching data:', errorMessage);
       setLoading(false);
     });
-
+  
     return () => {
-      socket.off('getPredbiljezbe');
+      socket.off('getYourOwnPredbiljezbe');
       socket.off('fetchingError');
     };
+    
+
+   
   }, []);
 
   const filteredList = lista.filter((pred) => {
@@ -175,7 +200,9 @@ export default function LectureSelectionPredb() {
                 )}
               </tbody>
             </Table>
-              <Button onClick={handleGetYourOwnPredbiljezbe}>Prikaz predbiljezbi</Button>
+            <Button onClick={() => handleGetYourOwnPredbiljezbe(psihologID)}>Osobne predbilježbe</Button>
+
+
               </>
           ) : (
             <p>You don't have permission to enter this page.</p>

@@ -206,7 +206,7 @@ const getYourOwnPredbiljezbe = async (psihologID) => {
 
     let predbiljezbe = await pool
       .request()
-      .input('psihologID', sql.Int, psihologID)
+      .input('psihologID', sql.VarChar, psihologID)
       .query(query);
 
     return predbiljezbe.recordset;

@@ -278,7 +278,8 @@ socket.on('deletePredavanje', async (predavanjeID) => {
     try {
       const predbiljezbe = await getYourOwnPredbiljezbe(psihologID);
       console.log(predbiljezbe);
-      io.emit('getYourOwnPredbiljezbe', predbiljezbe);
+      io.emit('getYourOwnPredbiljezbe', predbiljezbe.recordset); // Emit the array directly
+
     } catch (error) {
       console.error('Error while fetching data:', error);
       io.emit('fetchingError', 'An error occurred while fetching data.');
@@ -375,9 +376,9 @@ socket.on('updatePredavanje', async (updatedPredavanje, callback) => {
 
 });
 
-// server.listen(port, () => {
-//   console.log(`Listening on port: ${port}`);
-// });
+server.listen(port, () => {
+  console.log(`Listening on port: ${port}`);
+});
 
 
 
