@@ -90,9 +90,9 @@ const handleNavigate = () => {
         // <div><img src={forbiden} style={{width:'50px', height:'50p'}} alt='STOP'></img>You must login to see this page. You have not permission to enter this page. Go to ${handleNavigate} </div>
         <div>
     <img src={forbidden} style={{ width: '50px', height: '50px' }} alt='STOP' />
-    You must log in to see this page. You do not have permission to enter this page.{' '}
-    <span onClick={() => navigate('../registrationfeesaccommodation/eventregistration')}>
-      Go to navigate!
+    Morate se prijaviti kao sudionik da biste vidjeli sadržaj ove stranice. Nemate pravo pristupa sadržaju ove stranice!{' '}
+    <span onClick={() => navigate('../eventregistration')}style={{color: 'blue'}}>
+      Prijavi se!
     </span>
   </div>
       ) : (

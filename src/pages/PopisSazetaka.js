@@ -134,7 +134,7 @@ return (
         </Table>
       </>
     ) : (
-      <div><img src={forbidden} alt='forbidden' style={{ width: '50px', height: '50px', backgroundColor: 'transparent', opacity: 0.9}} ></img>You do not have permission to enter this page.</div>
+      <div><img src={forbidden} alt='forbidden' style={{ width: '50px', height: '50px', backgroundColor: 'transparent', opacity: 0.9}} ></img>Nemate pravo na pristup sadržaju ove stranice.</div>
     )}
   </div>
 );
