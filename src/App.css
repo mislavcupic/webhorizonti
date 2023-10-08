@@ -186,4 +186,9 @@ body {
 .carousel-wrapper .carousel-indicators .active {
   background-color: #6c757d; /* Change color as needed */
   border-color: #6c757d;
+}
+
+.my-form-control {
+  color: black; /* Set the desired text color */
+  /* Add any other necessary styles to make text visible */
 }/*# sourceMappingURL=App.css.map */

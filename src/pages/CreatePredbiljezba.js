@@ -83,14 +83,14 @@ export default function CreatePredbiljezba() {
 
   return (
     <>
-      <p>Create Predbiljezba:</p>
+      <p>Potvrda predbilježbi</p>
       <Form>
         <Form.Group controlId="selectedPredavanjeID">
-          <Form.Label>Odabrana predavanja: </Form.Label>
-          <Form.Control
+          <Form.Label>Odabrali ste predavanja: </Form.Label>
+          {/* <Form.Control
             as="select"
             value={selectedPredavanjeID}
-            onChange={(e) => setSelectedPredavanjeID(Array.from(e.target.selectedOptions, option => option.value))}
+            onChange={(e) => setSelectedPredavanjeID(Array.from(e.target.selectedOptions, option => option.value.toString()))}
             multiple
           >
             {predavanjaOptions.map((predavanje) => (
@@ -98,7 +98,24 @@ export default function CreatePredbiljezba() {
                 {predavanje.naziv}
               </option>
             ))}
-          </Form.Control>
+          </Form.Control> */}
+         <Form.Control
+  as="select"
+  value={selectedPredavanjeID}
+  onChange={(e) => {
+    const selectedValues = Array.from(e.target.selectedOptions, option => option.value.toString());
+    setSelectedPredavanjeID(selectedValues);
+  }}
+  multiple
+>
+  {predavanjaOptions.map((predavanje) => (
+    <option key={predavanje.Predavanje_ID} value={predavanje.Predavanje_ID.toString()}>
+      {predavanje.naziv}
+    </option>
+  ))}
+</Form.Control>
+
+
         </Form.Group>
         <Button variant="primary" onClick={handleCreatePredbiljezba}>Create Predbiljezba</Button>
       </Form>

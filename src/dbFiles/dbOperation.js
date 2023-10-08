@@ -145,9 +145,13 @@ const createPredavanje = async (Predavanje) => {
               '${Predavanje.naziv}',
               '${Predavanje.tip}',
               '${Predavanje.opis}',
-              ${Predavanje.brojPolaznika},
-              ${Predavanje.slobodnaMjesta},
-              ${Predavanje.ukupnoMjesta})
+               ${Predavanje.brojPolaznika},
+               ${Predavanje.slobodnaMjesta},
+               ${Predavanje.ukupnoMjesta},
+               '${Predavanje.mjestoOdrzavanja}',
+               '${Predavanje.vrijemePocetka}'
+              
+              )
     `);
   } catch (error) {
     console.log(error);

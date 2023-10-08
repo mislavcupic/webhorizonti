@@ -6,6 +6,9 @@ import CarouselComponent from './CarouselComponent';
 import { io } from 'socket.io-client';
 //import { useNavigate } from 'react-router-dom';
 import horizonti_velik_cropped from '../assets/media/horizonti_velik_cropped.png';
+//ovo dodajem sad zbog datetimePickera
+import ReactDatetime from "react-datetime";
+import "react-datetime/css/react-datetime.css";
 
 export default function CreatePredavanje() {
   let Predavanje_ID = nanoid(10);
@@ -13,6 +16,9 @@ export default function CreatePredavanje() {
   let tip = '';
  
  // const navigate = useNavigate();
+
+
+
   const socket = io('http://localhost:8080');
 
   const [predavanje, setPredavanje] = useState({
@@ -22,7 +28,9 @@ export default function CreatePredavanje() {
     opis: '',
     brojPolaznika: '',
     slobodnaMjesta: '',
-    ukupnoMjesta: ''
+    ukupnoMjesta: '',
+    mjestoOdrzavanja:'',
+    vrijemePocetka: null // Initialize vrijemePocetka with null
 
   });
 
@@ -57,6 +65,92 @@ export default function CreatePredavanje() {
     setPredavanje({ ...predavanje, ukupnoMjesta: e.target.value });
   };
 
+  const handleInputMjestoOdrzavanja = (e) => {
+    setPredavanje({ ...predavanje, mjestoOdrzavanja: e.target.value });
+  };
+
+  const handleVrijemePocetkaChange = (date) => {
+    setPredavanje({
+      ...predavanje,
+      vrijemePocetka: date,
+    });
+  };
+  
+  // const submitValues = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true); // Show loading spinner
+  //   const inputNaziv = document.getElementById('naziv');
+  //   const inputTip = document.getElementById('tip');
+  //   const inputOpis = document.getElementById('opis');
+  //   const inputBrojPolaznika = document.getElementById('brojPolaznika');
+  //   const inputSlobodnaMjesta = document.getElementById('slobodnaMjesta');
+  //   const inputUkupnoMjesta = document.getElementById('ukupnoMjesta');
+
+  //   if (predavanje.naziv === '' || predavanje.tip === '' || predavanje.opis === ''|| predavanje.brojPolaznika==='' || predavanje.slobodnaMjesta==='' || predavanje.ukupnoMjesta==='') {
+  //     alert('Ispuni sva polja da bi se nastavio proces stvaranja predavanja');
+  //     setLoading(false); // Hide loading spinner
+  //     return;
+  //   }
+  //   if (
+  //     predavanje.naziv === '' ||
+  //     predavanje.tip === '' ||
+  //     predavanje.opis === '' ||
+  //     predavanje.brojPolaznika === '' ||
+  //     predavanje.slobodnaMjesta === '' ||
+  //     predavanje.ukupnoMjesta === '' ||
+  //     !predavanje.vrijemePocetka // Check if vrijemePocetka is not set
+  //   ) {
+  //     alert('Ispuni sva polja da bi se nastavio proces stvaranja predavanja');
+  //     setLoading(false); // Hide loading spinner
+  //     return;
+  //   }
+  
+  //   const confirmWindow = window.confirm(`Želite li pospremiti ovako unesene podatke? 
+  //     Naziv: ${predavanje.naziv},
+  //     Tip: ${predavanje.tip},
+  //     Opis: ${predavanje.opis},
+  //     Broj polaznika: ${predavanje.brojPolaznika},
+  //     Slobodna mjesta: ${predavanje.slobodnaMjesta},
+  //     Ukupno mjesta: ${predavanje.ukupnoMjesta}
+  //     Vrijeme početka: ${predavanje.vrijemePocetka}
+  //     `);
+  
+  //   if (confirmWindow) {
+  //     try {
+  //       const updatedPredavanje = {
+  //         ...predavanje,
+  //         Predavanje_ID: nanoid(10),
+  //         tip: predavanje.tip,
+  //         vrijemePocetka: predavanje.vrijemePocetka.format(
+  //           "YYYY-MM-DD HH:mm:ss"
+  //         ), // Format vrijemePocetka
+  //       };
+  //       setPredavanje(updatedPredavanje);
+  //       socket.emit('insertPredavanje', updatedPredavanje);
+  
+  //       setLoading(false); // Hide loading spinner
+  //       alert('Uspješno stvoreno predavanje!');
+  //       // Clear input fields
+  //       setPredavanje({
+  //         ...updatedPredavanje,
+  //         naziv: '',
+  //         tip: '',
+  //         opis: '',
+  //         brojPolaznika: '',
+  //         slobodnaMjesta: '',
+  //         ukupnoMjesta: '',
+  //         vrijemePocetka: null,
+  //       });
+  //     } catch (err) {
+  //       console.log(err);
+  //       setLoading(false); // Hide loading spinner
+  //     }
+  //   } else {
+  //     setLoading(false); // Hide loading spinner
+  //   }
+  // };
+  
+
   const submitValues = async (e) => {
     e.preventDefault();
     setLoading(true); // Show loading spinner
@@ -67,8 +161,10 @@ export default function CreatePredavanje() {
     const inputBrojPolaznika = document.getElementById('brojPolaznika');
     const inputSlobodnaMjesta = document.getElementById('slobodnaMjesta');
     const inputUkupnoMjesta = document.getElementById('ukupnoMjesta');
+    const inputMjestoOdrzavanja = document.getElementById('mjestoOdrzavanja');
+    const inputVrijemePocetka = document.getElementById('vrijemePocetka');
 
-    if (predavanje.naziv === '' || predavanje.tip === '' || predavanje.opis === ''|| predavanje.brojPolaznika==='' || predavanje.slobodnaMjesta==='' || predavanje.ukupnoMjesta==='') {
+    if (predavanje.naziv === '' || predavanje.tip === '' || predavanje.opis === ''|| predavanje.brojPolaznika==='' || predavanje.slobodnaMjesta==='' || predavanje.ukupnoMjesta==='' ||  !predavanje.vrijemePocetka) {
       alert('Ispuni sva polja da bi se nastavio proces stvaranja predavanja');
       setLoading(false); // Hide loading spinner
       return;
@@ -80,7 +176,9 @@ export default function CreatePredavanje() {
       Opis: ${predavanje.opis},
       Broj polaznika: ${predavanje.brojPolaznika},
       Slobodna mjesta: ${predavanje.slobodnaMjesta},
-      Ukupno mjesta: ${predavanje.ukupnoMjesta}
+      Ukupno mjesta: ${predavanje.ukupnoMjesta},
+      Mjesto održavanja: ${predavanje.mjestoOdrzavanja},
+      Vrijeme početka: ${predavanje.vrijemePocetka}
       `);
 
     if (confirmWindow) {
@@ -101,6 +199,8 @@ export default function CreatePredavanje() {
         inputBrojPolaznika.value = '';
         inputSlobodnaMjesta.value = '';
         inputUkupnoMjesta.value = '';
+        inputMjestoOdrzavanja.value = '';
+        inputVrijemePocetka.value = '';
       } catch (err) {
         console.log(err);
         setLoading(false); // Hide loading spinner
@@ -265,7 +365,30 @@ export default function CreatePredavanje() {
                   onChange={handleInputUkupnoMjesta}
                 />
               </Form.Group>
-         
+              <Form.Group>
+                <Form.Label htmlFor="mjestoOdrzavanja">Mjesto održavanja: </Form.Label>
+                <Form.Control
+                  type="mjestoOdrzavanja"
+                  placeholder="Mjesto održavanja predavanja..."
+                  id="mjestoOdrzavanja"
+                  name="mjestoOdrzavanja"
+                  onChange={handleInputMjestoOdrzavanja}
+                />
+              </Form.Group>
+              <Form.Group>
+  <Form.Label htmlFor="vrijemePocetka">Vrijeme početka:</Form.Label>
+  <ReactDatetime
+    inputProps={{
+      id: "vrijemePocetka",
+      name: "vrijemePocetka",
+      placeholder: "Odaberite datum i vrijeme",
+    }}
+    value={predavanje.vrijemePocetka} // Use predavanje.vrijemePocetka as the value
+    onChange={handleVrijemePocetkaChange}
+  />
+</Form.Group>
+
+
               <br />
               <Button variant="primary" type="submit">
                 {loading ? (

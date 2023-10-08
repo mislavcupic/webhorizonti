@@ -435,7 +435,10 @@ export default function LectureSelection() {
                 <th>Broj polaznika</th>
                 <th>Slobodna mjesta</th>
                 <th>Ukupno mjesta</th>
+                <th>Mjesto održavanja</th>
+                <th>Vrijeme početka</th>
                 <th>Brisanje predavanja:</th>
+                   
               </tr>
             </thead>
             <tbody>
@@ -487,6 +490,8 @@ export default function LectureSelection() {
                     <td>{pred.brojPolaznika}</td>
                     <td>{pred.slobodnaMjesta}</td>
                     <td>{pred.ukupnoMjesta}</td>
+                   <td>{pred.mjestoOdrzavanja}</td> 
+                   <td>{pred.vrijemePocetka}</td>
                     <td>
                       <Button
                         variant="danger"

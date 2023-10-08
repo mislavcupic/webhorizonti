@@ -61,6 +61,10 @@ function Navigation() {
                Token - prijava predavanja
              </NavDropdown.Item>
              <NavDropdown.Divider />
+             <NavDropdown.Item href="/registrationfeesaccommodation/lectureselection">
+               Pregled predavanja
+             </NavDropdown.Item>
+             <NavDropdown.Divider />
              <NavDropdown.Item href="/registrationfeesaccommodation/lectureselectionpredb">
                Predbilježbe
              </NavDropdown.Item>
