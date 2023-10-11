@@ -15,9 +15,13 @@ export default function LectureSelectionPredb() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const socket = io('http://localhost:8080');
+  //const currentDate = new Date();
+  // const notification =   Notification.requestPermission().then(perm =>{
+  //   alert(perm);
+  // })
+  // const timeDifference = Math.abs(lista.vrijemePocetka - currentDate);
+  // const newDaysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
 
-
-  
 socket.on('getYourOwnPredbiljezbe', (data) => {
   console.log('Received data:', data); // No need for JSON.parse here
 
@@ -30,6 +34,7 @@ socket.on('getYourOwnPredbiljezbe', (data) => {
     setLoading(false);
   }
 });
+  
 const handleNavigate = () => {
   navigate('../registrationfeesaccommodation/eventregistration');
 }
@@ -38,12 +43,16 @@ const handleNavigate = () => {
   };
 
   const handleGetYourOwnPredbiljezbe = (psihologID) => {
+
+
     socket.emit('getYourOwnPredbiljezbe', psihologID);
       console.log('Notifikacija?')
+
+
   
-        Notification.requestPermission().then(perm =>{
-          alert(perm);
-        })
+        // Notification.requestPermission().then(perm =>{
+        //   alert(perm);
+        // })
   
   
   }
@@ -90,7 +99,9 @@ const handleNavigate = () => {
       pred.tip.toLowerCase().includes(loweredSearchQuery) ||
       pred.ime.toLowerCase().includes(loweredSearchQuery) ||
       pred.prezime.toLowerCase().includes(loweredSearchQuery) ||
-      pred.Vrijeme_predbiljezbe.toLowerCase().includes(loweredSearchQuery)
+      pred.Vrijeme_predbiljezbe.toLowerCase().includes(loweredSearchQuery) ||
+      pred.vrijemePocetka.toLowerCase().includes(loweredSearchQuery)||
+      pred.mjestoOdrzavanja.toLowerCase().includes(loweredSearchQuery)
     );
   });
 
@@ -138,6 +149,8 @@ const handleNavigate = () => {
                         <th>Tip: </th>
                         <th>Opis: </th>
                         <th>Vrijeme predbilježbe</th>
+                        <th>Mjesto održavanja</th>
+                        <th>Vrijeme početka</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -160,6 +173,8 @@ const handleNavigate = () => {
                             <td>{pred.tip}</td>
                             <td>{pred.opis}</td>
                             <td>{pred.Vrijeme_predbiljezbe}</td>
+                            <td>{pred.mjestoOdrzavanja}</td>
+                            <td>{pred.vrijemePocetka}</td>
                           </tr>
                         ))
                       )}
@@ -180,6 +195,8 @@ const handleNavigate = () => {
                         <th>Tip: </th>
                         <th>Opis: </th>
                         <th>Vrijeme predbilježbe</th>
+                        <th>Mjesto održavanja</th>
+                        <th>Vrijeme početka</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -202,6 +219,8 @@ const handleNavigate = () => {
                             <td>{pred.tip}</td>
                             <td>{pred.opis}</td>
                             <td>{pred.Vrijeme_predbiljezbe}</td>
+                            <td>{pred.mjestoOdrzavanja}</td>
+                            <td>{pred.vrijemePocetka}</td>
                           </tr>
                         ))
                       )}

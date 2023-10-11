@@ -10,6 +10,7 @@ import horizonti_velik_cropped from '../assets/media/horizonti_velik_cropped.png
 import ReactDatetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 
+
 export default function CreatePredavanje() {
   let Predavanje_ID = nanoid(10);
 //   let validates = true;
@@ -121,9 +122,9 @@ export default function CreatePredavanje() {
   //         ...predavanje,
   //         Predavanje_ID: nanoid(10),
   //         tip: predavanje.tip,
-  //         vrijemePocetka: predavanje.vrijemePocetka.format(
-  //           "YYYY-MM-DD HH:mm:ss"
-  //         ), // Format vrijemePocetka
+          // vrijemePocetka: predavanje.vrijemePocetka.format(
+          //   "YYYY-MM-DD HH:mm:ss"
+          // ), // Format vrijemePocetka
   //       };
   //       setPredavanje(updatedPredavanje);
   //       socket.emit('insertPredavanje', updatedPredavanje);
@@ -183,10 +184,14 @@ export default function CreatePredavanje() {
 
     if (confirmWindow) {
       try {
+        // const formattedDate = format(predavanje.vrijemePocetka, "dd.MM.yyyy HH:mm:ss");
+
         const updatedPredavanje = {
           ...predavanje,
           Predavanje_ID: nanoid(10),
-          tip: predavanje.tip
+          tip: predavanje.tip,
+          // vrijemePocetka: formattedDate
+          
         };
         setPredavanje(updatedPredavanje);
         socket.emit('insertPredavanje', updatedPredavanje);

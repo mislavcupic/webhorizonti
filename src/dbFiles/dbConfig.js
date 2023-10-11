@@ -10,7 +10,7 @@ options:{
     enableArithAbort:true,
     instancename:'SQLEXPRESS'
 }
-,
- port: 49676
-}
+// ,
+//  port: 49676
+ }
 module.exports = config;
