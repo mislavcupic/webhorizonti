@@ -6,6 +6,8 @@ import ThePlaceOfEvent from './ThePlaceOfEvent';
 import Navigation from '../pages/Navigation';
 import CarouselComponent from './CarouselComponent'
 import Footer from './Footer';
+import PozvaniPredavaci from './PozvaniPredavaci'
+
 export default function About() {
   return (
     <>
@@ -16,6 +18,7 @@ export default function About() {
    
    <Route path="introductionspeech" element={<IntroductionSpeech/>}></Route>
    <Route path="organizingcomettee" element={<ProgramOrganizingComittee/>}></Route>
+   <Route path="pozvanipredavaci" element={<PozvaniPredavaci/>}></Route>
    <Route path="theplaceofevent" element={<ThePlaceOfEvent/>}></Route>
  
   
