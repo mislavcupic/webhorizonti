@@ -15,24 +15,94 @@ catch(error){
 }
 
 
-// Create Psiholog operation
+// // Create Psiholog operation
+// const createPsiholog = async (Psiholog) => {
+//     try {
+//       let pool = await sql.connect(config);
+//       await pool.request().query(`
+//         INSERT INTO EventRegistration2
+//         VALUES ('${Psiholog.Psiholog_ID}', 
+//                 '${Psiholog.ime}',
+//                 '${Psiholog.prezime}',
+//                 '${Psiholog.email}',
+//                 '${Psiholog.date}',
+//                 '${Psiholog.role}')
+//       `);
+//     } catch (error) {
+//       console.log(error);
+//       throw error;
+//     }
+//   };
+//newest createPsiholog and sazetci
+// Modify createPsiholog to check email existence only if required
+// const createPsiholog = async (Psiholog, participantType) => {
+//   try {
+//     let pool = await sql.connect(config);
+
+//     if (participantType === 'Pasivni') {
+//       // Check if the email already exists in the database
+//       const emailCheckResult = await pool
+//         .request()
+//         .query(`SELECT * FROM EventRegistration2 WHERE email = '${Psiholog.email}'`);
+
+//       if (emailCheckResult.recordset.length > 0) {
+//         // Email already exists, return a message to the user
+//         throw new Error('Već ste prijavljeni na ovoj konferenciji!');
+//       }
+//     }
+
+//     // Proceed with insertion
+//     await pool.request().query(`
+//       INSERT INTO EventRegistration2
+//       VALUES (
+//         '${Psiholog.Psiholog_ID}', 
+//         '${Psiholog.ime}',
+//         '${Psiholog.prezime}',
+//         '${Psiholog.email}',
+//         '${Psiholog.date}',
+//         '${Psiholog.role}'
+//       )
+//     `);
+//   } catch (error) {
+//     console.log(error.message);
+//     throw error;
+//   }
+// };
+
+//new createPsiholog
 const createPsiholog = async (Psiholog) => {
-    try {
-      let pool = await sql.connect(config);
+  try {
+    let pool = await sql.connect(config);
+
+    // Check if the email already exists in the database
+    const emailCheckResult = await pool
+      .request()
+      .query(`SELECT * FROM EventRegistration2 WHERE email = '${Psiholog.email}'`);
+
+    if (emailCheckResult.recordset.length > 0 && Psiholog.participantType==='Pasivni sudionik') {
+      // Email already exists, return a message to the user
+      throw new Error('Već ste prijavljeni na ovoj konferenciji!');
+    } else {
+      // Email doesn't exist, proceed with insertion
       await pool.request().query(`
         INSERT INTO EventRegistration2
-        VALUES ('${Psiholog.Psiholog_ID}', 
-                '${Psiholog.ime}',
-                '${Psiholog.prezime}',
-                '${Psiholog.email}',
-                '${Psiholog.date}',
-                '${Psiholog.role}')
+        VALUES (
+          '${Psiholog.Psiholog_ID}', 
+          '${Psiholog.ime}',
+          '${Psiholog.prezime}',
+          '${Psiholog.email}',
+          '${Psiholog.date}',
+          '${Psiholog.role}',
+          '${Psiholog.participantType}'
+        )
       `);
-    } catch (error) {
-      console.log(error);
-      throw error;
     }
-  };
+  } catch (error) {
+    console.log(error.message);
+    throw error;
+  }
+};
+
   const createSazetci = async (Sazetci_ID, Psiholog_ID, FileName, FileType, FileData, OblikSudjelovanja) => {
     try {
       let pool = await sql.connect(config);

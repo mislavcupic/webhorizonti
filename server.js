@@ -50,7 +50,7 @@ function sendEmail (userPsiholog) {
           from: 'mislav.cupic@gmail.com',
           to:   userPsiholog.email,
           subject: "Potvrda prijave na stručni skup",
-          text: `Pozdrav ${userPsiholog.ime} ${userPsiholog.prezime}, Vaša prijava na stručni skup "Horizonti snage" uspješno je izvršena dana ${userPsiholog.date}. Vaša kontakt mail adresa je ${userPsiholog.email}. Čuvajte ovu poruku jer se na njoj nalazi i token s kojim ćete se kasnije prijavljivati na predavanja. Vaš token za prijavu na predavanja: ${userPsiholog.Psiholog_ID}`
+          text: `Pozdrav ${userPsiholog.ime} ${userPsiholog.prezime}, Vaša prijava na stručni skup "Horizonti snage" uspješno je izvršena dana ${userPsiholog.date}. Vaša kontakt mail adresa je ${userPsiholog.email}. Čuvajte ovu poruku jer se na njoj nalazi i token s kojim ćete se kasnije prijavljivati na predavanja. Vaš token za prijavu na predavanja: ${userPsiholog.Psiholog_ID} . Prijavi na željena predavanja (predavanja sa ograničenim brojem polaznika) pristupit ćete na ovoj poveznici, za što ćete dobiti obavijest na web stranici konferencije: http://localhost:8080/registrationfeesaccommodation/inserttoken `
       };
     //   text: `Pozdrav ${userPsiholog.ime} ${userPsiholog.prezime},Vaša prijava na stručni skup "Horizonti snage" uspješno je izvršena dana ${userPsiholog.date}.Vaša kontakt mail adresa je ${userPsiholog.email}.Čuvajte ovu poruku jer se na njoj nalazi i token s kojim ćete se kasnije prijavljivati na predavanja.Vaš token za prijavu na predavanja: <a href="http://localhost:8080/registrationfeesaccommodation/inserttoken?token=${userPsiholog.Psiholog_ID}">Kliknite ovdje da potvrdite</a>.`
     // };

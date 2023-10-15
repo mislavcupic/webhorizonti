@@ -29,8 +29,8 @@ export default function FormsOfParticipation() {
   ];
 
   const currentDate = new Date();
-  const examDate = new Date('2023-07-29');
-  const examDate2 = new Date('2023-07-28');
+  const examDate = new Date('2023-10-14');
+  const examDate2 = new Date('2023-10-14');
   const timeDifference = Math.abs(examDate - currentDate);
   const newDaysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
   const newHoursRemaining = Math.ceil(timeDifference / (1000 * 60 * 60));
@@ -62,6 +62,26 @@ export default function FormsOfParticipation() {
         <Row>
           <Col>
             <CardGroup>
+              <Card>
+                <div className="custom-card">
+                  <Card.Img
+                  style={{width:'350px', height:'385px'}}
+                    variant="top"
+                    className="card-img custom-image" // Add the custom-image class
+                    src={mislavImage} // Use the mislavImage state variable
+                    onMouseOver={handleImageHover} // Handle image source change on hover
+                    onMouseOut={handleImageLeave} // Handle image source change on hover out
+                  />
+                  <div className="img-overlay-predavaci"></div>
+                </div>
+                <Card.Body>
+                  <Card.Title>{list[1]}</Card.Title>
+                  <Card.Text>{listDescription[1]}</Card.Text>
+                </Card.Body>
+                <Card.Footer>
+                  <small className="text-muted">{handleRemainingTime()}</small>
+                </Card.Footer>
+              </Card>
               <Card>
                 <div className="custom-card">
                   <Card.Img
