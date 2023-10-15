@@ -6,7 +6,7 @@ import forbidden from '../assets/media/forbiden.jpg'
 import { useNavigate } from 'react-router-dom';
 
 export default function LectureSelectionPredb() {
-  const storedRole = localStorage.getItem('userRole');
+  const storedRole = localStorage.getItem('userRole'); //pokusat cu ipak sa localStorage
   const psihologID = localStorage.getItem('psihologID') ? JSON.parse(localStorage.getItem('psihologID')) : null;
   let navigate = useNavigate();
  

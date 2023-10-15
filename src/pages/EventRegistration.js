@@ -551,7 +551,7 @@ export default function EventRegistration({ role }) {
       setIsWaitingForConfirmation(false);
       setErrorMessage('Uspješno pospremljeni prijavni podaci!');
       // Only save the 'role' in localStorage if the data insertion is successful
-      localStorage.setItem('userRole', psiholog.role);
+      localStorage.setItem('userRole', psiholog.role); //tu i u lectureselectionpredb sam promijenio u sessionStorage pa nazad da vidim kaj će biti!
       navigate('../lectureselection');
     });
   };
