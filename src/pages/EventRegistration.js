@@ -605,7 +605,7 @@ function Step2({
 }) {
   return (
     <div>
-      <h3>Enter Details</h3>
+      <h3>Molimo unesite vaše prijavne podatke</h3>
       <Form.Group>
         <Form.Label htmlFor="ime">Ime:</Form.Label>
         <Form.Control id="ime" name="ime" type="text" placeholder="Unesi ime" onChange={handleInputIme} />
