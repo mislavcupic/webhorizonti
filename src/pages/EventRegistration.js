@@ -465,14 +465,59 @@ export default function EventRegistration({ role }) {
     }));
   };
 
+  // const submitValues = async (e) => {
+  //   e.preventDefault();
+
+  //   if (!psiholog.participantType) {
+  //     setErrorMessage('Molimo vas odaberite tip sudionika.');
+  //     return;
+  //   }
+
+  //   if (
+  //     (psiholog.participantType === 'Aktivni sudionik' && psiholog.uploadedFiles.length === 0) ||
+  //     !psiholog.ime ||
+  //     !psiholog.prezime ||
+  //     !psiholog.email
+  //   ) {
+  //     setErrorMessage('Molimo vas da ispunite sva polja.');
+  //     return;
+  //   }
+
+  //   const fileDetailsPromises = psiholog.uploadedFiles.map(async (file) => {
+  //     const fileDetails = await getFileDetails(file);
+  //     return {
+  //       file: fileDetails,
+  //     };
+  //   });
+  //   const filesWithDetails = await Promise.all(fileDetailsPromises);
+
+  //   const insertionTimeout = setTimeout(() => {
+  //     setIsWaitingForConfirmation(false);
+  //    <h1 style={{color: 'red'}}>{setErrorMessage('Spremanje podataka trajalo je dulje od očekivanog. Molimo pokušajte ponovno!')}</h1> 
+  //     setCurrentStep(1);
+  //   }, 7000);
+
+  //   localStorage.setItem('psihologID', JSON.stringify(psiholog.Psiholog_ID));
+  //   console.log('Data before sending to the server:', { ...psiholog, uploadedFiles: filesWithDetails });
+
+  //   socket.emit('insertData', { ...psiholog, uploadedFiles: filesWithDetails });
+  //   socket.on('dataInserted', (insertedData) => {
+  //     console.log('Data inserted:', insertedData);
+  //     clearTimeout(insertionTimeout);
+  //     setIsWaitingForConfirmation(false);
+  //     setErrorMessage('Uspješno pospremljeni prijavni podaci!');
+  //     navigate('../lectureselection');
+  //   });
+  // };
+
   const submitValues = async (e) => {
     e.preventDefault();
-
+  
     if (!psiholog.participantType) {
       setErrorMessage('Molimo vas odaberite tip sudionika.');
       return;
     }
-
+  
     if (
       (psiholog.participantType === 'Aktivni sudionik' && psiholog.uploadedFiles.length === 0) ||
       !psiholog.ime ||
@@ -482,7 +527,7 @@ export default function EventRegistration({ role }) {
       setErrorMessage('Molimo vas da ispunite sva polja.');
       return;
     }
-
+  
     const fileDetailsPromises = psiholog.uploadedFiles.map(async (file) => {
       const fileDetails = await getFileDetails(file);
       return {
@@ -490,25 +535,27 @@ export default function EventRegistration({ role }) {
       };
     });
     const filesWithDetails = await Promise.all(fileDetailsPromises);
-
+  
     const insertionTimeout = setTimeout(() => {
       setIsWaitingForConfirmation(false);
-     <h1 style={{color: 'red'}}>{setErrorMessage('Spremanje podataka trajalo je dulje od očekivanog. Molimo pokušajte ponovno!')}</h1> 
+      setErrorMessage('Spremanje podataka trajalo je dulje od očekivanog. Molimo pokušajte ponovno!');
       setCurrentStep(1);
     }, 7000);
-
-    localStorage.setItem('psihologID', JSON.stringify(psiholog.Psiholog_ID));
+  
     console.log('Data before sending to the server:', { ...psiholog, uploadedFiles: filesWithDetails });
-
+  
     socket.emit('insertData', { ...psiholog, uploadedFiles: filesWithDetails });
     socket.on('dataInserted', (insertedData) => {
       console.log('Data inserted:', insertedData);
       clearTimeout(insertionTimeout);
       setIsWaitingForConfirmation(false);
       setErrorMessage('Uspješno pospremljeni prijavni podaci!');
+      // Only save the 'role' in localStorage if the data insertion is successful
+      localStorage.setItem('userRole', psiholog.role);
       navigate('../lectureselection');
     });
   };
+  
 
   useEffect(() => {
     socket.on('insertionError', (errorMessage) => {

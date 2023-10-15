@@ -138,8 +138,8 @@ socket.on('insertData', async (data) => {
     sendEmail(data);
     io.emit('dataInserted', data);
   } catch (error) {
-    console.error('Error while inserting data:', error);
-    socket.emit('insertionError', 'An error occurred while inserting data.');
+    console.error('Pogreška pri spremanju podataka:', error);
+    socket.emit('insertionError', 'Dogodila se pogreška prilikom prijave.');
   }
 });
 
