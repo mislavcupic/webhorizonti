@@ -18,7 +18,8 @@ export default function CreatePredbiljezba() {
 
   const receivedPsiholog = JSON.parse(localStorage.getItem('psihologID'));
   const receivedPredavanja = JSON.parse(localStorage.getItem('myPredavanja'));
-  const psihologID = receivedPsiholog;
+  const token = localStorage.getItem('token') ? JSON.parse(localStorage.getItem('token')): null;
+  const psihologID = token;
   const predavanjeID = receivedPredavanja;
 
   useEffect(() => {
@@ -101,7 +102,7 @@ export default function CreatePredbiljezba() {
           </Form.Control> */}
          <Form.Control
   as="select"
-  value={selectedPredavanjeID}
+  value={predavanjeID}
   onChange={(e) => {
     const selectedValues = Array.from(e.target.selectedOptions, option => option.value.toString());
     setSelectedPredavanjeID(selectedValues);

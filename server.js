@@ -22,7 +22,7 @@ app.get('*', (req, res) => {
 
 // Import database operations
 // Import database operations
-const { createPsiholog, getPredavanja, getPredbiljezbe, createPredavanje, deletePredavanje, createPredbiljezba,updatePredavanje, getPredavanjeByID, createSazetci,fetchSazetciWithPsihologData,getYourOwnPredbiljezbe} = require('./src/dbFiles/dbOperation');
+const { createPsiholog, getPredavanja, getPredbiljezbe, createPredavanje, deletePredavanje, createPredbiljezba,updatePredavanje, getPredavanjeByID, createSazetci,fetchSazetciWithPsihologData,getYourOwnPredbiljezbe, checkPsihologByToken} = require('./src/dbFiles/dbOperation');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -50,7 +50,7 @@ function sendEmail (userPsiholog) {
           from: 'mislav.cupic@gmail.com',
           to:   userPsiholog.email,
           subject: "Potvrda prijave na stručni skup",
-          text: `Pozdrav ${userPsiholog.ime} ${userPsiholog.prezime}, Vaša prijava na stručni skup "Horizonti snage" uspješno je izvršena dana ${userPsiholog.date}. Vaša kontakt mail adresa je ${userPsiholog.email}. Čuvajte ovu poruku jer se na njoj nalazi i token s kojim ćete se kasnije prijavljivati na predavanja. Vaš token za prijavu na predavanja: ${userPsiholog.Psiholog_ID} . Prijavi na željena predavanja (predavanja sa ograničenim brojem polaznika) pristupit ćete na ovoj poveznici, za što ćete dobiti obavijest na web stranici konferencije: http://localhost:8080/registrationfeesaccommodation/inserttoken `
+          text: `Pozdrav ${userPsiholog.ime} ${userPsiholog.prezime}, Vaša prijava na stručni skup "Horizonti snage" uspješno je izvršena dana ${userPsiholog.date}. Vaša kontakt mail adresa je ${userPsiholog.email}. Čuvajte ovu poruku jer se na njoj nalazi i token s kojim ćete se kasnije prijavljivati na predavanja. Vaš token za prijavu na predavanja: ${userPsiholog.Psiholog_ID} . Prijavi na željena predavanja te mogućnost pregleda osobnih predbilježbi na predavanja (predavanja sa ograničenim brojem polaznika) pristupit ćete na ovoj poveznici, za što ćete pravovremeno dobiti obavijest na web stranici konferencije: http://localhost:8080/registrationfeesaccommodation/inserttoken `
       };
     //   text: `Pozdrav ${userPsiholog.ime} ${userPsiholog.prezime},Vaša prijava na stručni skup "Horizonti snage" uspješno je izvršena dana ${userPsiholog.date}.Vaša kontakt mail adresa je ${userPsiholog.email}.Čuvajte ovu poruku jer se na njoj nalazi i token s kojim ćete se kasnije prijavljivati na predavanja.Vaš token za prijavu na predavanja: <a href="http://localhost:8080/registrationfeesaccommodation/inserttoken?token=${userPsiholog.Psiholog_ID}">Kliknite ovdje da potvrdite</a>.`
     // };
@@ -174,6 +174,24 @@ socket.on('insertData', async (data) => {
 //     socket.emit('insertionError', 'An error occurred while inserting data.');
 //   }
 // });
+
+// ovo je za token i psihologId usporedba jesu li isti
+
+
+  socket.on('checkPsiholog', async (token) => {
+    try {
+      const psiho = await checkPsihologByToken(token);
+      if (psiho) {
+        socket.emit('PsihologFound', psiho);
+      } else {
+        socket.emit('PsihologNotFound');
+      }
+    } catch (error) {
+      socket.emit('ServerError');
+    }
+  });
+
+
 
 socket.on('fetchSazetci', async () => {
   try {

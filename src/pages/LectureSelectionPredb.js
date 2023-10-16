@@ -6,8 +6,27 @@ import forbidden from '../assets/media/forbiden.jpg'
 import { useNavigate } from 'react-router-dom';
 
 export default function LectureSelectionPredb() {
-  const storedRole = localStorage.getItem('userRole'); //pokusat cu ipak sa localStorage
-  const psihologID = localStorage.getItem('psihologID') ? JSON.parse(localStorage.getItem('psihologID')) : null;
+
+const role = localStorage.getItem('role'); // Get the value from 'psihoRole'
+
+if (role) { // Check if 'role' is not null
+  localStorage.setItem('userRole', role); // Set the 'userRole' key with the 'role' value
+}
+
+const roleTokenToRegular = localStorage.getItem('userRole'); // Retrieve the value from localStorage
+
+
+// Ensure that 'roleTokenToRegular' is used after it has been set
+
+// const role = localStorage.getItem('psihoRole'); // Get the value from 'psihoRole'
+// localStorage.setItem('userRole', role); // Set the 'userRole' key with the 'role' value
+// const roleTokenToRegular = localStorage.getItem('userRole'); // Retrieve the value from localStorage
+// console.log(roleTokenToRegular); // Log the 'userRole' value
+
+
+  const psihologID = localStorage.getItem('psihologID') ? JSON.parse(localStorage.getItem('psihologID')) : role;
+  console.log(roleTokenToRegular); // Log the 'userRole' value
+  // storedRole = role;
   let navigate = useNavigate();
  
 
@@ -28,6 +47,8 @@ socket.on('getYourOwnPredbiljezbe', (data) => {
   try {
     const predbiljezbeArray = JSON.parse(data);
     setLista(predbiljezbeArray);
+    let odabirRole = role?role:storedRole;
+    console.log(odabirRole);
     setLoading(false);
   } catch (error) {
     console.error('Error while processing data:', error);
@@ -42,12 +63,13 @@ const handleNavigate = () => {
     socket.emit('getPredbiljezbe');
   };
 
-  const handleGetYourOwnPredbiljezbe = (psihologID) => {
+  const handleGetYourOwnPredbiljezbe = (psihologID) => {  //umjesto psihologID probat ću gurnut token
 
 
     socket.emit('getYourOwnPredbiljezbe', psihologID);
       console.log('Notifikacija?')
-
+      let odabirRole = role?role:roleToken;
+      console.log(odabirRole);
 
   
         // Notification.requestPermission().then(perm =>{
@@ -107,7 +129,7 @@ const handleNavigate = () => {
 
   return (
     <>
-      {storedRole === null || psihologID === null ? (
+      {roleTokenToRegular === null || psihologID === null ? (
         // <div><img src={forbiden} style={{width:'50px', height:'50p'}} alt='STOP'></img>You must login to see this page. You have not permission to enter this page. Go to ${handleNavigate} </div>
         <div>
     <img src={forbidden} style={{ width: '50px', height: '50px' }} alt='STOP' />
@@ -121,7 +143,7 @@ const handleNavigate = () => {
           <p>Predbilježbe:</p>
           <Container>
             <Row>
-              {storedRole === 'admin' || storedRole === 'odbor' ? (
+              {roleTokenToRegular === 'admin' || roleTokenToRegular === 'odbor' ? (
                 <>
                   <Form.Group>
                     <Form.Label htmlFor='pretraga'>Pretraži predbilježbe:</Form.Label>
@@ -182,7 +204,7 @@ const handleNavigate = () => {
                   </Table>
                   <Button onClick={handleGetPredbiljezbe}>Prikaz predbiljezbi</Button>
                 </>
-              ) : storedRole === 'user' && psihologID ? (
+              ) : roleTokenToRegular === 'user' && psihologID ? (
                 <>
                   <Table striped bordered hover>
                     <thead className="bg-primary">

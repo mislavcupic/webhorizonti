@@ -377,6 +377,9 @@ export default function LectureSelection() {
   const navigate = useNavigate();
   const receivedPsihologID = JSON.parse(localStorage.getItem('psihologID'));
   const tokenreceived = JSON.parse(localStorage.getItem('token'));
+  const role = localStorage.getItem('userRole');
+  const roleToken = localStorage.getItem('role'); //stavio sam role umjesto psihoRole
+ 
 
   const handleDeleteButton = (predavanjeID) => {
     socket.emit('deletePredavanje', predavanjeID);
@@ -392,7 +395,7 @@ export default function LectureSelection() {
 
   const handleSendSelectedPredavanje = () => {
     localStorage.setItem('token', JSON.stringify(tokenreceived));
-    localStorage.setItem('psihologID', JSON.stringify(receivedPsihologID));
+    localStorage.setItem('psihologID', JSON.stringify(receivedPsihologID)); //tu sam zamijenio pa stavio na token umjesto na receivedPsihologID
     localStorage.setItem('myPredavanja', JSON.stringify(selectedLectures));
     if (selectedLectures.length === 0) {
       alert('Morate odabrati barem jedno predavanje!');
@@ -405,6 +408,8 @@ export default function LectureSelection() {
     socket.on('getPredavanja', (fetchingPredavanja) => {
       setLista(fetchingPredavanja);
       setLoading(false);
+      let odabirRole = role?role:roleToken;
+      console.log(odabirRole);
     });
 
     socket.on('fetchingError', (errorMessage) => {

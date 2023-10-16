@@ -525,6 +525,8 @@ export default function EventRegistration({ role }) {
       !psiholog.email
     ) {
       setErrorMessage('Molimo vas da ispunite sva polja.');
+      alert('Molimo vas da ispunite sva polja!');
+      localStorage.setItem('userRole', null);
       return;
     }
   
@@ -539,9 +541,12 @@ export default function EventRegistration({ role }) {
     const insertionTimeout = setTimeout(() => {
       setIsWaitingForConfirmation(false);
       setErrorMessage('Spremanje podataka trajalo je dulje od očekivanog. Molimo pokušajte ponovno!');
+      alert('Spremanje podataka trajalo je dulje od očekivanog. Molimo pokušajte ponovno!');
       setCurrentStep(1);
+      localStorage.setItem('userRole', null);
     }, 7000);
-  
+    localStorage.setItem('psihologID', JSON.stringify(psiholog.Psiholog_ID));
+    localStorage.setItem('token', JSON.stringify(psiholog.Psiholog_ID));
     console.log('Data before sending to the server:', { ...psiholog, uploadedFiles: filesWithDetails });
   
     socket.emit('insertData', { ...psiholog, uploadedFiles: filesWithDetails });
@@ -550,8 +555,9 @@ export default function EventRegistration({ role }) {
       clearTimeout(insertionTimeout);
       setIsWaitingForConfirmation(false);
       setErrorMessage('Uspješno pospremljeni prijavni podaci!');
+      alert('Uspješno pospremljeni podaci!')
       // Only save the 'role' in localStorage if the data insertion is successful
-      localStorage.setItem('userRole', psiholog.role); //tu i u lectureselectionpredb sam promijenio u sessionStorage pa nazad da vidim kaj će biti!
+      localStorage.setItem('userRole', psiholog.role); //tu i u lectureselectionpredb sam promijenio u sessionStorage!
       navigate('../lectureselection');
     });
   };
@@ -614,7 +620,7 @@ export default function EventRegistration({ role }) {
         {errorMessage && (
           <Row>
             <Container>
-              <p className="error-message">{errorMessage}</p>
+              <h3 className="error-message" style={{color:'red'}}>{errorMessage}</h3>
             </Container>
           </Row>
         )}

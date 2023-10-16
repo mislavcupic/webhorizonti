@@ -5,6 +5,7 @@ import '../App.css';
 
 import mislav1 from '../assets/media/BackgroundEraser_20231014_103845539.png';
 import mislav2 from '../assets/media/BackgroundEraser_20231014_103826161.png';
+import crazy1 from '../assets/media/BackgroundEraser_20231015_140742491.png'
 
 export default function FormsOfParticipation() {
   const list = [
@@ -47,13 +48,16 @@ export default function FormsOfParticipation() {
 
   // Use state to track image source change
   const [mislavImage, setMislavImage] = useState(mislav1);
+  const [crazyImage,setCrazyImage] = useState(crazy1);
 
   const handleImageHover = () => {
     setMislavImage(mislav2); // Change the image source to mislav2
+    setCrazyImage(crazy1);
   };
 
   const handleImageLeave = () => {
-    setMislavImage(mislav1); // Change the image source back to mislav1 when the user stops hovering
+    setMislavImage(mislav1); // Change the image source back to mislav1 when the user stops hovering 
+    setCrazyImage(crazy1);
   };
 
   return (
@@ -88,7 +92,7 @@ export default function FormsOfParticipation() {
                   style={{width:'350px', height:'385px'}}
                     variant="top"
                     className="card-img custom-image" // Add the custom-image class
-                    src={mislavImage} // Use the mislavImage state variable
+                    src={crazyImage} // Use the mislavImage state variable
                     onMouseOver={handleImageHover} // Handle image source change on hover
                     onMouseOut={handleImageLeave} // Handle image source change on hover out
                   />

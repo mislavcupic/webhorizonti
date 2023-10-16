@@ -103,6 +103,25 @@ const createPsiholog = async (Psiholog) => {
   }
 };
 
+//checkPsihologByToken
+async function checkPsihologByToken(token) {
+  try {
+    const pool = await sql.connect(config);
+    const result = await pool
+      .request()
+      .input('token', sql.NVarChar, token)
+      .query('SELECT * FROM EventRegistration2 WHERE Psiholog_ID = @token');
+
+    if (result.recordset.length > 0) {
+      console.log(result.recordset[0]);
+      return result.recordset[0]; // Return the matching Psiholog
+    } else {
+      return null; // No matching Psiholog found
+    }
+  } catch (error) {
+    throw error;
+  }
+}
   const createSazetci = async (Sazetci_ID, Psiholog_ID, FileName, FileType, FileData, OblikSudjelovanja) => {
     try {
       let pool = await sql.connect(config);
@@ -406,5 +425,6 @@ module.exports = {
     getPredavanjeByID,
     createSazetci,
     fetchSazetciWithPsihologData,
-    getYourOwnPredbiljezbe
+    getYourOwnPredbiljezbe,
+    checkPsihologByToken
 }
