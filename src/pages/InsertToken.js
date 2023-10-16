@@ -66,7 +66,7 @@ const [input,setInput] = useState('');
         const insertionTimeout = setTimeout(() => {
           setIsWaitingForConfirmation(false);
           alert('Insertion took longer than expected. Please try again.');
-        }, 15000);
+        }, 1500);
 
        
           clearTimeout(insertionTimeout);

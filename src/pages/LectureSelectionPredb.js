@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 export default function LectureSelectionPredb() {
 
 const role = localStorage.getItem('role'); // Get the value from 'psihoRole'
-
+const token = JSON.parse(localStorage.getItem('token'));
 if (role) { // Check if 'role' is not null
   localStorage.setItem('userRole', role); // Set the 'userRole' key with the 'role' value
 }
@@ -63,13 +63,13 @@ const handleNavigate = () => {
     socket.emit('getPredbiljezbe');
   };
 
-  const handleGetYourOwnPredbiljezbe = (psihologID) => {  //umjesto psihologID probat ću gurnut token
+  const handleGetYourOwnPredbiljezbe = (psihologID = token) => {  //umjesto psihologID probat ću gurnut token
+    console.log(token);
 
-
-    socket.emit('getYourOwnPredbiljezbe', psihologID);
+    socket.emit('getYourOwnPredbiljezbe', psihologID=token);
       console.log('Notifikacija?')
-      let odabirRole = role?role:roleToken;
-      console.log(odabirRole);
+      // let odabirRole = role?role:roleToken;   //zakomentirao sam!
+      // console.log(odabirRole);                 //zakomentirao sam!
 
   
         // Notification.requestPermission().then(perm =>{
@@ -258,4 +258,105 @@ const handleNavigate = () => {
     </>
   );
 }
+// return (
+//   <>
+//     {roleTokenToRegular === null || psihologID === null ? (
+//       <div>
+//         <img src={forbidden} style={{ width: '50px', height: '50px' }} alt='STOP' />
+//         Morate se prijaviti kao sudionik da biste vidjeli sadržaj ove stranice. Nemate pravo pristupa sadržaju ove stranice!{' '}
+//         <span onClick={() => navigate('../eventregistration')} style={{ color: 'blue' }}>
+//           Prijavi se!
+//         </span>
+//       </div>
+//     ) : (
+//       <>
+//         <p>Predbilježbe:</p>
+//         <Container>
+//           <Row>
+//             <Table striped bordered hover className="modern-table">
+//               <thead className="bg-primary">
+//                 <tr>
+//                   <th>Header</th>
+//                   <th>Data</th>
+//                 </tr>
+//               </thead>
+//               <tbody>
+//                 {loading ? (
+//                   <tr>
+//                     <td>Loading...</td>
+//                     <td></td>
+//                   </tr>
+//                 ) : filteredList.length === 0 ? (
+//                   <tr>
+//                     <td>No data available.</td>
+//                     <td></td>
+//                   </tr>
+//                 ) : (
+//                   filteredList.map((pred) => (
+//                     <>
+//                       <tr className="bg-warning" key={pred.Predbiljezbe_ID + 'ime'}>
+//                         <td>Ime:</td>
+//                         <td>{pred.ime}</td>
+//                       </tr>
+//                       <tr className="bg-warning" key={pred.Predbiljezbe_ID + 'prezime'}>
+//                         <td>Prezime:</td>
+//                         <td>{pred.prezime}</td>
+//                       </tr>
+//                       <tr className="bg-warning" key={pred.Predbiljezbe_ID + 'email'}>
+//                         <td>E mail:</td>
+//                         <td>{pred.email}</td>
+//                       </tr>
+//                       <tr className="bg-warning" key={pred.Predbiljezbe_ID + 'datetime'}>
+//                         <td>Datum:</td>
+//                         <td>{pred.datetime}</td>
+//                       </tr>
+//                       <tr className="bg-warning" key={pred.Predbiljezbe_ID + 'naziv'}>
+//                         <td>Naziv predavanja:</td>
+//                         <td>{pred.naziv}</td>
+//                       </tr>
+//                       <tr className="bg-warning" key={pred.Predbiljezbe_ID + 'tip'}>
+//                         <td>Tip predavanja:</td>
+//                         <td>{pred.tip}</td>
+//                       </tr>
+//                       <tr className="bg-warning" key={pred.Predbiljezbe_ID + 'opis'}>
+//                         <td>Opis predavanja:</td>
+//                         <td>{pred.opis}</td>
+//                       </tr>
+//                       <tr className="bg-warning" key={pred.Predbiljezbe_ID + 'vrijemePredbiljezbe'}>
+//                         <td>Vrijeme predbilježbe:</td>
+//                         <td>{pred.Vrijeme_predbiljezbe}</td>
+//                       </tr>
+//                       <tr className="bg-warning" key={pred.Predbiljezbe_ID + 'mjestoOdrzavanja'}>
+//                         <td>Mjesto održavanja:</td>
+//                         <td>{pred.mjestoOdrzavanja}</td>
+//                       </tr>
+//                       <tr className="bg-warning" key={pred.Predbiljezbe_ID + 'vrijemePocetka'}>
+//                         <td>Vrijeme početka:</td>
+//                         <td>{pred.vrijemePocetka}</td>
+//                       </tr>
+//                       <tr className="bg-warning" key={pred.Predbiljezbe_ID}>
+//                         <td></td>
+//                         <td></td>
+//                       </tr>
+//                       {/* Add similar rows for other data */}
+//                     </>
+//                   ))
+//                 )}
+//                 <tr>
+//                   <td>Vrijeme početka:</td>
+//                   <td></td>
+//                 </tr>
+//               </tbody>
+//             </Table>
+//             <Button onClick={handleGetPredbiljezbe}>Prikaz predbiljezbi</Button>
+//           </Row>
+//         </Container>
+//       </>
+//     )}
+//   </>
+// )};
 
+
+
+
+  
