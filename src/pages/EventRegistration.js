@@ -422,7 +422,7 @@ export default function EventRegistration({ role }) {
     if (email === process.env.REACT_APP_ADMIN_MAIL) {
       role = 'admin';
     } else if (odborMails.includes(email)) {
-      console.log(odborMails);
+      // console.log(odborMails);
       role = 'odbor';
     }
 
@@ -526,7 +526,7 @@ export default function EventRegistration({ role }) {
     ) {
       setErrorMessage('Molimo vas da ispunite sva polja.');
       alert('Molimo vas da ispunite sva polja!');
-      localStorage.setItem('userRole', null);
+      sessionStorage.setItem('userRole', null); //mijenjam sve u sessionStorage
       return;
     }
   
@@ -543,10 +543,10 @@ export default function EventRegistration({ role }) {
       setErrorMessage('Spremanje podataka trajalo je dulje od očekivanog. Molimo pokušajte ponovno!');
       alert('Spremanje podataka trajalo je dulje od očekivanog. Molimo pokušajte ponovno!');
       setCurrentStep(1);
-      localStorage.setItem('userRole', null);
+      sessionStorage.setItem('userRole', null);
     }, 7000);
-    localStorage.setItem('psihologID', JSON.stringify(psiholog.Psiholog_ID));
-    localStorage.setItem('token', JSON.stringify(psiholog.Psiholog_ID));
+    sessionStorage.setItem('psihologID', JSON.stringify(psiholog.Psiholog_ID));
+    sessionStorage.setItem('token', JSON.stringify(psiholog.Psiholog_ID));
     console.log('Data before sending to the server:', { ...psiholog, uploadedFiles: filesWithDetails });
   
     socket.emit('insertData', { ...psiholog, uploadedFiles: filesWithDetails });
@@ -557,7 +557,7 @@ export default function EventRegistration({ role }) {
       setErrorMessage('Uspješno pospremljeni prijavni podaci!');
       alert('Uspješno pospremljeni podaci!')
       // Only save the 'role' in localStorage if the data insertion is successful
-      localStorage.setItem('userRole', psiholog.role); //tu i u lectureselectionpredb sam promijenio u sessionStorage!
+      sessionStorage.setItem('userRole', psiholog.role); //tu i u lectureselectionpredb sam promijenio u sessionStorage!
       navigate('../lectureselection');
     });
   };

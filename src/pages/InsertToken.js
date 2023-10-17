@@ -33,7 +33,7 @@ const [input,setInput] = useState('');
     // Listen for responses from the server
     socket.on('PsihologFound', (psiho) => {
       // setUserRole(psiho.role);
-      localStorage.setItem('role', psiho.role);
+      sessionStorage.setItem('role', psiho.role);
       console.log(psiho.role);
       setIsWaitingForConfirmation(false);
       alert('Uspješno pospremljeni prijavni podaci!');
@@ -58,7 +58,7 @@ const [input,setInput] = useState('');
       try {
         setIsWaitingForConfirmation(true);
 
-        localStorage.setItem('token', JSON.stringify(input));
+        sessionStorage.setItem('token', JSON.stringify(input));
 
     
 

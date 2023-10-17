@@ -7,13 +7,13 @@ import { useNavigate } from 'react-router-dom';
 
 export default function LectureSelectionPredb() {
 
-const role = localStorage.getItem('role'); // Get the value from 'psihoRole'
-const token = JSON.parse(localStorage.getItem('token'));
+const role = sessionStorage.getItem('role'); // Get the value from 'psihoRole'
+const token = JSON.parse(sessionStorage.getItem('token'));
 if (role) { // Check if 'role' is not null
-  localStorage.setItem('userRole', role); // Set the 'userRole' key with the 'role' value
+  sessionStorage.setItem('userRole', role); // Set the 'userRole' key with the 'role' value
 }
 
-const roleTokenToRegular = localStorage.getItem('userRole'); // Retrieve the value from localStorage
+const roleTokenToRegular = sessionStorage.getItem('userRole'); // Retrieve the value from localStorage
 
 
 // Ensure that 'roleTokenToRegular' is used after it has been set
@@ -24,7 +24,7 @@ const roleTokenToRegular = localStorage.getItem('userRole'); // Retrieve the val
 // console.log(roleTokenToRegular); // Log the 'userRole' value
 
 
-  const psihologID = localStorage.getItem('psihologID') ? JSON.parse(localStorage.getItem('psihologID')) : role;
+  const psihologID = sessionStorage.getItem('psihologID') ? JSON.parse(sessionStorage.getItem('psihologID')) : role;
   console.log(roleTokenToRegular); // Log the 'userRole' value
   // storedRole = role;
   let navigate = useNavigate();

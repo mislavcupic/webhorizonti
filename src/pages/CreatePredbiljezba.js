@@ -16,9 +16,9 @@ export default function CreatePredbiljezba() {
   const socket = io('http://localhost:8080');
   const navigate = useNavigate();
 
-  const receivedPsiholog = JSON.parse(localStorage.getItem('psihologID'));
-  const receivedPredavanja = JSON.parse(localStorage.getItem('myPredavanja'));
-  const token = localStorage.getItem('token') ? JSON.parse(localStorage.getItem('token')): null;
+  const receivedPsiholog = JSON.parse(sessionStorage.getItem('psihologID'));
+  const receivedPredavanja = JSON.parse(sessionStorage.getItem('myPredavanja'));
+  const token = sessionStorage.getItem('token') ? JSON.parse(sessionStorage.getItem('token')): null;
   const psihologID = token;
   const predavanjeID = receivedPredavanja;
 

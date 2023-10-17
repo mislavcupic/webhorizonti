@@ -5,7 +5,7 @@ import { Table, Form } from 'react-bootstrap';
 import DownloadLink from './DownloadLink';
 import forbidden from '../assets/media/forbiden.jpg'
 
-const storedRole = localStorage.getItem('userRole');
+const storedRole = sessionStorage.getItem('userRole');
 const PopisSazetaka = () => {
   const [sazetciData, setSazetciData] = useState([]);
   const [searchString, setSearchString] = useState('');
